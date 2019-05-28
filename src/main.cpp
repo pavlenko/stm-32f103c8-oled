@@ -21,18 +21,22 @@ int main(void)
     MX_I2C2_Init();
 
     SSD1306_Init();
-    SSD1306_GotoXY(10, 27);
+    SSD1306_GotoXY(0, 0);
     SSD1306_Puts("OLED inited", &Font_7x10, SSD1306_COLOR_WHITE);
     SSD1306_UpdateScreen();
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-      HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-      HAL_Delay(500);
-  }
-  /* USER CODE END 3 */
+    int counter = 0;
+    char buf[10];
+
+    while (true) {
+        SSD1306_GotoXY(0, 20);
+        sprintf(buf, "counter: %d", counter++);
+        SSD1306_Puts(buf, &Font_7x10, SSD1306_COLOR_WHITE);
+        SSD1306_UpdateScreen();
+
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+        HAL_Delay(500);
+    }
 }
 
 /**
