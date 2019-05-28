@@ -1,6 +1,10 @@
 #ifndef __SSD1306_H
 #define __SSD1306_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 
 #define SSD1306_SET_MEM_ADDR_MODE   0x20
@@ -31,9 +35,13 @@
 
 typedef struct SSD1306_s {
     void (*writeByte)(uint8_t byte);
-    void (*writeData)(uint8_t *data, uint16_t size);
+    //void (*writeData)(uint8_t *data, uint16_t size);
 } SSD1306_t;
 
 void SSD1306_initialize(SSD1306_t *instance);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //__SSD1306_H

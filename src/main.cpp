@@ -5,8 +5,12 @@
 #include "fonts.h"
 #include "ssd1306.h"
 
+#include "SSD1306_2.h"
+
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+
+SSD1306_t oled;
 
 int main(void)
 {
@@ -20,13 +24,22 @@ int main(void)
   MX_GPIO_Init();
     MX_I2C2_Init();
 
-    SSD1306_Init();
+    oled.writeByte = [](uint8_t byte){
+        uint8_t dt[2];
+        dt[0] = 0x00;
+        dt[1] = byte;
+        HAL_I2C_Master_Transmit(&i2c2, SSD1306_I2C_ADDR, dt, 2, 10);
+    };
+
+    SSD1306_initialize(&oled);
+
+    //SSD1306_Init();
     SSD1306_GotoXY(0, 0);
     SSD1306_Puts("OLED inited", &Font_7x10, SSD1306_COLOR_WHITE);
     SSD1306_UpdateScreen();
 
     int counter = 0;
-    char buf[10];
+    char buf[20];
 
     while (true) {
         SSD1306_GotoXY(0, 20);

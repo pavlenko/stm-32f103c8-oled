@@ -1,4 +1,4 @@
-#include "SSD1306.h"
+#include "SSD1306_2.h"
 
 void SSD1306_initialize(SSD1306_t *instance)
 {
