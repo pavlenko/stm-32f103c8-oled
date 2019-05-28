@@ -22,7 +22,7 @@ int main(void)
 
     SSD1306_Init();
     SSD1306_GotoXY(10, 27);
-    SSD1306_Puts("OLED inited", &Font_7x10, 1);
+    SSD1306_Puts("OLED inited", &Font_7x10, SSD1306_COLOR_WHITE);
     SSD1306_UpdateScreen();
 
   /* Infinite loop */
