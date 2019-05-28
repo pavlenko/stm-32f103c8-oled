@@ -88,6 +88,10 @@ typedef enum {
  */
 uint8_t SSD1306_Init(void);
 
+uint16_t SSD1306_getCurrentX();
+
+uint16_t SSD1306_getCurrentY();
+
 /** 
  * @brief  Updates buffer from internal RAM to LCD
  * @note   This function must be called each time you do some changes to LCD, to update buffer from RAM to LCD

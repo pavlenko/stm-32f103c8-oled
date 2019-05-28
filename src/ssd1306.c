@@ -106,6 +106,14 @@ uint8_t SSD1306_Init(void) {
 	return 1;
 }
 
+uint16_t SSD1306_getCurrentX() {
+    return SSD1306.CurrentX;
+}
+
+uint16_t SSD1306_getCurrentY() {
+    return SSD1306.CurrentY;
+}
+
 void SSD1306_UpdateScreen(void) {
 	uint8_t m;
 	

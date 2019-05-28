@@ -5,12 +5,47 @@
 #include "fonts.h"
 #include "ssd1306.h"
 
+#include "font_5x7.h"
 #include "SSD1306_2.h"
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 
 SSD1306_t oled;
+
+char SSD1306__putc(char ch, SSD1306_COLOR_t color) {
+    uint32_t i, b, j;
+
+    for (j = 0; j < 5; j++) {
+        b = Font_5x7[ch - 32][j];
+
+        for (i = 0; i < 7; i++) {
+            if ((b >> i) & 0x01) {
+                SSD1306_DrawPixel(SSD1306_getCurrentX() + j, (SSD1306_getCurrentY() + i), (SSD1306_COLOR_t) color);
+            } else {
+                SSD1306_DrawPixel(SSD1306_getCurrentX() + j, (SSD1306_getCurrentY() + i), (SSD1306_COLOR_t) !color);
+            }
+        }
+    }
+
+    /* Increase pointer */
+    SSD1306_GotoXY(SSD1306_getCurrentX() + 6, SSD1306_getCurrentY());
+
+    /* Return character written */
+    return ch;
+}
+
+char SSD1306__puts(const char* str, SSD1306_COLOR_t color) {
+    while (*str) {
+        if (SSD1306__putc(*str, color) != *str) {
+            return *str;
+        }
+
+        str++;
+    }
+
+    return *str;
+}
 
 int main(void)
 {
@@ -32,10 +67,12 @@ int main(void)
     };
 
     SSD1306_initialize(&oled);
+    SSD1306_GotoXY(0, 0);
+    SSD1306__puts("HELLO", SSD1306_COLOR_WHITE);
 
     //SSD1306_Init();
-    SSD1306_GotoXY(0, 0);
-    SSD1306_Puts("OLED inited", &Font_7x10, SSD1306_COLOR_WHITE);
+    SSD1306_GotoXY(0, 10);
+    SSD1306_Puts("OLED initialized", &Font_7x10, SSD1306_COLOR_WHITE);
     SSD1306_UpdateScreen();
 
     int counter = 0;
