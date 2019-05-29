@@ -75,10 +75,56 @@ void MonoLCD::rect(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, MonoLCD_C
 }
 
 void MonoLCD::circle(uint16_t cx, uint16_t cy, uint16_t r, MonoLCD_COLOR_t color, bool fill) {
+    int16_t f = 1 - r;
+    int16_t ddF_x = 1;
+    int16_t ddF_y = -2 * r;
+    int16_t x = 0;
+    int16_t y = r;
+
     this->pixel(cx, cy + r, color);
     this->pixel(cx, cy - r, color);
     this->pixel(cx + r, cy, color);
     this->pixel(cx - r, cy, color);
 
-    //TODO draw other pixels
+    if (fill) {
+        this->line(cx - r, cy, cx + r, cy, color);
+
+        while (x < y) {
+            if (f >= 0) {
+                y--;
+                ddF_y += 2;
+                f += ddF_y;
+            }
+            x++;
+            ddF_x += 2;
+            f += ddF_x;
+
+            this->line(cx - x, cy + y, cx + x, cy + y, color);
+            this->line(cx + x, cy - y, cx - x, cy - y, color);
+
+            this->line(cx + y, cy + x, cx - y, cy + x, color);
+            this->line(cx + y, cy - x, cx - y, cy - x, color);
+        }
+    } else {
+        while (x < y) {
+            if (f >= 0) {
+                y--;
+                ddF_y += 2;
+                f += ddF_y;
+            }
+            x++;
+            ddF_x += 2;
+            f += ddF_x;
+
+            this->pixel(cx + x, cy + y, color);
+            this->pixel(cx - x, cy + y, color);
+            this->pixel(cx + x, cy - y, color);
+            this->pixel(cx - x, cy - y, color);
+
+            this->pixel(cx + y, cy + x, color);
+            this->pixel(cx - y, cy + x, color);
+            this->pixel(cx + y, cy - x, color);
+            this->pixel(cx - y, cy - x, color);
+        }
+    }
 }
