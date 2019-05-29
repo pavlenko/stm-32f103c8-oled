@@ -13,7 +13,7 @@
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 
-//MonoLCD ssd1306_gfx = MonoLCD(128, 64);
+MonoLCD ssd1306_gfx = MonoLCD(128, 64);
 
 SSD1306_t oled;
 
@@ -63,7 +63,13 @@ int main(void)
   MX_GPIO_Init();
     MX_I2C2_Init();
 
-    //ssd1306_gfx.drawPixel(0, 0, MonoLCD_COLOR_WHITE);
+    MonoLCD_FONT_t font = {
+        .data   = Font_7x10.data,
+        .width  = Font_7x10.FontWidth,
+        .height = Font_7x10.FontHeight,
+    };
+
+    ssd1306_gfx.string(0, 0, "TEST", &font, MonoLCD_COLOR_WHITE);
 
     oled.writeByte = [](uint8_t byte){
         uint8_t dt[2];

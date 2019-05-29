@@ -128,3 +128,40 @@ void MonoLCD::circle(uint16_t cx, uint16_t cy, uint16_t r, MonoLCD_COLOR_t color
         }
     }
 }
+
+void MonoLCD::bitmap(uint16_t x, uint16_t y, MonoLCD_BITMAP_t *bitmap, MonoLCD_COLOR_t color) {
+    uint16_t width = (bitmap->width + 7) / 8;
+    uint8_t byte   = 0;
+
+    for (uint16_t j = 0; j < bitmap->height; j++, y++) {
+        for (uint16_t i = 0; i < bitmap->width; i++) {
+            if (i & 7u) {
+                byte <<= 1u;
+            } else {
+                byte = bitmap->data[j * width + i / 8];
+            }
+
+            if (byte & 0x80u) this->pixel(x + i, y, color);
+        }
+    }
+}
+
+void MonoLCD::symbol(uint16_t x, uint16_t y, char symbol, MonoLCD_FONT_t *font, MonoLCD_COLOR_t color) {
+    uint16_t i, j, b;
+
+    for (i = 0; i < font->height; i++) {
+        b = font->data[(symbol - 32) * font->height + i];
+
+        for (j = 0; j < font->width; j++) {
+            if ((b << j) & 0x8000u) {
+                this->pixel(x + j, (y + i), color);
+            }
+        }
+    }
+}
+
+void MonoLCD::string(uint16_t x, uint16_t y, const char *string, MonoLCD_FONT_t *font, MonoLCD_COLOR_t color) {
+    while (*string++) {
+        this->symbol(x, y, *string, font, color);
+    }
+}

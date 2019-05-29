@@ -8,6 +8,18 @@ typedef enum {
     MonoLCD_COLOR_WHITE,
 } MonoLCD_COLOR_t;
 
+typedef struct {
+    const uint8_t *data;
+    uint16_t width;
+    uint16_t height;
+} MonoLCD_BITMAP_t;
+
+typedef struct {
+    const uint16_t *data;
+    uint16_t width;
+    uint16_t height;
+} MonoLCD_FONT_t;
+
 class MonoLCD {
 private:
     uint8_t *_buffer;
@@ -54,6 +66,32 @@ public:
      * @param fill
      */
     void circle(uint16_t cx, uint16_t cy, uint16_t r, MonoLCD_COLOR_t color, bool fill);
+
+    /**
+     * @param x
+     * @param y
+     * @param bitmap
+     * @param color
+     */
+    void bitmap(uint16_t x, uint16_t y, MonoLCD_BITMAP_t *bitmap, MonoLCD_COLOR_t color);
+
+    /**
+     * @param x
+     * @param y
+     * @param symbol
+     * @param font
+     * @param color
+     */
+    void symbol(uint16_t x, uint16_t y, char symbol, MonoLCD_FONT_t *font, MonoLCD_COLOR_t color);
+
+    /**
+     * @param x
+     * @param y
+     * @param string
+     * @param font
+     * @param color
+     */
+    void string(uint16_t x, uint16_t y, const char *string, MonoLCD_FONT_t *font, MonoLCD_COLOR_t color);
 };
 
 #endif //MONO_LCD_H
