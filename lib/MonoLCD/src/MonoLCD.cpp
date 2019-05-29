@@ -1,12 +1,13 @@
 #include "MonoLCD.h"
 
-MonoLCD::MonoLCD(uint16_t width, uint16_t height) {
+MonoLCD::MonoLCD(uint16_t width, uint16_t height, MonoLCD_ADAPTER_t adapter) {
     this->_width  = width;
     this->_height = height;
 
     uint8_t buffer[width * height / 8];
 
-    this->_buffer = buffer;
+    this->_buffer  = buffer;
+    this->_adapter = adapter;
 }
 
 //TODO pass some info to adapter (x,y,width,height,...)
@@ -154,15 +155,17 @@ void MonoLCD::bitmap(uint16_t x, uint16_t y, MonoLCD_BITMAP_t *bitmap, MonoLCD_C
 }
 
 void MonoLCD::symbol(uint16_t x, uint16_t y, char symbol, MonoLCD_FONT_t *font, MonoLCD_COLOR_t color) {
-    uint16_t i, j, b;
+    uint16_t i, j, line;
 
     for (i = 0; i < font->height; i++) {
-        b = font->data[(symbol - 32) * font->height + i];
+        line = font->data[(symbol - 32) * font->height + i];
 
         for (j = 0; j < font->width; j++) {
-            if ((b << j) & 0x8000u) {
-                this->pixel(x + j, (y + i), color);
+            if (line & 0x8000u) {
+                this->pixel(x + j, y + i, color);
             }
+
+            line <<= 1u;
         }
     }
 }

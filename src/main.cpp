@@ -13,8 +13,6 @@
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 
-MonoLCD ssd1306_gfx = MonoLCD(128, 64);
-
 SSD1306_t oled;
 
 char SSD1306__putc(char ch, SSD1306_COLOR_t color) {
@@ -50,6 +48,10 @@ char SSD1306__puts(const char* str, SSD1306_COLOR_t color) {
 
     return *str;
 }
+
+MonoLCD ssd1306_gfx = MonoLCD(128, 64, [](uint8_t *data, uint16_t length){
+    oled.writeByte(*data);
+});
 
 int main(void)
 {

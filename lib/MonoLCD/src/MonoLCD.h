@@ -33,7 +33,7 @@ public:
      * @param width
      * @param height
      */
-    MonoLCD(uint16_t width, uint16_t height);
+    MonoLCD(uint16_t width, uint16_t height, MonoLCD_ADAPTER_t adapter);
 
     void update();
 
