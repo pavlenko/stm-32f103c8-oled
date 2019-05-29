@@ -19,7 +19,7 @@ void MonoLCD::pixel(uint16_t x, uint16_t y, MonoLCD_COLOR_t color) {
     }
 }
 
-//TODO
+//TODO maybe crop or just bypass values to pixel drawing
 void MonoLCD::line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, MonoLCD_COLOR_t color) {
     if (x0 >= this->_width) x0 = this->_width - 1;
     if (x1 >= this->_width) x1 = this->_width - 1;
@@ -34,4 +34,12 @@ void MonoLCD::line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, MonoLCD_C
     if (dy == 0) {/*horizontal line*/return;}
 
     /*diagonal line*/
+}
+
+//TODO add fill argument
+void MonoLCD::rect(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, MonoLCD_COLOR_t color) {
+    this->line(x0, y0, x1, y0, color);
+    this->line(x0, y1, x1, y1, color);
+    this->line(x0, y0, x0, y1, color);
+    this->line(x1, y0, x1, y1, color);
 }
