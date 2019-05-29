@@ -19,27 +19,66 @@ void MonoLCD::pixel(uint16_t x, uint16_t y, MonoLCD_COLOR_t color) {
     }
 }
 
-//TODO maybe crop or just bypass values to pixel drawing
 void MonoLCD::line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, MonoLCD_COLOR_t color) {
-    if (x0 >= this->_width) x0 = this->_width - 1;
-    if (x1 >= this->_width) x1 = this->_width - 1;
-    if (y0 >= this->_height) y0 = this->_height - 1;
-    if (y1 >= this->_height) y1 = this->_height - 1;
+    int16_t dx  = (x0 < x1) ? (x1 - x0) : (x0 - x1);
+    int16_t dy  = (y0 < y1) ? (y1 - y0) : (y0 - y1);
+    int16_t sx  = (x0 < x1) ? 1 : -1;
+    int16_t sy  = (y0 < y1) ? 1 : -1;
+    int16_t err = ((dx > dy) ? dx : -dy) / 2;
 
-    int16_t dx = (x0 < x1) ? (x1 - x0) : (x0 - x1);
-    int16_t dy = (y0 < y1) ? (y1 - y0) : (y0 - y1);
+    if (dx == 0) {
+        do {
+            this->pixel(x0, y0, color);
+            y0 += dy;
+        } while (y0 != y1);
 
-    if (dx == 0) {/*vertical line*/return;}
+        return;
+    }
 
-    if (dy == 0) {/*horizontal line*/return;}
+    if (dy == 0) {
+        do {
+            this->pixel(x0, y0, color);
+            x0 += dx;
+        } while (x0 != x1);
 
-    /*diagonal line*/
+        return;
+    }
+
+    do {
+        this->pixel(x0, y0, color);
+
+        if (err > -dx) {
+            err -= dy;
+            x0  += sx;
+        }
+
+        if (err < dy) {
+            err += dx;
+            y0  += sy;
+        }
+    } while (x0 != x1 || y0 != y1);
 }
 
-//TODO add fill argument
-void MonoLCD::rect(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, MonoLCD_COLOR_t color) {
+void MonoLCD::rect(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, MonoLCD_COLOR_t color, bool fill) {
+    uint16_t i;
+
     this->line(x0, y0, x1, y0, color);
     this->line(x0, y1, x1, y1, color);
     this->line(x0, y0, x0, y1, color);
     this->line(x1, y0, x1, y1, color);
+
+    if (fill) {
+        for (i = y0 + 1; i < y1 - 1; i++) {
+            this->line(x0, i, x1, i, color);
+        }
+    }
+}
+
+void MonoLCD::circle(uint16_t cx, uint16_t cy, uint16_t r, MonoLCD_COLOR_t color, bool fill) {
+    this->pixel(cx, cy + r, color);
+    this->pixel(cx, cy - r, color);
+    this->pixel(cx + r, cy, color);
+    this->pixel(cx - r, cy, color);
+
+    //TODO draw other pixels
 }

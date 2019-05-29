@@ -42,16 +42,18 @@ public:
      * @param x1
      * @param y1
      * @param color
+     * @param fill
      */
-    void rect(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, MonoLCD_COLOR_t color);
+    void rect(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, MonoLCD_COLOR_t color, bool fill);
 
     /**
      * @param cx
      * @param cy
      * @param r
      * @param color
+     * @param fill
      */
-    void circle(uint16_t cx, uint16_t cy, uint16_t r, MonoLCD_COLOR_t color);
+    void circle(uint16_t cx, uint16_t cy, uint16_t r, MonoLCD_COLOR_t color, bool fill);
 };
 
 #endif //MONO_LCD_H
