@@ -8,8 +8,12 @@
 #include "font_5x7.h"
 #include "SSD1306_2.h"
 
+#include "MonoLCD.h"
+
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+
+//MonoLCD ssd1306_gfx = MonoLCD(128, 64);
 
 SSD1306_t oled;
 
@@ -58,6 +62,8 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
     MX_I2C2_Init();
+
+    //ssd1306_gfx.drawPixel(0, 0, MonoLCD_COLOR_WHITE);
 
     oled.writeByte = [](uint8_t byte){
         uint8_t dt[2];
