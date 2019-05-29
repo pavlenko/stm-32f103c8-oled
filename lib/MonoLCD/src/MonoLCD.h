@@ -20,17 +20,22 @@ typedef struct {
     uint16_t height;
 } MonoLCD_FONT_t;
 
+typedef void (*MonoLCD_ADAPTER_t)(uint8_t *data, uint16_t length);
+
 class MonoLCD {
 private:
     uint8_t *_buffer;
     uint16_t _width;
     uint16_t _height;
+    MonoLCD_ADAPTER_t _adapter;
 public:
     /**
      * @param width
      * @param height
      */
     MonoLCD(uint16_t width, uint16_t height);
+
+    void update();
 
     /**
      * @param x

@@ -9,6 +9,13 @@ MonoLCD::MonoLCD(uint16_t width, uint16_t height) {
     this->_buffer = buffer;
 }
 
+//TODO pass some info to adapter (x,y,width,height,...)
+void MonoLCD::update() {
+    for (int i = 0; i < this->_height / 8; ++i) {
+        this->_adapter(&this->_buffer[this->_width * i], this->_width);
+    }
+}
+
 void MonoLCD::pixel(uint16_t x, uint16_t y, MonoLCD_COLOR_t color) {
     if (x >= this->_width || y >= this->_height) return;
 
