@@ -50,7 +50,7 @@ char SSD1306__puts(const char* str, SSD1306_COLOR_t color) {
 }
 
 MonoLCD ssd1306_gfx = MonoLCD(128, 64, [](uint8_t *data, uint16_t length){
-    oled.writeByte(*data);
+    oled.writeData(SSD1306_REG_DATA, data, length);
 });
 
 int main(void)
@@ -73,11 +73,18 @@ int main(void)
 
     ssd1306_gfx.string(0, 0, "TEST", &font, MonoLCD_COLOR_WHITE);
 
-    oled.writeByte = [](uint8_t byte){
+    oled.writeByte = [](uint8_t reg, uint8_t byte){
         uint8_t dt[2];
-        dt[0] = 0x00;
+        dt[0] = reg;
         dt[1] = byte;
         HAL_I2C_Master_Transmit(&i2c2, SSD1306_I2C_ADDR, dt, 2, 10);
+    };
+
+    oled.writeData = [](uint8_t reg, uint8_t *data, uint16_t length){
+        uint8_t dt[2];
+        dt[0] = reg;
+        dt[1] = *data;
+        //HAL_I2C_Master_Transmit(&i2c2, SSD1306_I2C_ADDR, dt, 2, 10);
     };
 
     SSD1306_initialize(&oled);

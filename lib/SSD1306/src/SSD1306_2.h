@@ -7,6 +7,9 @@ extern "C" {
 
 #include <stdint.h>
 
+#define SSD1306_REG_COMMAND 0x00
+#define SSD1306_REG_DATA    0x40
+
 #define SSD1306_SET_MEM_ADDR_MODE   0x20
 #define SSD1306_SET_DISPLAY_OFF     0xAE
 #define SSD1306_SET_DISPLAY_ON      0xAF
@@ -34,8 +37,8 @@ extern "C" {
 #define SSD1306_VCOMH_DESELECT_LEVEL_083 0x30
 
 typedef struct SSD1306_s {
-    void (*writeByte)(uint8_t byte);
-    //void (*writeData)(uint8_t *data, uint16_t size);
+    void (*writeByte)(uint8_t reg, uint8_t byte);
+    void (*writeData)(uint8_t reg, uint8_t *data, uint16_t size);
 } SSD1306_t;
 
 void SSD1306_initialize(SSD1306_t *instance);
