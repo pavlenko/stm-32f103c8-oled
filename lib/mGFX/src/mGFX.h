@@ -65,20 +65,22 @@ void mGFX_line(mGFX_Handle_t *handle, uint16_t x0, uint16_t y0, uint16_t x1, uin
 void mGFX_rectangle(mGFX_Handle_t *handle, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, mGFX_Color_t color);
 
 /**
+ * @param handle
  * @param cx
  * @param cy
  * @param r
  * @param color
  */
-void mGFX_circle(uint16_t cx, uint16_t cy, uint16_t r, mGFX_Color_t color);
+void mGFX_circle(mGFX_Handle_t *handle, uint16_t cx, uint16_t cy, uint16_t r, mGFX_Color_t color);
 
 /**
+ * @param handle
  * @param x
  * @param y
  * @param bitmap
  * @param color
  */
-void mGFX_bitmap(uint16_t x, uint16_t y, mGFX_Bitmap_t *bitmap, mGFX_Color_t color);
+void mGFX_bitmap(mGFX_Handle_t *handle, uint16_t x, uint16_t y, mGFX_Bitmap_t *bitmap, mGFX_Color_t color);
 
 /**
  * @param x

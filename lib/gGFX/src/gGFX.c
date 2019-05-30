@@ -67,3 +67,37 @@ void gGFX_rectangle(gGFX_Handle_t *handle, uint16_t x0, uint16_t y0, uint16_t x1
     gGFX_line(handle, x0, y0, x0, y1, color);
     gGFX_line(handle, x1, y0, x1, y1, color);
 }
+
+void gGFX_circle(gGFX_Handle_t *handle, uint16_t cx, uint16_t cy, uint16_t r, uint8_t color) {
+    int16_t f = 1 - r;
+    int16_t ddF_x = 1;
+    int16_t ddF_y = -2 * r;
+    int16_t x = 0;
+    int16_t y = r;
+
+    gGFX_pixel(handle, cx, cy + r, color);
+    gGFX_pixel(handle, cx, cy - r, color);
+    gGFX_pixel(handle, cx + r, cy, color);
+    gGFX_pixel(handle, cx - r, cy, color);
+
+    while (x < y) {
+        if (f >= 0) {
+            y--;
+            ddF_y += 2;
+            f += ddF_y;
+        }
+        x++;
+        ddF_x += 2;
+        f += ddF_x;
+
+        gGFX_pixel(handle, cx + x, cy + y, color);
+        gGFX_pixel(handle, cx - x, cy + y, color);
+        gGFX_pixel(handle, cx + x, cy - y, color);
+        gGFX_pixel(handle, cx - x, cy - y, color);
+
+        gGFX_pixel(handle, cx + y, cy + x, color);
+        gGFX_pixel(handle, cx - y, cy + x, color);
+        gGFX_pixel(handle, cx + y, cy - x, color);
+        gGFX_pixel(handle, cx - y, cy - x, color);
+    }
+}

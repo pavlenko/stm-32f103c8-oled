@@ -60,20 +60,22 @@ void gGFX_line(gGFX_Handle_t *handle, uint16_t x0, uint16_t y0, uint16_t x1, uin
 void gGFX_rectangle(gGFX_Handle_t *handle, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t color);
 
 /**
+ * @param handle
  * @param cx
  * @param cy
  * @param r
  * @param color
  */
-void mGFX_circle(uint16_t cx, uint16_t cy, uint16_t r, uint8_t color);
+void gGFX_circle(gGFX_Handle_t *handle, uint16_t cx, uint16_t cy, uint16_t r, uint8_t color);
 
 /**
+ * @param handle
  * @param x
  * @param y
  * @param bitmap
  * @param color
  */
-void mGFX_bitmap(uint16_t x, uint16_t y, gGFX_Bitmap_t *bitmap);
+void gGFX_bitmap(gGFX_Handle_t *handle, uint16_t x, uint16_t y, gGFX_Bitmap_t *bitmap);
 
 /**
  * @param x
@@ -82,7 +84,7 @@ void mGFX_bitmap(uint16_t x, uint16_t y, gGFX_Bitmap_t *bitmap);
  * @param font
  * @param color
  */
-//void mGFX_symbol(uint16_t x, uint16_t y, char symbol, MonoLCD_FONT_t *font, uint8_t color);
+//void gGFX_symbol(uint16_t x, uint16_t y, char symbol, MonoLCD_FONT_t *font, uint8_t color);
 
 /**
  * @param x
@@ -91,7 +93,7 @@ void mGFX_bitmap(uint16_t x, uint16_t y, gGFX_Bitmap_t *bitmap);
  * @param font
  * @param color
  */
-//void mGFX_string(uint16_t x, uint16_t y, const char *string, MonoLCD_FONT_t *font, uint8_t color);
+//void gGFX_string(uint16_t x, uint16_t y, const char *string, MonoLCD_FONT_t *font, uint8_t color);
 
 #ifdef __cplusplus
 }
