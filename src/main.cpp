@@ -49,7 +49,10 @@ char SSD1306__puts(const char* str, SSD1306_COLOR_t color) {
     return *str;
 }
 
-MonoLCD ssd1306_gfx = MonoLCD(128, 64, [](uint8_t *data, uint16_t length){
+MonoLCD ssd1306_gfx = MonoLCD(128, 64, [](uint8_t m, uint8_t *data, uint16_t length){
+    oled.writeByte(SSD1306_REG_COMMAND, 0xB0 + m);
+    oled.writeByte(SSD1306_REG_COMMAND, 0x00);
+    oled.writeByte(SSD1306_REG_COMMAND, 0x10);
     oled.writeData(SSD1306_REG_DATA, data, length);
 });
 
@@ -81,29 +84,32 @@ int main(void)
     };
 
     oled.writeData = [](uint8_t reg, uint8_t *data, uint16_t length){
-        uint8_t dt[2];
+        uint8_t dt[1];
         dt[0] = reg;
-        dt[1] = *data;
-        //HAL_I2C_Master_Transmit(&i2c2, SSD1306_I2C_ADDR, dt, 2, 10);
+        //dt[1] = *data;
+        HAL_I2C_Master_Transmit(&i2c2, SSD1306_I2C_ADDR, dt, 1, 10);
+        HAL_I2C_Master_Transmit(&i2c2, SSD1306_I2C_ADDR, data, length, 10);
     };
 
     SSD1306_initialize(&oled);
     SSD1306_GotoXY(0, 0);
     SSD1306__puts("HELLO", SSD1306_COLOR_WHITE);
 
+    //ssd1306_gfx.update();
+
     //SSD1306_Init();
-    SSD1306_GotoXY(0, 10);
-    SSD1306_Puts("OLED initialized", &Font_7x10, SSD1306_COLOR_WHITE);
+    //SSD1306_GotoXY(0, 10);
+    //SSD1306_Puts("OLED initialized", &Font_7x10, SSD1306_COLOR_WHITE);
     SSD1306_UpdateScreen();
 
-    int counter = 0;
-    char buf[20];
+    //int counter = 0;
+    //char buf[20];
 
     while (true) {
-        SSD1306_GotoXY(0, 20);
+        /*SSD1306_GotoXY(0, 20);
         sprintf(buf, "counter: %d", counter++);
         SSD1306_Puts(buf, &Font_7x10, SSD1306_COLOR_WHITE);
-        SSD1306_UpdateScreen();
+        SSD1306_UpdateScreen();*/
 
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
         HAL_Delay(500);

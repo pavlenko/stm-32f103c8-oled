@@ -20,7 +20,7 @@ typedef struct {
     uint16_t height;
 } MonoLCD_FONT_t;
 
-typedef void (*MonoLCD_ADAPTER_t)(uint8_t *data, uint16_t length);
+typedef void (*MonoLCD_ADAPTER_t)(uint8_t i, uint8_t *data, uint16_t length);
 
 class MonoLCD {
 private:

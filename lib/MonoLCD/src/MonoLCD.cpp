@@ -12,8 +12,8 @@ MonoLCD::MonoLCD(uint16_t width, uint16_t height, MonoLCD_ADAPTER_t adapter) {
 
 //TODO pass some info to adapter (x,y,width,height,...)
 void MonoLCD::update() {
-    for (int i = 0; i < this->_height / 8; ++i) {
-        this->_adapter(&this->_buffer[this->_width * i], this->_width);
+    for (int i = 0; i < this->_height / 8; i++) {
+        this->_adapter(i, &this->_buffer[this->_width * i], this->_width);
     }
 }
 
