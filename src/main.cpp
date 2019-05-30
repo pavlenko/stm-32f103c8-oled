@@ -56,6 +56,30 @@ MonoLCD ssd1306_gfx = MonoLCD(128, 64, [](uint8_t m, uint8_t *data, uint16_t len
     oled.writeData(SSD1306_REG_DATA, data, length);
 });
 
+void __writeByte(uint8_t type, uint8_t byte) {
+    HAL_I2C_Mem_Write(
+            &i2c2,
+            SSD1306_I2C_ADDR,
+            type,
+            I2C_MEMADD_SIZE_8BIT,
+            (uint8_t *) &byte,
+            1,
+            1000
+    );
+}
+
+void __writeData(uint8_t type, uint8_t *data, uint16_t length) {
+    HAL_I2C_Mem_Write(
+            &i2c2,
+            SSD1306_I2C_ADDR,
+            type,
+            I2C_MEMADD_SIZE_8BIT,
+            (uint8_t *)data,
+            sizeof(uint16_t) * length,
+            1000
+    );
+}
+
 int main(void)
 {
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
