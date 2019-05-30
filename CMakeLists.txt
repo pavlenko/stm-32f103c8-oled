@@ -3,6 +3,9 @@ project(stm-32f103c8-oled)
 
 include(CMakeListsPrivate.txt)
 include_directories("$ENV{HOMEDRIVE}$ENV{HOMEPATH}/.platformio/packages/framework-stm32cube/f1/Drivers/STM32F1xx_HAL_Driver/Src")
+
+include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/gGFX/src")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/mGFX/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/MonoLCD/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/SSD1306/src")
 
