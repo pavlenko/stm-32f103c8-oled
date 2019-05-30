@@ -11,6 +11,7 @@ private:
 public:
     MonochromeGFX(uint16_t width, uint16_t height);
     ~MonochromeGFX();
+    void clear();
 };
 
 
