@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include "mGFX_Font.h"
 
 typedef enum {
     mGFX_BLACK,
@@ -84,22 +85,24 @@ void mGFX_circle(mGFX_Handle_t *handle, uint16_t cx, uint16_t cy, uint16_t r, mG
 void mGFX_bitmap(mGFX_Handle_t *handle, uint16_t x, uint16_t y, mGFX_Bitmap_t *bitmap, mGFX_Color_t color);
 
 /**
+ * @param handle
  * @param x
  * @param y
  * @param symbol
  * @param font
  * @param color
  */
-//void mGFX_symbol(uint16_t x, uint16_t y, char symbol, MonoLCD_FONT_t *font, mGFX_Color_t color);
+void mGFX_symbol(mGFX_Handle_t *handle, uint16_t x, uint16_t y, char symbol, mGFX_Font_t *font, mGFX_Color_t color);
 
 /**
+ * @param handle
  * @param x
  * @param y
  * @param string
  * @param font
  * @param color
  */
-//void mGFX_string(uint16_t x, uint16_t y, const char *string, MonoLCD_FONT_t *font, mGFX_Color_t color);
+void mGFX_string(mGFX_Handle_t *handle, uint16_t x, uint16_t y, const char *string, mGFX_Font_t *font, mGFX_Color_t color);
 
 #ifdef __cplusplus
 }

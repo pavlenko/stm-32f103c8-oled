@@ -1,4 +1,5 @@
 #include <mGFX.h>
+#include <mGFX_Font_05x07.h>
 #include "main.h"
 
 #include "i2c.h"
@@ -297,6 +298,7 @@ int main()
 
     mGFX_clear(&ssd1306_gfx);
     mGFX_bitmap(&ssd1306_gfx, 0, 0, &VUMeter_b, mGFX_WHITE);
+    mGFX_string(&ssd1306_gfx, 0, 56, "Hello", &mGFX_Font_05x07, mGFX_WHITE);
 
     update_display();
 

@@ -142,3 +142,29 @@ void mGFX_bitmap(mGFX_Handle_t *handle, uint16_t x, uint16_t y, mGFX_Bitmap_t *b
         }
     }
 }
+
+void mGFX_symbol(mGFX_Handle_t *handle, uint16_t x, uint16_t y, char symbol, mGFX_Font_t *font, mGFX_Color_t color) {
+    uint16_t i, j, b;
+
+    for (i = 0; i < font->height; i++) {
+        b = font->bitmap[(symbol - 32) * font->height + i];
+
+        for (j = 0; j < font->width; j++) {
+            if ((b << j) & 0x8000) {
+                mGFX_pixel(handle, x + j, y + i, (mGFX_Color_t) color);
+            } else {
+                mGFX_pixel(handle, x + j, y + i, (mGFX_Color_t) !color);
+            }
+        }
+    }
+}
+
+void mGFX_string(mGFX_Handle_t *handle, uint16_t x, uint16_t y, const char *string, mGFX_Font_t *font, mGFX_Color_t color) {
+    while (*string) {
+        mGFX_symbol(handle, x, y, *string, font, color);
+
+        x += font->width;
+
+        string++;
+    }
+}
