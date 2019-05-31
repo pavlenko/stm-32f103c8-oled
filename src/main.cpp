@@ -1,3 +1,4 @@
+#include <mGFX.h>
 #include "main.h"
 
 #include "i2c.h"
@@ -8,12 +9,11 @@
 #include "font_5x7.h"
 #include "SSD1306_2.h"
 
-#include "MonoLCD.h"
-
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 
 SSD1306_t oled;
+mGFX_Handle_t ssd1306_gfx;
 
 char SSD1306__putc(char ch, SSD1306_COLOR_t color) {
     uint32_t i, b, j;
@@ -49,13 +49,6 @@ char SSD1306__puts(const char* str, SSD1306_COLOR_t color) {
     return *str;
 }
 
-MonoLCD ssd1306_gfx = MonoLCD(128, 64, [](uint8_t m, uint8_t *data, uint16_t length){
-    oled.writeByte(SSD1306_REG_COMMAND, 0xB0 + m);
-    oled.writeByte(SSD1306_REG_COMMAND, 0x00);
-    oled.writeByte(SSD1306_REG_COMMAND, 0x10);
-    oled.writeData(SSD1306_REG_DATA, data, length);
-});
-
 void __writeByte(uint8_t type, uint8_t byte) {
     HAL_I2C_Mem_Write(
             &i2c2,
@@ -74,13 +67,23 @@ void __writeData(uint8_t type, uint8_t *data, uint16_t length) {
             SSD1306_I2C_ADDR,
             type,
             I2C_MEMADD_SIZE_8BIT,
-            (uint8_t *)data,
-            sizeof(uint16_t) * length,
+            (uint8_t *) data,
+            sizeof(uint8_t) * length,
             1000
     );
 }
 
-int main(void)
+void update_display() {
+    for (uint8_t i = 0; i < 7; i++) {
+        __writeByte(SSD1306_REG_COMMAND, 0xB0 + i);
+        __writeByte(SSD1306_REG_COMMAND, 0x00);
+        __writeByte(SSD1306_REG_COMMAND, 0x10);
+
+        __writeData(SSD1306_REG_DATA, &ssd1306_gfx.buffer[ssd1306_gfx.width * i], ssd1306_gfx.width);
+    }
+}
+
+int main()
 {
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
@@ -91,14 +94,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
     MX_I2C2_Init();
-
-    MonoLCD_FONT_t font = {
-        .data   = Font_7x10.data,
-        .width  = Font_7x10.FontWidth,
-        .height = Font_7x10.FontHeight,
-    };
-
-    ssd1306_gfx.string(0, 0, "TEST", &font, MonoLCD_COLOR_WHITE);
 
     oled.writeByte = [](uint8_t reg, uint8_t byte){
         uint8_t dt[2];
@@ -116,15 +111,23 @@ int main(void)
     };
 
     SSD1306_initialize(&oled);
-    SSD1306_GotoXY(0, 0);
-    SSD1306__puts("HELLO", SSD1306_COLOR_WHITE);
+
+    mGFX_initialize(&ssd1306_gfx, 128, 64);
+
+    mGFX_line(&ssd1306_gfx, 0, 0, 127, 63, mGFX_WHITE);
+    mGFX_rectangle(&ssd1306_gfx, 10, 10, 117, 53, mGFX_WHITE);
+
+    update_display();
+
+    //SSD1306_GotoXY(0, 0);
+    //SSD1306__puts("HELLO", SSD1306_COLOR_WHITE);
 
     //ssd1306_gfx.update();
 
     //SSD1306_Init();
     //SSD1306_GotoXY(0, 10);
     //SSD1306_Puts("OLED initialized", &Font_7x10, SSD1306_COLOR_WHITE);
-    SSD1306_UpdateScreen();
+    //SSD1306_UpdateScreen();
 
     //int counter = 0;
     //char buf[20];

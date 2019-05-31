@@ -1,6 +1,7 @@
 #include "mGFX.h"
 
 #include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 
 void mGFX_initialize(mGFX_Handle_t *handle, uint16_t width, uint16_t height) {
@@ -26,43 +27,48 @@ void mGFX_pixel(mGFX_Handle_t *handle, uint16_t x, uint16_t y, mGFX_Color_t colo
 }
 
 void mGFX_line(mGFX_Handle_t *handle, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, mGFX_Color_t color) {
-    int16_t dx  = (x0 < x1) ? (x1 - x0) : (x0 - x1);
-    int16_t dy  = (y0 < y1) ? (y1 - y0) : (y0 - y1);
-    int16_t sx  = (x0 < x1) ? 1 : -1;
-    int16_t sy  = (y0 < y1) ? 1 : -1;
-    int16_t err = ((dx > dy) ? dx : -dy) / 2;
+    int diffX = abs(x1 - x0);
+    int diffY = abs(y1 - y0);
 
-    if (dx == 0) {
-        do {
+    int stepX = (x0 > x1) ? -1 : 1;
+    int stepY = (y0 > y1) ? -1 : 1;
+
+    diffY <<= 1; // diffY is now 2*diffY
+    diffX <<= 1; // diffX is now 2*diffX
+
+    mGFX_pixel(handle, x0, y0, color);
+
+    if (diffX > diffY) {
+        // Optimization for draw line with width > height
+        int fraction = diffY - (diffX >> 1);
+
+        while (x0 != x1) {
+            if (fraction >= 0) {
+                y0       += stepY;
+                fraction -= diffX;
+            }
+
+            x0       += stepX;
+            fraction += diffY;
+
             mGFX_pixel(handle, x0, y0, color);
-            y0 += dy;
-        } while (y0 != y1);
+        }
+    } else {
+        // Optimization for draw line with width < height
+        int fraction = diffX - (diffY >> 1);
 
-        return;
-    }
+        while (y0 != y1) {
+            if (fraction >= 0) {
+                x0       += stepX;
+                fraction -= diffY;
+            }
 
-    if (dy == 0) {
-        do {
+            y0       += stepY;
+            fraction += diffX;
+
             mGFX_pixel(handle, x0, y0, color);
-            x0 += dx;
-        } while (x0 != x1);
-
-        return;
+        }
     }
-
-    do {
-        mGFX_pixel(handle, x0, y0, color);
-
-        if (err > -dx) {
-            err -= dy;
-            x0  += sx;
-        }
-
-        if (err < dy) {
-            err += dx;
-            y0  += sy;
-        }
-    } while (x0 != x1 || y0 != y1);
 }
 
 void mGFX_rectangle(mGFX_Handle_t *handle, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, mGFX_Color_t color) {
