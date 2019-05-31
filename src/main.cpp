@@ -116,7 +116,7 @@ int main()
 
     mGFX_line(&ssd1306_gfx, 0, 0, 127, 63, mGFX_WHITE);
     mGFX_line(&ssd1306_gfx, 0, 63, 127, 0, mGFX_WHITE);
-    mGFX_rectangle(&ssd1306_gfx, 0, 0, 127, 63, mGFX_WHITE);
+    //mGFX_rectangle(&ssd1306_gfx, 0, 0, 127, 63, mGFX_WHITE);
     mGFX_circle(&ssd1306_gfx, 63, 31, 31, mGFX_WHITE);
 
     update_display();
@@ -133,15 +133,39 @@ int main()
 
     //int counter = 0;
     //char buf[20];
+    int16_t _w = 0;
+    int16_t _h = 0;
+    int16_t dw = 4;
+    int16_t dh = 2;
 
     while (true) {
         /*SSD1306_GotoXY(0, 20);
         sprintf(buf, "counter: %d", counter++);
         SSD1306_Puts(buf, &Font_7x10, SSD1306_COLOR_WHITE);
         SSD1306_UpdateScreen();*/
+        mGFX_clear(&ssd1306_gfx);
+
+        mGFX_line(&ssd1306_gfx, 0, 0, 127, 63, mGFX_WHITE);
+        mGFX_line(&ssd1306_gfx, 0, 63, 127, 0, mGFX_WHITE);
+        mGFX_circle(&ssd1306_gfx, 63, 31, 31, mGFX_WHITE);
+
+        mGFX_rectangle(&ssd1306_gfx, 0, 0, _w - 1, _h - 1, mGFX_WHITE);
+
+        update_display();
+
+        if (_w == 0 && _h == 0) {
+            dw = 4;
+            dh = 2;
+        } else if (_w == 128 && _h == 64) {
+            dw = -4;
+            dh = -2;
+        }
+
+        _w += dw;
+        _h += dh;
 
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-        HAL_Delay(500);
+        HAL_Delay(25);
     }
 }
 

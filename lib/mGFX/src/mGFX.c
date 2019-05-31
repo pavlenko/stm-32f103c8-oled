@@ -30,6 +30,10 @@ void mGFX_line(mGFX_Handle_t *handle, uint16_t x0, uint16_t y0, uint16_t x1, uin
     int diffX = abs(x1 - x0);
     int diffY = abs(y1 - y0);
 
+    if (diffX == 0 && diffY == 0) {
+        return;
+    }
+
     int stepX = (x0 > x1) ? -1 : 1;
     int stepY = (y0 > y1) ? -1 : 1;
 
