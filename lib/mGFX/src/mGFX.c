@@ -105,3 +105,20 @@ void mGFX_circle(mGFX_Handle_t *handle, uint16_t cx, uint16_t cy, uint16_t r, mG
         mGFX_pixel(handle, cx - y, cy - x, color);
     }
 }
+
+void mGFX_bitmap(mGFX_Handle_t *handle, uint16_t x, uint16_t y, mGFX_Bitmap_t *bitmap, mGFX_Color_t color) {
+    uint16_t width = (bitmap->width + 7) / 8;
+    uint8_t byte   = 0;
+
+    for (uint16_t j = 0; j < bitmap->height; j++, y++) {
+        for (uint16_t i = 0; i < bitmap->width; i++) {
+            if (i & 7u) {
+                byte <<= 1u;
+            } else {
+                byte = bitmap->data[j * width + i / 8];
+            }
+
+            if (byte & 0x80u) mGFX_pixel(handle, x + i, y, color);
+        }
+    }
+}

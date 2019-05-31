@@ -101,3 +101,11 @@ void gGFX_circle(gGFX_Handle_t *handle, uint16_t cx, uint16_t cy, uint16_t r, ui
         gGFX_pixel(handle, cx - y, cy - x, color);
     }
 }
+
+void gGFX_bitmap(gGFX_Handle_t *handle, uint16_t x, uint16_t y, gGFX_Bitmap_t *bitmap) {
+    for (uint16_t j = 0; j < bitmap->height; j++, y++) {
+        for (uint16_t i = 0; i < bitmap->width; i++) {
+            gGFX_pixel(handle, x + i, y, bitmap->data[j * bitmap->width + i]);
+        }
+    }
+}
