@@ -1,5 +1,8 @@
 #include <mGFX.h>
 #include <mGFX_Font_05x07.h>
+#include <mGFX_Font_07x10.h>
+#include <mGFX_Font_11x18.h>
+#include <mGFX_Font_16x26.h>
 #include "main.h"
 
 #include "i2c.h"
@@ -294,11 +297,14 @@ int main()
 
     update_display();
 
-    HAL_Delay(1000);
+    HAL_Delay(1500);
 
     mGFX_clear(&ssd1306_gfx);
     mGFX_bitmap(&ssd1306_gfx, 0, 0, &VUMeter_b, mGFX_WHITE);
-    mGFX_string(&ssd1306_gfx, 0, 56, "Hello", &mGFX_Font_05x07, mGFX_WHITE);
+    mGFX_string(&ssd1306_gfx, 0, 56, "Hel", &mGFX_Font_05x07, mGFX_WHITE);
+    mGFX_string(&ssd1306_gfx, 21, 55, "Hel", &mGFX_Font_07x10, mGFX_WHITE);
+    mGFX_string(&ssd1306_gfx, 45, 48, "Hel", &mGFX_Font_11x18, mGFX_WHITE);
+    mGFX_string(&ssd1306_gfx, 70, 40, "He", &mGFX_Font_16x26, mGFX_WHITE);
 
     update_display();
 
