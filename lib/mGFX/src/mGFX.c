@@ -122,13 +122,23 @@ void mGFX_bitmap(mGFX_Handle_t *handle, uint16_t x, uint16_t y, mGFX_Bitmap_t *b
 
     for (uint16_t j = 0; j < bitmap->height; j++, y++) {
         for (uint16_t i = 0; i < bitmap->width; i++) {
-            if (i & 7u) {
-                byte <<= 1u;
-            } else {
-                byte = bitmap->data[j * width + i / 8];
-            }
+            if (!bitmap->lsb) {
+                if (i & 7u) {
+                    byte <<= 1u;
+                } else {
+                    byte = bitmap->data[j * width + i / 8];
+                }
 
-            if (byte & 0x80u) mGFX_pixel(handle, x + i, y, color);
+                if (byte & 0x80u) mGFX_pixel(handle, x + i, y, color);
+            } else {
+                if (i & 7u) {
+                    byte >>= 1u;
+                } else {
+                    byte = bitmap->data[j * width + i / 8];
+                }
+
+                if (byte & 0x01u) mGFX_pixel(handle, x + i, y, color);
+            }
         }
     }
 }

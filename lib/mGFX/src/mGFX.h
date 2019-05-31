@@ -22,6 +22,7 @@ typedef struct {
     uint8_t *data;
     uint16_t width;
     uint16_t height;
+    uint8_t lsb;
 } mGFX_Bitmap_t;
 
 /**
