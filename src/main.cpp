@@ -74,7 +74,7 @@ void __writeData(uint8_t type, uint8_t *data, uint16_t length) {
 }
 
 void update_display() {
-    for (uint8_t i = 0; i < 7; i++) {
+    for (uint8_t i = 0; i < 8; i++) {
         __writeByte(SSD1306_REG_COMMAND, 0xB0 + i);
         __writeByte(SSD1306_REG_COMMAND, 0x00);
         __writeByte(SSD1306_REG_COMMAND, 0x10);
@@ -115,7 +115,9 @@ int main()
     mGFX_initialize(&ssd1306_gfx, 128, 64);
 
     mGFX_line(&ssd1306_gfx, 0, 0, 127, 63, mGFX_WHITE);
-    mGFX_rectangle(&ssd1306_gfx, 10, 10, 117, 53, mGFX_WHITE);
+    mGFX_line(&ssd1306_gfx, 0, 63, 127, 0, mGFX_WHITE);
+    mGFX_rectangle(&ssd1306_gfx, 0, 0, 127, 63, mGFX_WHITE);
+    mGFX_circle(&ssd1306_gfx, 63, 31, 31, mGFX_WHITE);
 
     update_display();
 
