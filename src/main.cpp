@@ -6,6 +6,7 @@
 #include "main.h"
 
 #include "i2c.h"
+#include "tim.h"
 
 #include "fonts.h"
 #include "ssd1306.h"
@@ -261,15 +262,16 @@ void update_display() {
 
 int main()
 {
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+    HAL_Init();
 
-  /* Configure the system clock */
-  SystemClock_Config();
+    /* Configure the system clock */
+    SystemClock_Config();
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
+    /* Initialize all configured peripherals */
+    MX_GPIO_Init();
     MX_I2C2_Init();
+    MX_TIM2_Init();
 
     oled.writeByte = [](uint8_t reg, uint8_t byte){
         uint8_t dt[2];
