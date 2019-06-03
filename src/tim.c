@@ -22,6 +22,11 @@ void MX_TIM2_Init() {
     HAL_TIM_PWM_ConfigChannel(&tim4, &sConfigOC, TIM_CHANNEL_2);
     HAL_TIM_PWM_ConfigChannel(&tim4, &sConfigOC, TIM_CHANNEL_3);
     HAL_TIM_PWM_ConfigChannel(&tim4, &sConfigOC, TIM_CHANNEL_4);
+
+    HAL_TIM_PWM_Start_IT(&tim4, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start_IT(&tim4, TIM_CHANNEL_2);
+    HAL_TIM_PWM_Start_IT(&tim4, TIM_CHANNEL_3);
+    HAL_TIM_PWM_Start_IT(&tim4, TIM_CHANNEL_4);
 }
 
 void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* timPWM)
@@ -70,4 +75,8 @@ void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef* timPWM)
         /* Peripheral interrupt Deinit */
         HAL_NVIC_DisableIRQ(TIM4_IRQn);
     }
+}
+
+void TIM4_IRQHandler(void) {
+    HAL_TIM_IRQHandler(&tim4);
 }
