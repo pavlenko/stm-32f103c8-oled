@@ -14,6 +14,8 @@
 #include "font_5x7.h"
 #include "SSD1306_2.h"
 
+#include "bitmap0.h"
+
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 
@@ -329,11 +331,12 @@ int main()
     HAL_Delay(1500);
 
     mGFX_clear(&ssd1306_gfx);
-    mGFX_bitmap(&ssd1306_gfx, 0, 0, &VUMeter_b, mGFX_WHITE);
+    mGFX_bitmap(&ssd1306_gfx, 0, 0, &bitmap0, mGFX_WHITE);
+    /*mGFX_bitmap(&ssd1306_gfx, 0, 0, &VUMeter_b, mGFX_WHITE);
     mGFX_string(&ssd1306_gfx, 0, 56, "Hel", &mGFX_Font_05x07, mGFX_WHITE);
     mGFX_string(&ssd1306_gfx, 21, 55, "Hel", &mGFX_Font_07x10, mGFX_WHITE);
     mGFX_string(&ssd1306_gfx, 45, 48, "Hel", &mGFX_Font_11x18, mGFX_WHITE);
-    mGFX_string(&ssd1306_gfx, 70, 40, "He", &mGFX_Font_16x26, mGFX_WHITE);
+    mGFX_string(&ssd1306_gfx, 70, 40, "He", &mGFX_Font_16x26, mGFX_WHITE);*/
 
     update_display();
 
