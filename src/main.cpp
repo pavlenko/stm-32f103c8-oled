@@ -292,6 +292,33 @@ int main()
 
     mGFX_initialize(&ssd1306_gfx, 128, 64);
 
+    mGFX_string(&ssd1306_gfx, 0, 0, "Core...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    update_display();
+    HAL_Delay(200);
+    mGFX_string(&ssd1306_gfx, 0, 8, "Channel1...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    update_display();
+    HAL_Delay(200);
+    mGFX_string(&ssd1306_gfx, 0, 16, "Channel2...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    update_display();
+    HAL_Delay(200);
+    mGFX_string(&ssd1306_gfx, 0, 24, "Channel3...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    update_display();
+    HAL_Delay(200);
+    mGFX_string(&ssd1306_gfx, 0, 32, "Channel4...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    update_display();
+    HAL_Delay(200);
+    mGFX_string(&ssd1306_gfx, 0, 40, "Channel5...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    update_display();
+    HAL_Delay(200);
+    mGFX_string(&ssd1306_gfx, 0, 48, "Channel6...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    update_display();
+    HAL_Delay(200);
+    mGFX_string(&ssd1306_gfx, 0, 56, "Run main program", &mGFX_Font_05x07, mGFX_WHITE);
+    update_display();
+
+    HAL_Delay(2000);
+    mGFX_clear(&ssd1306_gfx);
+
     mGFX_line(&ssd1306_gfx, 0, 0, 127, 63, mGFX_WHITE);
     mGFX_line(&ssd1306_gfx, 0, 63, 127, 0, mGFX_WHITE);
     mGFX_rectangle(&ssd1306_gfx, 0, 0, 127, 63, mGFX_WHITE);
