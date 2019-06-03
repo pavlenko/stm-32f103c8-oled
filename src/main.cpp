@@ -327,6 +327,11 @@ int main()
     int16_t dw = 4;
     int16_t dh = 2;*/
 
+    //tim4.Instance->CCR1 = 2000;
+
+    int16_t _i = 600;
+    int16_t di = 0;
+
     while (true) {
         /*SSD1306_GotoXY(0, 20);
         sprintf(buf, "counter: %d", counter++);
@@ -355,6 +360,17 @@ int main()
 
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
         HAL_Delay(25);
+
+        if (_i == 1500) {
+            di = -10;
+            //tim4.Instance->CCR1 = 1500;
+        } else if (_i == 600) {
+            di = 10;
+            //tim4.Instance->CCR1 = 600;
+        }
+
+        _i += di;
+        tim4.Instance->CCR1 = _i;
     }
 }
 

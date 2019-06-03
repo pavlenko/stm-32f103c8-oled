@@ -5,6 +5,8 @@ TIM_HandleTypeDef tim4;
 TIM_OC_InitTypeDef sConfigOC;
 
 void MX_TIM2_Init() {
+    TIM_MasterConfigTypeDef sMasterConfig;
+
     tim4.Instance           = TIM4;
     tim4.Init.Prescaler     = (uint32_t) (SystemCoreClock / 1000000) - 1;
     tim4.Init.CounterMode   = TIM_COUNTERMODE_UP;
@@ -23,10 +25,15 @@ void MX_TIM2_Init() {
     HAL_TIM_PWM_ConfigChannel(&tim4, &sConfigOC, TIM_CHANNEL_3);
     HAL_TIM_PWM_ConfigChannel(&tim4, &sConfigOC, TIM_CHANNEL_4);
 
-    HAL_TIM_PWM_Start_IT(&tim4, TIM_CHANNEL_1);
-    HAL_TIM_PWM_Start_IT(&tim4, TIM_CHANNEL_2);
-    HAL_TIM_PWM_Start_IT(&tim4, TIM_CHANNEL_3);
-    HAL_TIM_PWM_Start_IT(&tim4, TIM_CHANNEL_4);
+    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+    sMasterConfig.MasterSlaveMode     = TIM_MASTERSLAVEMODE_ENABLE;
+
+    HAL_TIMEx_MasterConfigSynchronization(&tim4, &sMasterConfig);
+
+    HAL_TIM_PWM_Start(&tim4, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&tim4, TIM_CHANNEL_2);
+    HAL_TIM_PWM_Start(&tim4, TIM_CHANNEL_3);
+    HAL_TIM_PWM_Start(&tim4, TIM_CHANNEL_4);
 }
 
 void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* timPWM)
@@ -53,7 +60,8 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* timPWM)
         HAL_NVIC_EnableIRQ(TIM4_IRQn);
 
         /* Peripheral clock enable */
-        __HAL_RCC_TIM2_CLK_ENABLE();
+        __HAL_RCC_TIM4_CLK_ENABLE();
+        __HAL_RCC_GPIOB_CLK_ENABLE();
     }
 }
 
@@ -77,6 +85,7 @@ void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef* timPWM)
     }
 }
 
+/*
 void TIM4_IRQHandler(void) {
     HAL_TIM_IRQHandler(&tim4);
-}
+}*/
