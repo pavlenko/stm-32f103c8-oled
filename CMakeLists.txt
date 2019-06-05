@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.2)
 project(stm-32f103c8-oled)
 
 include(CMakeListsPrivate.txt)
+include_directories("$ENV{HOMEDRIVE}$ENV{HOMEPATH}/.platformio/packages/framework-stm32cube/f1/Drivers/STM32F1xx_HAL_Driver/Src")
 include_directories("$ENV{HOME}/.platformio/packages/framework-stm32cube/f1/Drivers/STM32F1xx_HAL_Driver/Src")
 
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/gGFX/src")
