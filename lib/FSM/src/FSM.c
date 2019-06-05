@@ -1,15 +1,31 @@
 #include "FSM.h"
 
 void FSM_initialize(FSM_Handle_t *fsm, FSM_State_t *state) {
-    fsm->state = state;
+    fsm->prevState = fsm->nextState = state;
 
-    fsm->state->enter();
+    if (fsm->prevState->onEnter) {
+        fsm->prevState->onEnter();
+    }
 }
 
-void FSM_transition(FSM_Handle_t *fsm, FSM_Transition_t *transition) {
-    fsm->state->leave();
+void FSM_transition(FSM_Handle_t *fsm, FSM_State_t *state) {
+    fsm->nextState = state;
+}
 
-    fsm->state = transition->handler();
+void FSM_dispatch(FSM_Handle_t *fsm) {
+    if (fsm->prevState != fsm->nextState) {
+        if (fsm->prevState->onLeave) {
+            fsm->prevState->onLeave();
+        }
 
-    fsm->state->enter();
+        fsm->prevState = fsm->nextState;
+
+        if (fsm->prevState->onEnter) {
+            fsm->prevState->onEnter();
+        }
+    }
+
+    if (fsm->prevState->onDispatch) {
+        fsm->prevState->onDispatch();
+    }
 }
