@@ -4,10 +4,13 @@
 #include <stddef.h>
 #include <string.h>
 
-//TODO error of initialization here, cannot attach timer after call this function
 void Timeout_initialize(Timeout_t *timeout, uint8_t limit) {
-    timeout->items = (Timer_t **) malloc(limit * sizeof(Timer_t *));
+    //timeout->items = (Timer_t **) malloc(limit * sizeof(Timer_t *));
 
+    // Allocate memory for array of struct pointers
+    *(timeout->items) = (Timer_t *) malloc(limit * sizeof(Timer_t *));//TODO <-- check this variant of initialization
+
+    // Fill array to pointers to null
     for (uint8_t i = 0; i < timeout->limit; ++i) {
         timeout->items[i] = NULL;
     }
