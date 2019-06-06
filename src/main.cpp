@@ -57,13 +57,13 @@ void update_display() {
     }
 }
 
-Timeout_t timeout;
+Timeout_List_t timeout;
 
 void __toggle_led() {
     HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 }
 
-Timer_t timerLED;
+Timeout_Item_t timerLED;
 
 int main()
 {

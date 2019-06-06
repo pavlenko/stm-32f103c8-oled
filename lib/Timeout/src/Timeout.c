@@ -4,11 +4,11 @@
 #include <stddef.h>
 #include <string.h>
 
-void Timeout_initialize(Timeout_t *timeout, uint8_t limit) {
+void Timeout_initialize(Timeout_List_t *timeout, uint8_t limit) {
     //timeout->items = (Timer_t **) malloc(limit * sizeof(Timer_t *));
 
     // Allocate memory for array of struct pointers
-    *(timeout->items) = (Timer_t *) malloc(limit * sizeof(Timer_t *));//TODO <-- check this variant of initialization
+    *(timeout->items) = (Timeout_Item_t *) malloc(limit * sizeof(Timeout_Item_t *));//TODO <-- check this variant of initialization
 
     // Fill array to pointers to null
     for (uint8_t i = 0; i < timeout->limit; ++i) {
@@ -16,7 +16,7 @@ void Timeout_initialize(Timeout_t *timeout, uint8_t limit) {
     }
 }
 
-Timeout_Status_t Timeout_attachTimer(Timeout_t *timeout, Timer_t *timer) {
+Timeout_Status_t Timeout_attachTimer(Timeout_List_t *timeout, Timeout_Item_t *timer) {
     for (uint8_t i = 0; i < timeout->limit; ++i) {
         if (timeout->items[i] == NULL) {
             timeout->items[i] = timer;
@@ -27,7 +27,7 @@ Timeout_Status_t Timeout_attachTimer(Timeout_t *timeout, Timer_t *timer) {
     return TIMEOUT_FAILURE;
 }
 
-Timeout_Status_t Timeout_cancelTimer(Timeout_t *timeout, Timer_t *timer) {
+Timeout_Status_t Timeout_cancelTimer(Timeout_List_t *timeout, Timeout_Item_t *timer) {
     for (uint8_t i = 0; i < timeout->limit; ++i) {
         if (timeout->items[i] == timer) {
             timeout->items[i] = NULL;
@@ -38,7 +38,7 @@ Timeout_Status_t Timeout_cancelTimer(Timeout_t *timeout, Timer_t *timer) {
     return TIMEOUT_FAILURE;
 }
 
-void Timeout_dispatch(Timeout_t *timeout, uint32_t ms) {
+void Timeout_dispatch(Timeout_List_t *timeout, uint32_t ms) {
     for (uint8_t i = 0; i < timeout->limit; ++i) {
         if (timeout->items[i] == NULL) {
             continue;
