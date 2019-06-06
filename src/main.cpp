@@ -15,6 +15,7 @@
 #include "SSD1306_2.h"
 
 #include "bitmap0.h"
+#include "Timeout.h"
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -55,6 +56,14 @@ void update_display() {
         __writeData(SSD1306_REG_DATA, &ssd1306_gfx.buffer[ssd1306_gfx.width * i], ssd1306_gfx.width);
     }
 }
+
+Timeout_t timeout;
+
+void __toggle_led() {
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+}
+
+Timer_t timerLED;
 
 int main()
 {
@@ -156,7 +165,24 @@ int main()
     int16_t _i = 600;
     int16_t di = 0;
 
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+
+    timerLED.interval = 1000;
+    timerLED.callable = __toggle_led;
+
+    Timeout_initialize(&timeout, 16);
+
+    if (Timeout_attachTimer(&timeout, &timerLED) == TIMEOUT_FAILURE) {
+        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+    }
+
+    char str[20];
+
     while (true) {
+        sprintf(str, "tick: %d", HAL_GetTick());
+        mGFX_string(&ssd1306_gfx, 0, 0, str, &mGFX_Font_05x07, mGFX_WHITE);
+        //timerLED.callable();
+        //Timeout_dispatch(&timeout, HAL_GetTick());
         /*SSD1306_GotoXY(0, 20);
         sprintf(buf, "counter: %d", counter++);
         SSD1306_Puts(buf, &Font_7x10, SSD1306_COLOR_WHITE);
@@ -182,7 +208,7 @@ int main()
         _w += dw;
         _h += dh;*/
 
-        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+        //HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
         HAL_Delay(25);
 
         if (_i == 1500) {

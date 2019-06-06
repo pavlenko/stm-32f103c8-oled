@@ -9,6 +9,7 @@ include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/gGFX/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/mGFX/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/MonoLCD/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/SSD1306/src")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/Timeout/src")
 
 add_custom_target(
     PLATFORMIO_BUILD ALL
