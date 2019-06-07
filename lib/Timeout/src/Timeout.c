@@ -48,6 +48,55 @@ Timeout_Status_t Timeout_createRepeatedTimer(Timeout_List_t *timeout, uint32_t i
     return TIMEOUT_FAILURE;
 }
 
+uint32_t Timeout_createHandlerSingular(Timeout_List_t *timeout, uint32_t interval, void (*callable)()) {
+    for (uint8_t i = 0; i < timeout->limit; ++i) {
+        if ((*(timeout->items + i)) == NULL) {
+            (*(timeout->items + i)) = (Timeout_Timer_t *) malloc(sizeof(Timeout_Timer_t));
+
+            timeout->last++;
+
+            (*(timeout->items + i))->identity = timeout->last;
+            (*(timeout->items + i))->interval = 0;
+            (*(timeout->items + i))->schedule = interval + timeout->time;
+            (*(timeout->items + i))->callable = callable;
+
+            return timeout->last;
+        }
+    }
+
+    return 0;
+}
+
+uint32_t Timeout_createHandlerRepeated(Timeout_List_t *timeout, uint32_t interval, void (*callable)()) {
+    for (uint8_t i = 0; i < timeout->limit; ++i) {
+        if ((*(timeout->items + i)) == NULL) {
+            (*(timeout->items + i)) = (Timeout_Timer_t *) malloc(sizeof(Timeout_Timer_t));
+
+            timeout->last++;
+
+            (*(timeout->items + i))->identity = timeout->last;
+            (*(timeout->items + i))->interval = interval;
+            (*(timeout->items + i))->schedule = interval + timeout->time;
+            (*(timeout->items + i))->callable = callable;
+
+            return timeout->last;
+        }
+    }
+
+    return 0;
+}
+
+Timeout_Status_t Timeout_cancelHandler(Timeout_List_t *timeout, uint32_t identity) {
+    for (uint8_t i = 0; i < timeout->limit; ++i) {
+        if ((*(timeout->items + i)) != NULL && (*(timeout->items + i))->identity == identity) {
+            (*(timeout->items + i)) = NULL;
+            return TIMEOUT_SUCCESS;
+        }
+    }
+
+    return TIMEOUT_FAILURE;
+}
+
 Timeout_Status_t Timeout_cancelTimer(Timeout_List_t *timeout, Timeout_Timer_t *timer) {
     for (uint8_t i = 0; i < timeout->limit; ++i) {
         if ((*(timeout->items + i)) == timer) {
