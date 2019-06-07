@@ -28,11 +28,16 @@ typedef struct {
     Timeout_Item_t *items;
 } Timeout_List_t;
 
+/**
+ * Initialize handlers list with specific time and size
+ *
+ * @param timeout
+ * @param time
+ * @param limit
+ *
+ * @return Success or failure if cannot allocate memory for list
+ */
 Timeout_Status_t Timeout_initialize(Timeout_List_t *timeout, uint32_t time, uint8_t limit);
-
-Timeout_Status_t Timeout_attachTimer(Timeout_List_t *timeout, Timeout_Timer_t *timer);
-
-Timeout_Status_t Timeout_createRepeatedTimer(Timeout_List_t *timeout, uint32_t interval, void (*callable)());
 
 /**
  * Create and attach singular run handler
@@ -41,7 +46,7 @@ Timeout_Status_t Timeout_createRepeatedTimer(Timeout_List_t *timeout, uint32_t i
  * @param interval
  * @param callable
  *
- * @return Handler identity for use in cancel logic
+ * @return Handler identity for use in cancel logic or 0 if cannot create handler
  */
 uint32_t Timeout_createHandlerSingular(Timeout_List_t *timeout, uint32_t interval, void (*callable)());
 
@@ -52,7 +57,7 @@ uint32_t Timeout_createHandlerSingular(Timeout_List_t *timeout, uint32_t interva
  * @param interval
  * @param callable
  *
- * @return Handler identity for use in cancel logic
+ * @return Handler identity for use in cancel logic or 0 if cannot create handler
  */
 uint32_t Timeout_createHandlerRepeated(Timeout_List_t *timeout, uint32_t interval, void (*callable)());
 
@@ -66,9 +71,13 @@ uint32_t Timeout_createHandlerRepeated(Timeout_List_t *timeout, uint32_t interva
  */
 Timeout_Status_t Timeout_cancelHandler(Timeout_List_t *timeout, uint32_t identity);
 
-Timeout_Status_t Timeout_cancelTimer(Timeout_List_t *timeout, Timeout_Timer_t *timer);
-
-void Timeout_dispatch(Timeout_List_t *timeout, uint32_t ms);
+/**
+ * Dispatch handlers, must be called as fast as possible but at least at each millisecond
+ *
+ * @param timeout
+ * @param time
+ */
+void Timeout_dispatch(Timeout_List_t *timeout, uint32_t time);
 
 #ifdef __cplusplus
 }

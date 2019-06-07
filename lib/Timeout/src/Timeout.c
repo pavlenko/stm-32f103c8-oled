@@ -21,37 +21,14 @@ Timeout_Status_t Timeout_initialize(Timeout_List_t *timeout, uint32_t time, uint
     return TIMEOUT_SUCCESS;
 }
 
-Timeout_Status_t Timeout_attachTimer(Timeout_List_t *timeout, Timeout_Timer_t *timer) {
-    for (uint8_t i = 0; i < timeout->limit; ++i) {
-        if ((*(timeout->items + i)) == NULL) {
-            (*(timeout->items + i)) = timer;
-            return TIMEOUT_SUCCESS;
-        }
-    }
-
-    return TIMEOUT_FAILURE;
-}
-
-Timeout_Status_t Timeout_createRepeatedTimer(Timeout_List_t *timeout, uint32_t interval, void (*callable)()) {
-    for (uint8_t i = 0; i < timeout->limit; ++i) {
-        if ((*(timeout->items + i)) == NULL) {
-            (*(timeout->items + i)) = (Timeout_Timer_t *) malloc(sizeof(Timeout_Timer_t));
-
-            (*(timeout->items + i))->interval = interval;
-            (*(timeout->items + i))->schedule = interval + timeout->time;
-            (*(timeout->items + i))->callable = callable;
-
-            return TIMEOUT_SUCCESS;
-        }
-    }
-
-    return TIMEOUT_FAILURE;
-}
-
 uint32_t Timeout_createHandlerSingular(Timeout_List_t *timeout, uint32_t interval, void (*callable)()) {
     for (uint8_t i = 0; i < timeout->limit; ++i) {
         if ((*(timeout->items + i)) == NULL) {
             (*(timeout->items + i)) = (Timeout_Timer_t *) malloc(sizeof(Timeout_Timer_t));
+
+            if (!(*(timeout->items + i))) {
+                return 0;
+            }
 
             timeout->last++;
 
@@ -71,6 +48,10 @@ uint32_t Timeout_createHandlerRepeated(Timeout_List_t *timeout, uint32_t interva
     for (uint8_t i = 0; i < timeout->limit; ++i) {
         if ((*(timeout->items + i)) == NULL) {
             (*(timeout->items + i)) = (Timeout_Timer_t *) malloc(sizeof(Timeout_Timer_t));
+
+            if (!(*(timeout->items + i))) {
+                return 0;
+            }
 
             timeout->last++;
 
@@ -97,26 +78,15 @@ Timeout_Status_t Timeout_cancelHandler(Timeout_List_t *timeout, uint32_t identit
     return TIMEOUT_FAILURE;
 }
 
-Timeout_Status_t Timeout_cancelTimer(Timeout_List_t *timeout, Timeout_Timer_t *timer) {
-    for (uint8_t i = 0; i < timeout->limit; ++i) {
-        if ((*(timeout->items + i)) == timer) {
-            (*(timeout->items + i)) = NULL;
-            return TIMEOUT_SUCCESS;
-        }
-    }
-
-    return TIMEOUT_FAILURE;
-}
-
-void Timeout_dispatch(Timeout_List_t *timeout, uint32_t ms) {
-    timeout->time = ms;
+void Timeout_dispatch(Timeout_List_t *timeout, uint32_t time) {
+    timeout->time = time;
 
     for (uint8_t i = 0; i < timeout->limit; ++i) {
         if ((*(timeout->items + i)) == NULL) {
             continue;
         }
 
-        if ((*(timeout->items + i))->schedule < ms) {
+        if ((*(timeout->items + i))->schedule < time) {
             (*(timeout->items + i))->callable();
 
             if ((*(timeout->items + i))->interval > 0) {

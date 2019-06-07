@@ -172,7 +172,7 @@ int main()
 
     Timeout_initialize(&timeout, HAL_GetTick(), 16);
 
-    if (Timeout_createRepeatedTimer(&timeout, 500, __toggle_led) == TIMEOUT_FAILURE) {
+    if (!Timeout_createHandlerRepeated(&timeout, 500, __toggle_led)) {
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
     }
 
