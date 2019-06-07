@@ -1,6 +1,6 @@
 #include "SSD1306.h"
 
-PE::SSD1306::SSD1306(PE_SSD1306_VCC_t vcc, uint8_t width, uint8_t height, SSD1306_reset_t reset, SSD1306_write_t write) {
+PE_SSD1306::PE_SSD1306(PE_SSD1306_VCC_t vcc, uint8_t width, uint8_t height, PE_SSD1306_reset_t reset, PE_SSD1306_write_t write) {
     _vcc    = vcc;
     _width  = width;
     _height = height;
@@ -8,7 +8,7 @@ PE::SSD1306::SSD1306(PE_SSD1306_VCC_t vcc, uint8_t width, uint8_t height, SSD130
     _write  = write;
 }
 
-void PE::SSD1306::initialize() {
+void PE_SSD1306::initialize() {
     _reset();
 
     uint8_t muxRatio   = _height - 1;
@@ -70,7 +70,7 @@ void PE::SSD1306::initialize() {
     _write(SSD1306_WRITE_COMMAND, init3, sizeof(init3));
 }
 
-void PE::SSD1306::setEnabled(bool value) {
+void PE_SSD1306::setEnabled(bool value) {
     static const uint8_t data[] = {
         (uint8_t) (value ? PE_SSD1306_DISPLAY_ON : PE_SSD1306_DISPLAY_OFF),
     };
@@ -78,7 +78,7 @@ void PE::SSD1306::setEnabled(bool value) {
     _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
-void PE::SSD1306::setInverse(bool value) {
+void PE_SSD1306::setInverse(bool value) {
     static const uint8_t data[] = {
             (uint8_t) (value ? PE_SSD1306_INVERSE_ENABLE : PE_SSD1306_INVERSE_DISABLE),
     };
@@ -86,7 +86,7 @@ void PE::SSD1306::setInverse(bool value) {
     _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
-void PE::SSD1306::setContrast(uint8_t contrast) {
+void PE_SSD1306::setContrast(uint8_t contrast) {
     static const uint8_t data[] = {
         PE_SSD1306_CONTRAST_CONTROL,
         contrast,
@@ -95,7 +95,7 @@ void PE::SSD1306::setContrast(uint8_t contrast) {
     _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
-void PE::SSD1306::setFlipX(bool value) {
+void PE_SSD1306::setFlipX(bool value) {
     static const uint8_t data[] = {
         (uint8_t) (value ? PE_SSD1306_SEGMENT_REMAP_OFF : PE_SSD1306_SEGMENT_REMAP_ON),
     };
@@ -103,7 +103,7 @@ void PE::SSD1306::setFlipX(bool value) {
     _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
-void PE::SSD1306::setFlipY(bool value) {
+void PE_SSD1306::setFlipY(bool value) {
     static const uint8_t data[] = {
         (uint8_t) (value ? PE_SSD1306_COM_SCAN_INCREMENT : PE_SSD1306_COM_SCAN_DECREMENT),
     };
@@ -111,7 +111,7 @@ void PE::SSD1306::setFlipY(bool value) {
     _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
-void PE::SSD1306::setAllEnabled(bool value) {
+void PE_SSD1306::setAllEnabled(bool value) {
     static const uint8_t data[] = {
         (uint8_t) (value ? PE_SSD1306_ALL_ON_ENABLE : PE_SSD1306_ALL_ON_DISABLE),
     };
@@ -119,7 +119,7 @@ void PE::SSD1306::setAllEnabled(bool value) {
     _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
-void PE::SSD1306::setScrollEnabled(bool value) {
+void PE_SSD1306::setScrollEnabled(bool value) {
     static const uint8_t data[] = {
         (uint8_t) (value ? PE_SSD1306_SCROLL_ENABLE : PE_SSD1306_SCROLL_DISABLE),
     };
@@ -127,7 +127,7 @@ void PE::SSD1306::setScrollEnabled(bool value) {
     _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
-void PE::SSD1306::update(uint8_t *buffer, uint16_t size) {
+void PE_SSD1306::update(uint8_t *buffer, uint16_t size) {
     static const uint8_t data[] = {
         PE_SSD1306_PAGE_START_ADDRESS,
         PE_SSD1306_COLUMN_L_ADDRESS,

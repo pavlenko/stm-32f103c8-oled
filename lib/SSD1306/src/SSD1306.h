@@ -40,90 +40,88 @@ typedef enum {
     PE_SSD1306_VCC_INTERNAL = 0x02,
 } PE_SSD1306_VCC_t;
 
-namespace PE {
-    typedef void (*SSD1306_reset_t) ();
+typedef void (*PE_SSD1306_reset_t) ();
 
-    typedef void (*SSD1306_write_t) (uint8_t reg, const uint8_t *data, uint8_t size);
+typedef void (*PE_SSD1306_write_t) (uint8_t reg, const uint8_t *data, uint8_t size);
 
-    class SSD1306 {
-        PE_SSD1306_VCC_t _vcc;
-        uint8_t _width;
-        uint8_t _height;
-        SSD1306_reset_t _reset{};
-        SSD1306_write_t _write{};
-    public:
-        /**
-         * @param vcc    Display powering type
-         * @param width  Display width in pixels
-         * @param height Display height in pixels
-         * @param reset  Reset logic adapter
-         * @param write  Write logic adapter
-         */
-        SSD1306(PE_SSD1306_VCC_t vcc, uint8_t width, uint8_t height, SSD1306_reset_t reset, SSD1306_write_t write);
+class PE_SSD1306 {
+    PE_SSD1306_VCC_t _vcc;
+    uint8_t _width;
+    uint8_t _height;
+    PE_SSD1306_reset_t _reset{};
+    PE_SSD1306_write_t _write{};
+public:
+    /**
+     * @param vcc    Display powering type
+     * @param width  Display width in pixels
+     * @param height Display height in pixels
+     * @param reset  Reset logic adapter
+     * @param write  Write logic adapter
+     */
+    PE_SSD1306(PE_SSD1306_VCC_t vcc, uint8_t width, uint8_t height, PE_SSD1306_reset_t reset, PE_SSD1306_write_t write);
 
-        /**
-         * Initialize display procedure
-         */
-        void initialize();
+    /**
+     * Initialize display procedure
+     */
+    void initialize();
 
-        /**
-         * Set display enabled / disabled
-         *
-         * @param value
-         */
-        void setEnabled(bool value);
+    /**
+     * Set display enabled / disabled
+     *
+     * @param value
+     */
+    void setEnabled(bool value);
 
-        /**
-         * Inverse display pixels state (do not affect real memory data)
-         *
-         * @param value
-         */
-        void setInverse(bool value);
+    /**
+     * Inverse display pixels state (do not affect real memory data)
+     *
+     * @param value
+     */
+    void setInverse(bool value);
 
-        /**
-         * Set display contrast
-         *
-         * @param contrast
-         */
-        void setContrast(uint8_t contrast);
+    /**
+     * Set display contrast
+     *
+     * @param contrast
+     */
+    void setContrast(uint8_t contrast);
 
-        /**
-         * Set display flipped horizontally
-         *
-         * @param value
-         */
-        void setFlipX(bool value);
+    /**
+     * Set display flipped horizontally
+     *
+     * @param value
+     */
+    void setFlipX(bool value);
 
-        /**
-         * Set display flipped vertically
-         *
-         * @param value
-         */
-        void setFlipY(bool value);
+    /**
+     * Set display flipped vertically
+     *
+     * @param value
+     */
+    void setFlipY(bool value);
 
-        /**
-         * Set all pixels on, usable for damage test, maybe
-         *
-         * @param value
-         */
-        void setAllEnabled(bool value);
+    /**
+     * Set all pixels on, usable for damage test, maybe
+     *
+     * @param value
+     */
+    void setAllEnabled(bool value);
 
-        /**
-         * Enable/disable scrolling
-         *
-         * @param value
-         */
-        void setScrollEnabled(bool value);
+    /**
+     * Enable/disable scrolling
+     *
+     * @param value
+     */
+    void setScrollEnabled(bool value);
 
-        /**
-         * Update display ram with specific buffer
-         *
-         * @param buffer
-         * @param size
-         */
-        void update(uint8_t *buffer, uint16_t size);
-    };
-}
+    /**
+     * Update display ram with specific buffer
+     *
+     * @param buffer
+     * @param size
+     */
+    void update(uint8_t *buffer, uint16_t size);
+};
 
 
 #endif //PE_SSD1306_H
