@@ -180,7 +180,7 @@ int main()
 
     while (true) {
         Timeout_dispatch(&timeout, HAL_GetTick());
-        sprintf(str, "tick: %d", HAL_GetTick());
+        sprintf(str, "tick: %lu", HAL_GetTick());
         mGFX_string(&ssd1306_gfx, 0, 0, str, &mGFX_Font_05x07, mGFX_WHITE);
 
         //char str2[20];
