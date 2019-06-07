@@ -170,9 +170,9 @@ int main()
     timerLED.interval = 500;
     timerLED.callable = __toggle_led;
 
-    Timeout_initialize(&timeout, 16);
+    Timeout_initialize(&timeout, HAL_GetTick(), 16);
 
-    if (Timeout_attachTimer(&timeout, &timerLED) == TIMEOUT_FAILURE) {
+    if (Timeout_createRepeatedTimer(&timeout, 500, __toggle_led) == TIMEOUT_FAILURE) {
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
     }
 

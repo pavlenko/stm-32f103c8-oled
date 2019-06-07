@@ -4,16 +4,14 @@
 #include <stddef.h>
 #include <string.h>
 
-Timeout_Status_t Timeout_initialize(Timeout_List_t *timeout, uint8_t limit) {
+Timeout_Status_t Timeout_initialize(Timeout_List_t *timeout, uint32_t time, uint8_t limit) {
+    timeout->time  = time;
+    timeout->limit = limit;
     timeout->items = (Timeout_Item_t *) malloc(limit * sizeof(Timeout_Item_t));
 
     if (!timeout->items) {
         return TIMEOUT_FAILURE;
     }
-
-    // Allocate memory for array of struct pointers
-    //*(timeout->items) = (Timeout_Item_t *) malloc(limit * sizeof(Timeout_ItemRef_t *));//TODO <-- check this variant of initialization
-    timeout->limit = limit;
 
     // Fill array to pointers to null
     for (uint8_t i = 0; i < timeout->limit; i++) {
@@ -34,6 +32,22 @@ Timeout_Status_t Timeout_attachTimer(Timeout_List_t *timeout, Timeout_Timer_t *t
     return TIMEOUT_FAILURE;
 }
 
+Timeout_Status_t Timeout_createRepeatedTimer(Timeout_List_t *timeout, uint32_t interval, void (*callable)()) {
+    for (uint8_t i = 0; i < timeout->limit; ++i) {
+        if ((*(timeout->items + i)) == NULL) {
+            (*(timeout->items + i)) = (Timeout_Timer_t *) malloc(sizeof(Timeout_Timer_t));
+
+            (*(timeout->items + i))->interval = interval;
+            (*(timeout->items + i))->schedule = interval + timeout->time;
+            (*(timeout->items + i))->callable = callable;
+
+            return TIMEOUT_SUCCESS;
+        }
+    }
+
+    return TIMEOUT_FAILURE;
+}
+
 Timeout_Status_t Timeout_cancelTimer(Timeout_List_t *timeout, Timeout_Timer_t *timer) {
     for (uint8_t i = 0; i < timeout->limit; ++i) {
         if ((*(timeout->items + i)) == timer) {
@@ -46,6 +60,8 @@ Timeout_Status_t Timeout_cancelTimer(Timeout_List_t *timeout, Timeout_Timer_t *t
 }
 
 void Timeout_dispatch(Timeout_List_t *timeout, uint32_t ms) {
+    timeout->time = ms;
+
     for (uint8_t i = 0; i < timeout->limit; ++i) {
         if ((*(timeout->items + i)) == NULL) {
             continue;

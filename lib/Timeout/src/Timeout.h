@@ -21,13 +21,16 @@ typedef struct {
 typedef Timeout_Timer_t *Timeout_Item_t;
 
 typedef struct {
+    uint32_t time;
     uint8_t limit;
     Timeout_Item_t *items;
 } Timeout_List_t;
 
-Timeout_Status_t Timeout_initialize(Timeout_List_t *timeout, uint8_t limit);
+Timeout_Status_t Timeout_initialize(Timeout_List_t *timeout, uint32_t time, uint8_t limit);
 
 Timeout_Status_t Timeout_attachTimer(Timeout_List_t *timeout, Timeout_Timer_t *timer);
+
+Timeout_Status_t Timeout_createRepeatedTimer(Timeout_List_t *timeout, uint32_t interval, void (*callable)());
 
 Timeout_Status_t Timeout_cancelTimer(Timeout_List_t *timeout, Timeout_Timer_t *timer);
 
