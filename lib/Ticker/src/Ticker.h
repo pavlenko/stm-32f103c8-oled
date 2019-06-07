@@ -1,37 +1,71 @@
 #ifndef TICKER_H
 #define TICKER_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdint.h>
 
-typedef void (*Ticker_Handler_t) ();
+namespace PE {
+    typedef struct {
+        uint32_t identity;
+        uint32_t interval;
+        uint32_t schedule;
+        void (*callable)();
+    } Ticker_Handler_t;
 
-typedef struct {
-    uint32_t interval;
-    void (*callback) ();
-} Ticker_Timer_t;
+    class Ticker {
+    private:
+        uint32_t _last = 0;
+        uint32_t _time = 0;
+        uint8_t _size  = 0;
+        Ticker_Handler_t **_list = nullptr;
+    public:
+        Ticker() = default;
 
-typedef struct {
-    uint32_t        currentTime;
-    Ticker_Timer_t *repeatedList;
-    uint8_t         repeatedSize;
-    Ticker_Timer_t *singularList;
-    uint8_t         singularSize;
-} Ticker_Handle_t;
+        /**
+         * Initialize handlers list with specific time and size
+         *
+         * @param time
+         * @param limit
+         *
+         * @return true or false if cannot allocate memory for list
+         */
+        bool initialize(uint32_t time, uint8_t size);
 
-void Ticker_initialize();
+        /**
+         * Create and attach singular run handler
+         *
+         * @param interval
+         * @param callable
+         *
+         * @return Handler identity for use in cancel logic or 0 if cannot create handler
+         */
+        uint32_t createHandlerSingular(uint32_t interval, void (*callable)());
 
-void Ticker_setSingular(uint32_t intervalMS, Ticker_Handler_t handler);
+        /**
+         * Create and attach repeated run handler
+         *
+         * @param interval
+         * @param callable
+         *
+         * @return Handler identity for use in cancel logic or 0 if cannot create handler
+         */
+        uint32_t createHandlerRepeated(uint32_t interval, void (*callable)());
 
-void Ticker_setRepeated(uint32_t intervalMS, Ticker_Handler_t handler);
+        /**
+         * Cancel specific handler by identity
+         *
+         * @param identity
+         *
+         * @return true or false if no handler with specific identity
+         */
+        bool cancelHandler(uint32_t identity);
 
-void Ticker_dispatch();
-
-#ifdef __cplusplus
+        /**
+         * Dispatch handlers, must be called as fast as possible but at least at each millisecond
+         *
+         * @param time
+         */
+        void dispatch(uint32_t time);
+    };
 }
-#endif
 
 #endif //TICKER_H

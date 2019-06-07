@@ -90,7 +90,7 @@ void Timeout_dispatch(Timeout_List_t *timeout, uint32_t time) {
             (*(timeout->items + i))->callable();
 
             if ((*(timeout->items + i))->interval > 0) {
-                (*(timeout->items + i))->schedule += timeout->items[i]->interval;
+                (*(timeout->items + i))->schedule += (*(timeout->items + i))->interval;
             } else {
                 (*(timeout->items + i)) = NULL;
             }
