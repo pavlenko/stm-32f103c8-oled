@@ -1,4 +1,4 @@
-#include "SSD1306.h"
+#include "PE_SSD1306.h"
 
 PE_SSD1306::PE_SSD1306(PE_SSD1306_VCC_t vcc, uint8_t width, uint8_t height, PE_SSD1306_reset_t reset, PE_SSD1306_write_t write) {
     _vcc    = vcc;
