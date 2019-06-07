@@ -9,6 +9,8 @@
 #define SSD1306_WRITE_COMMAND 0x00
 #define SSD1306_WRITE_DATA    0x40
 
+#define PE_SSD1306_COLUMN_L_ADDRESS      0x00
+#define PE_SSD1306_COLUMN_H_ADDRESS      0x10
 #define PE_SSD1306_MEMORY_MODE           0x20
 #define PE_SSD1306_SCROLL_DISABLE        0x2E
 #define PE_SSD1306_SCROLL_ENABLE         0x2F
@@ -24,13 +26,14 @@
 #define PE_SSD1306_MULTIPLEX_RATIO       0xA8
 #define PE_SSD1306_DISPLAY_OFF           0xAE
 #define PE_SSD1306_DISPLAY_ON            0xAF
+#define PE_SSD1306_PAGE_START_ADDRESS    0xB0
 #define PE_SSD1306_COM_SCAN_INCREMENT    0xC0
 #define PE_SSD1306_COM_SCAN_DECREMENT    0xC8
 #define PE_SSD1306_DISPLAY_OFFSET        0xD3
 #define PE_SSD1306_DISPLAY_CLOCK_DIVIDER 0xD5
 #define PE_SSD1306_PRE_CHARGE_PERIOD     0xD9
 #define PE_SSD1306_COM_PINS_CONFIG       0xDA
-#define PE_SSD1306_SET_VCOMH_DESELECT    0xDB
+#define PE_SSD1306_VCOMH_DESELECT        0xDB
 
 typedef enum {
     PE_SSD1306_VCC_EXTERNAL = 0x01,
@@ -87,14 +90,36 @@ namespace PE {
          *
          * @param value
          */
-        void setFlipHorizontal(bool value);
+        void setFlipX(bool value);
 
         /**
          * Set display flipped vertically
          *
          * @param value
          */
-        void setFlipVertical(bool value);
+        void setFlipY(bool value);
+
+        /**
+         * Set all pixels on, usable for damage test, maybe
+         *
+         * @param value
+         */
+        void setAllEnabled(bool value);
+
+        /**
+         * Enable/disable scrolling
+         *
+         * @param value
+         */
+        void setScrollEnabled(bool value);
+
+        /**
+         * Update display ram with specific buffer
+         *
+         * @param buffer
+         * @param size
+         */
+        void update(uint8_t *buffer, uint16_t size);
     };
 }
 

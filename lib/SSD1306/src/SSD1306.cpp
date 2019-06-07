@@ -59,7 +59,7 @@ void PE::SSD1306::initialize(PE_SSD1306_VCC_t vccType) {
 
     static const uint8_t init3[] = {
         PE_SSD1306_PRE_CHARGE_PERIOD, preCharge, // 0xD9
-        PE_SSD1306_SET_VCOMH_DESELECT, 0x40,     // 0xDB, val
+        PE_SSD1306_VCOMH_DESELECT, 0x40,         // 0xDB, val
         PE_SSD1306_ALL_ON_DISABLE,               // 0xA4
         PE_SSD1306_INVERSE_DISABLE,              // 0xA6
         PE_SSD1306_SCROLL_DISABLE,               // 0x2E
@@ -94,7 +94,7 @@ void PE::SSD1306::setContrast(uint8_t contrast) {
     _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
-void PE::SSD1306::setFlipHorizontal(bool value) {
+void PE::SSD1306::setFlipX(bool value) {
     static const uint8_t data[] = {
         (uint8_t) (value ? PE_SSD1306_SEGMENT_REMAP_OFF : PE_SSD1306_SEGMENT_REMAP_ON),
     };
@@ -102,10 +102,37 @@ void PE::SSD1306::setFlipHorizontal(bool value) {
     _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
-void PE::SSD1306::setFlipVertical(bool value) {
+void PE::SSD1306::setFlipY(bool value) {
     static const uint8_t data[] = {
         (uint8_t) (value ? PE_SSD1306_COM_SCAN_INCREMENT : PE_SSD1306_COM_SCAN_DECREMENT),
     };
 
     _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+}
+
+void PE::SSD1306::setAllEnabled(bool value) {
+    static const uint8_t data[] = {
+        (uint8_t) (value ? PE_SSD1306_ALL_ON_ENABLE : PE_SSD1306_ALL_ON_DISABLE),
+    };
+
+    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+}
+
+void PE::SSD1306::setScrollEnabled(bool value) {
+    static const uint8_t data[] = {
+        (uint8_t) (value ? PE_SSD1306_SCROLL_ENABLE : PE_SSD1306_SCROLL_DISABLE),
+    };
+
+    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+}
+
+void PE::SSD1306::update(uint8_t *buffer, uint16_t size) {
+    static const uint8_t data[] = {
+        PE_SSD1306_PAGE_START_ADDRESS,
+        PE_SSD1306_COLUMN_L_ADDRESS,
+        PE_SSD1306_COLUMN_H_ADDRESS,
+    };
+
+    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+    _write(SSD1306_WRITE_DATA, buffer, size);
 }
