@@ -16,18 +16,20 @@ typedef struct {
     uint32_t interval;
     uint32_t schedule;
     void (*callable)();
-} Timeout_Item_t;
+} Timeout_Timer_t;
+
+typedef Timeout_Timer_t *Timeout_Item_t;
 
 typedef struct {
     uint8_t limit;
-    Timeout_Item_t **items;
+    Timeout_Item_t *items;
 } Timeout_List_t;
 
-void Timeout_initialize(Timeout_List_t *timeout, uint8_t limit);
+Timeout_Status_t Timeout_initialize(Timeout_List_t *timeout, uint8_t limit);
 
-Timeout_Status_t Timeout_attachTimer(Timeout_List_t *timeout, Timeout_Item_t *timer);
+Timeout_Status_t Timeout_attachTimer(Timeout_List_t *timeout, Timeout_Timer_t *timer);
 
-Timeout_Status_t Timeout_cancelTimer(Timeout_List_t *timeout, Timeout_Item_t *timer);
+Timeout_Status_t Timeout_cancelTimer(Timeout_List_t *timeout, Timeout_Timer_t *timer);
 
 void Timeout_dispatch(Timeout_List_t *timeout, uint32_t ms);
 

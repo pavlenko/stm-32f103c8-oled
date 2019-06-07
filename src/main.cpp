@@ -63,7 +63,7 @@ void __toggle_led() {
     HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 }
 
-Timeout_Item_t timerLED;
+Timeout_Timer_t timerLED;
 
 int main()
 {
@@ -99,25 +99,25 @@ int main()
 
     mGFX_string(&ssd1306_gfx, 0, 0, "Core...OK", &mGFX_Font_05x07, mGFX_WHITE);
     update_display();
-    HAL_Delay(200);
+    HAL_Delay(100);
     mGFX_string(&ssd1306_gfx, 0, 8, "Channel1...OK", &mGFX_Font_05x07, mGFX_WHITE);
     update_display();
-    HAL_Delay(200);
+    HAL_Delay(100);
     mGFX_string(&ssd1306_gfx, 0, 16, "Channel2...OK", &mGFX_Font_05x07, mGFX_WHITE);
     update_display();
-    HAL_Delay(200);
+    HAL_Delay(100);
     mGFX_string(&ssd1306_gfx, 0, 24, "Channel3...OK", &mGFX_Font_05x07, mGFX_WHITE);
     update_display();
-    HAL_Delay(200);
+    HAL_Delay(100);
     mGFX_string(&ssd1306_gfx, 0, 32, "Channel4...OK", &mGFX_Font_05x07, mGFX_WHITE);
     update_display();
-    HAL_Delay(200);
+    HAL_Delay(100);
     mGFX_string(&ssd1306_gfx, 0, 40, "Channel5...OK", &mGFX_Font_05x07, mGFX_WHITE);
     update_display();
-    HAL_Delay(200);
+    HAL_Delay(100);
     mGFX_string(&ssd1306_gfx, 0, 48, "Channel6...OK", &mGFX_Font_05x07, mGFX_WHITE);
     update_display();
-    HAL_Delay(200);
+    HAL_Delay(100);
     mGFX_string(&ssd1306_gfx, 0, 56, "Run main program", &mGFX_Font_05x07, mGFX_WHITE);
     update_display();
 
@@ -167,7 +167,7 @@ int main()
 
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
 
-    timerLED.interval = 1000;
+    timerLED.interval = 500;
     timerLED.callable = __toggle_led;
 
     Timeout_initialize(&timeout, 16);
@@ -179,8 +179,13 @@ int main()
     char str[20];
 
     while (true) {
+        Timeout_dispatch(&timeout, HAL_GetTick());
         sprintf(str, "tick: %d", HAL_GetTick());
         mGFX_string(&ssd1306_gfx, 0, 0, str, &mGFX_Font_05x07, mGFX_WHITE);
+
+        //char str2[20];
+        //sprintf(str2, "tick: %d", sizeof(timeout.items));
+        //mGFX_string(&ssd1306_gfx, 0, 8, str2, &mGFX_Font_05x07, mGFX_WHITE);
         //timerLED.callable();
         //Timeout_dispatch(&timeout, HAL_GetTick());
         /*SSD1306_GotoXY(0, 20);
