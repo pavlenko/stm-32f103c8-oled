@@ -1,18 +1,19 @@
 #include "SSD1306.h"
 
-PE::SSD1306::SSD1306(uint8_t width, uint8_t height, SSD1306_reset reset, SSD1306_write write) {
+PE::SSD1306::SSD1306(PE_SSD1306_VCC_t vcc, uint8_t width, uint8_t height, SSD1306_reset_t reset, SSD1306_write_t write) {
+    _vcc    = vcc;
     _width  = width;
     _height = height;
     _reset  = reset;
     _write  = write;
 }
 
-void PE::SSD1306::initialize(PE_SSD1306_VCC_t vccType) {
+void PE::SSD1306::initialize() {
     _reset();
 
     uint8_t muxRatio   = _height - 1;
-    uint8_t chargePump = (vccType == PE_SSD1306_VCC_EXTERNAL) ? 0x10 : 0x14;
-    uint8_t preCharge  = (vccType == PE_SSD1306_VCC_EXTERNAL) ? 0x22 : 0xF1;
+    uint8_t chargePump = (_vcc == PE_SSD1306_VCC_EXTERNAL) ? 0x10 : 0x14;
+    uint8_t preCharge  = (_vcc == PE_SSD1306_VCC_EXTERNAL) ? 0x22 : 0xF1;
 
     static const uint8_t init1[] = {
         PE_SSD1306_DISPLAY_OFF,                 // 0xAE
@@ -29,7 +30,7 @@ void PE::SSD1306::initialize(PE_SSD1306_VCC_t vccType) {
     _write(SSD1306_WRITE_COMMAND, init1, sizeof(init1));
 
     if (96 == _width && 16 == _height) {
-        uint8_t contrast = (vccType == PE_SSD1306_VCC_EXTERNAL) ? 0x10 : 0xAF;
+        uint8_t contrast = (_vcc == PE_SSD1306_VCC_EXTERNAL) ? 0x10 : 0xAF;
 
         static const uint8_t init2[] = {
             PE_SSD1306_COM_PINS_CONFIG, 0x02,      // 0xDA, val
@@ -47,7 +48,7 @@ void PE::SSD1306::initialize(PE_SSD1306_VCC_t vccType) {
 
         _write(SSD1306_WRITE_COMMAND, init2, sizeof(init2));
     } if (128 == _width && 64 == _height) {
-        uint8_t contrast = (vccType == PE_SSD1306_VCC_EXTERNAL) ? 0x9F : 0xCF;
+        uint8_t contrast = (_vcc == PE_SSD1306_VCC_EXTERNAL) ? 0x9F : 0xCF;
 
         static const uint8_t init2[] = {
             PE_SSD1306_COM_PINS_CONFIG, 0x12,      // 0xDA, val

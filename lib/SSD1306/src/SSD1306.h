@@ -41,28 +41,30 @@ typedef enum {
 } PE_SSD1306_VCC_t;
 
 namespace PE {
-    typedef void (*SSD1306_reset) ();
+    typedef void (*SSD1306_reset_t) ();
 
-    typedef void (*SSD1306_write) (uint8_t reg, const uint8_t *data, uint8_t size);
+    typedef void (*SSD1306_write_t) (uint8_t reg, const uint8_t *data, uint8_t size);
 
     class SSD1306 {
+        PE_SSD1306_VCC_t _vcc;
         uint8_t _width;
         uint8_t _height;
-        SSD1306_reset _reset{};
-        SSD1306_write _write{};
+        SSD1306_reset_t _reset{};
+        SSD1306_write_t _write{};
     public:
         /**
+         * @param vcc    Display powering type
          * @param width  Display width in pixels
          * @param height Display height in pixels
          * @param reset  Reset logic adapter
          * @param write  Write logic adapter
          */
-        SSD1306(uint8_t width, uint8_t height, SSD1306_reset reset, SSD1306_write write);
+        SSD1306(PE_SSD1306_VCC_t vcc, uint8_t width, uint8_t height, SSD1306_reset_t reset, SSD1306_write_t write);
 
         /**
-         * @param vccType
+         * Initialize display procedure
          */
-        void initialize(PE_SSD1306_VCC_t vccType);
+        void initialize();
 
         /**
          * Set display enabled / disabled
