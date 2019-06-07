@@ -38,16 +38,63 @@ typedef enum {
 } PE_SSD1306_VCC_t;
 
 namespace PE {
+    typedef void (*SSD1306_reset) ();
+
+    typedef void (*SSD1306_write) (uint8_t reg, const uint8_t *data, uint8_t size);
 
     class SSD1306 {
         uint8_t _width;
         uint8_t _height;
-        void (*_reset) ();
-        void (*_write) (uint8_t reg, const uint8_t *data, uint8_t size);
+        SSD1306_reset _reset{};
+        SSD1306_write _write{};
     public:
-        SSD1306(uint8_t width, uint8_t height): _width(width), _height(height) {};
+        /**
+         * @param width  Display width in pixels
+         * @param height Display height in pixels
+         * @param reset  Reset logic adapter
+         * @param write  Write logic adapter
+         */
+        SSD1306(uint8_t width, uint8_t height, SSD1306_reset reset, SSD1306_write write);
 
+        /**
+         * @param vccType
+         */
         void initialize(PE_SSD1306_VCC_t vccType);
+
+        /**
+         * Set display enabled / disabled
+         *
+         * @param value
+         */
+        void setEnabled(bool value);
+
+        /**
+         * Inverse display pixels state (do not affect real memory data)
+         *
+         * @param value
+         */
+        void setInverse(bool value);
+
+        /**
+         * Set display contrast
+         *
+         * @param contrast
+         */
+        void setContrast(uint8_t contrast);
+
+        /**
+         * Set display flipped horizontally
+         *
+         * @param value
+         */
+        void setFlipHorizontal(bool value);
+
+        /**
+         * Set display flipped vertically
+         *
+         * @param value
+         */
+        void setFlipVertical(bool value);
     };
 }
 

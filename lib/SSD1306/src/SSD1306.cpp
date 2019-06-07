@@ -1,5 +1,12 @@
 #include "SSD1306.h"
 
+PE::SSD1306::SSD1306(uint8_t width, uint8_t height, SSD1306_reset reset, SSD1306_write write) {
+    _width  = width;
+    _height = height;
+    _reset  = reset;
+    _write  = write;
+}
+
 void PE::SSD1306::initialize(PE_SSD1306_VCC_t vccType) {
     _reset();
 
@@ -60,4 +67,45 @@ void PE::SSD1306::initialize(PE_SSD1306_VCC_t vccType) {
     };
 
     _write(SSD1306_WRITE_COMMAND, init3, sizeof(init3));
+}
+
+void PE::SSD1306::setEnabled(bool value) {
+    static const uint8_t data[] = {
+        (uint8_t) (value ? PE_SSD1306_DISPLAY_ON : PE_SSD1306_DISPLAY_OFF),
+    };
+
+    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+}
+
+void PE::SSD1306::setInverse(bool value) {
+    static const uint8_t data[] = {
+            (uint8_t) (value ? PE_SSD1306_INVERSE_ENABLE : PE_SSD1306_INVERSE_DISABLE),
+    };
+
+    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+}
+
+void PE::SSD1306::setContrast(uint8_t contrast) {
+    static const uint8_t data[] = {
+        PE_SSD1306_CONTRAST_CONTROL,
+        contrast,
+    };
+
+    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+}
+
+void PE::SSD1306::setFlipHorizontal(bool value) {
+    static const uint8_t data[] = {
+        (uint8_t) (value ? PE_SSD1306_SEGMENT_REMAP_OFF : PE_SSD1306_SEGMENT_REMAP_ON),
+    };
+
+    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+}
+
+void PE::SSD1306::setFlipVertical(bool value) {
+    static const uint8_t data[] = {
+        (uint8_t) (value ? PE_SSD1306_COM_SCAN_INCREMENT : PE_SSD1306_COM_SCAN_DECREMENT),
+    };
+
+    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
