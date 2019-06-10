@@ -2,6 +2,8 @@
 
 #include <malloc.h>
 
+PE_Ticker::PE_Ticker() = default;
+
 bool PE_Ticker::initialize(uint32_t time, uint8_t size) {
     _time = time;
     _size = size;

@@ -16,9 +16,10 @@
 
 #include "bitmap0.h"
 #include "Timeout.h"
+#include "PE_Ticker.h"
 
-void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
+void SystemClock_Config();
+static void MX_GPIO_Init();
 
 SSD1306_t oled;
 mGFX_Handle_t ssd1306_gfx;
@@ -57,13 +58,13 @@ void update_display() {
     }
 }
 
-Timeout_List_t timeout;
+//Timeout_List_t timeout;
 
 void __toggle_led() {
     HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
 }
 
-Timeout_Timer_t timerLED;
+//Timeout_Timer_t timerLED;
 
 int main()
 {
@@ -167,19 +168,27 @@ int main()
 
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
 
-    timerLED.interval = 500;
-    timerLED.callable = __toggle_led;
+    PE_Ticker ticker = PE_Ticker();
+    ticker.initialize(HAL_GetTick(), 16);
 
-    Timeout_initialize(&timeout, HAL_GetTick(), 16);
-
-    if (!Timeout_createHandlerRepeated(&timeout, 500, __toggle_led)) {
+    if (ticker.createHandlerRepeated(500, __toggle_led) > 0) {
         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
     }
+
+    //timerLED.interval = 500;
+    //timerLED.callable = __toggle_led;
+
+    //Timeout_initialize(&timeout, HAL_GetTick(), 16);
+
+    //if (!Timeout_createHandlerRepeated(&timeout, 500, __toggle_led)) {
+    //    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+    //}
 
     char str[20];
 
     while (true) {
-        Timeout_dispatch(&timeout, HAL_GetTick());
+        //Timeout_dispatch(&timeout, HAL_GetTick());
+        ticker.dispatch(HAL_GetTick());
         sprintf(str, "tick: %lu", HAL_GetTick());
         mGFX_string(&ssd1306_gfx, 0, 0, str, &mGFX_Font_05x07, mGFX_WHITE);
 

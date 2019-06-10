@@ -17,7 +17,7 @@ private:
     uint8_t _size  = 0;
     PE_Ticker_Handler_t **_list = nullptr;
 public:
-    PE_Ticker() = default;
+    explicit PE_Ticker();
 
     /**
      * Initialize handlers list with specific time and size

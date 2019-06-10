@@ -1,92 +1,79 @@
-/**
-  @page EEPROM_Emulation AN2594 EEPROM_Emulation Readme file
-  
+    /**
+  @page FSMC_NOR_CodeExecute FSMC NOR memory basic functionalities use example
+
   @verbatim
-  ******************** (C) COPYRIGHT 2009 STMicroelectronics *******************
-  * @file     EEPROM_Emulation/readme.txt 
-  * @author   MCD Application Team
-  * @version  V3.1.0
-  * @date     07/27/2009
-  * @brief    Description of the AN2594 "EEPROM emulation in STM32F10x microcontrollers".
+  ******************* (C) COPYRIGHT 2016 STMicroelectronics ********************
+  * @file    EEPROM_Emulation/readme.txt 
+  * @author  MCD Application Team
+  * @version V1.5.0
+  * @date    14-April-2017
+  * @brief   Description of the EEPROM_Emulation application.
   ******************************************************************************
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  *
+  * Redistribution and use in source and binary forms, with or without modification,
+  * are permitted provided that the following conditions are met:
+  *   1. Redistributions of source code must retain the above copyright notice,
+  *      this list of conditions and the following disclaimer.
+  *   2. Redistributions in binary form must reproduce the above copyright notice,
+  *      this list of conditions and the following disclaimer in the documentation
+  *      and/or other materials provided with the distribution.
+  *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  *      may be used to endorse or promote products derived from this software
+  *      without specific prior written permission.
+  *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  *
   ******************************************************************************
-   @endverbatim
+  @endverbatim
 
-@par Example Description 
+@par Application Description 
+Please refer to AN2594 for futher details regarding this application.
 
-This AN describes a software method for emulating EEPROM using the onchip Flash
-memory of the STM32F10xx  devices.
+@note Take care, to work well, memory shall be erase before using this application.
+
+@note Care must be taken when using HAL_Delay(), this function provides accurate delay (in milliseconds)
+      based on variable incremented in SysTick ISR. This implies that if HAL_Delay() is called from
+      a peripheral ISR process, then the SysTick interrupt must have higher priority (numerically lower)
+      than the peripheral interrupt. Otherwise the caller ISR process will be blocked.
+      To change the SysTick interrupt priority you have to use HAL_NVIC_SetPriority() function.
+      
+@note The application need to ensure that the SysTick time base is always set to 1 millisecond
+      to have correct HAL operation.
 
 @par Directory contents 
 
-+ inc 
-  - EEPROM_Emulation/inc/stm32f10x_conf.h     Library Configuration file
-  - EEPROM_Emulation/inc/stm32f10x_it.h       Interrupt handlers header file
-  - EEPROM_Emulation/inc/eeprom.h             EEPROM emulation Header file
 
-+ src 
-  - EEPROM_Emulation/src/stm32f10x_it.c    Interrupt handlers
-  - EEPROM_Emulation/src/eeprom.c          EEPROM emulation firmware functions
-  - EEPROM_Emulation/src/main.c            Main program  
-
+ - EEPROM_Emulation/Inc/stm32f1xx_hal_conf.h        HAL Configuration file
+ - EEPROM_Emulation/Inc/eeprom.h                      Header for main.c module 
+ - EEPROM_Emulation/Inc/stm32f1xx_it.h              Header for stm32f1xx_it.c
+ - EEPROM_Emulation/Src/main.c                      Main program
+ - EEPROM_Emulation/Src/eeprom.c                      EEPROM program
+ - EEPROM_Emulation/Src/stm32f1xx_it.c              Interrupt handlers
+ - EEPROM_Emulation/Src/system_stm32f1xx.c          STM32F1xx system clock configuration file 
+    
 
 @par Hardware and Software environment 
 
-  - This example runs on STM32F10x Connectivity line, High-Density, Medium-Density 
-    and Low-Density Devices.
-  
-  - This example has been tested with STMicroelectronics STM3210C-EVAL (STM32F10x 
-    Connectivity line), STM3210E-EVAL (STM32F10x High-Density) and STM3210B-EVAL
-    (STM32F10x Medium-Density) evaluation boards and can be easily tailored to
-    any other supported device and development board.
+  - This example runs on STM32F1xx devices.
+    
+  - This example has been tested with STM32F103RB-Nucleo board and can be
+    easily tailored to any other supported device and development board. 
 
+@par How to use it ? 
 
-@par How to use it ?  
+In order to make the program work, you must do the following :
+ - Open your preferred toolchain 
+ - Rebuild all files and load your image into target memory
+ - Run the example
 
- - RVMDK 
-    - Open the EEPROM_Emulation.Uv2 project
-    - In the build toolbar select the project config:
-        - STM3210C-EVAL: to configure the project for STM32 Connectivity line devices
-        - STM3210B-EVAL: to configure the project for STM32 Medium-density devices
-        - STM3210E-EVAL: to configure the project for STM32 High-density devices
-    - Rebuild all files: Project->Rebuild all target files
-    - Load project image: Debug->Start/Stop Debug Session
-    - Run program: Debug->Run (F5)    
-
- - EWARMv5 (v5.30) 
-    - Open the EEPROM_Emulation.eww workspace.
-    - In the workspace toolbar select the project config:
-        - STM3210C-EVAL: to configure the project for STM32 Connectivity line devices
-        - STM3210B-EVAL: to configure the project for STM32 Medium-density devices
-        - STM3210E-EVAL: to configure the project for STM32 High-density devices
-    - Rebuild all files: Project->Rebuild all
-    - Load project image: Project->Debug
-    - Run program: Debug->Go(F5)
-
- - RIDE 
-    - Open the EEPROM_Emulation.rprj project.
-    - In the configuration toolbar(Project->properties) select the project config:
-        - STM3210C-EVAL: to configure the project for STM32 Connectivity line devices
-       - STM3210B-EVAL: to configure the project for STM32 Medium-density devices
-       - STM3210E-EVAL: to configure the project for STM32 High-density devices
-    - Rebuild all files: Project->build project
-    - Load project image: Debug->start(ctrl+D)
-    - Run program: Debug->Run(ctrl+F9)  
-
-@note
- - Low-density devices are STM32F101xx and STM32F103xx microcontrollers where
-   the Flash memory density ranges between 16 and 32 Kbytes.
- - Medium-density devices are STM32F101xx and STM32F103xx microcontrollers where
-   the Flash memory density ranges between 32 and 128 Kbytes.
- - High-density devices are STM32F101xx and STM32F103xx microcontrollers where
-   the Flash memory density ranges between 256 and 512 Kbytes.
- - Connectivity line devices are STM32F105xx and STM32F107xx microcontrollers.                
-
- * <h2><center>&copy; COPYRIGHT 2009 STMicroelectronics</center></h2>
+ * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
  */
