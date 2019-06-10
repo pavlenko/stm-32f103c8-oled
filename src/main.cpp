@@ -1,16 +1,11 @@
-#include <mGFX.h>
-#include <PE_mGFX_Font_05x07.h>
-#include <mGFX_Font_07x10.h>
-#include <mGFX_Font_11x18.h>
-#include <mGFX_Font_16x26.h>
 #include "main.h"
-
 #include "i2c.h"
-#include "tim.h"
 
+#include "tim.h"
 #include "bitmap0.h"
-#include "Timeout.h"
+
 #include "PE_mGFX.h"
+#include "PE_mGFX_Font_05x07.h"
 #include "PE_SSD1306.h"
 #include "PE_Ticker.h"
 
