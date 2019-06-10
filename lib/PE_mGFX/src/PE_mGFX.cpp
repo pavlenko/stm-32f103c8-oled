@@ -11,7 +11,7 @@ PE_mGFX::PE_mGFX(uint16_t width, uint16_t height) {
 }
 
 bool PE_mGFX::initialize() {
-    if ((_buffer != nullptr) && !(_buffer = (uint8_t *) malloc(_width * ((_height + 7) / 8)))) {
+    if ((_buffer != nullptr) || !(_buffer = (uint8_t *) malloc(_width * ((_height + 7) / 8)))) {
         return false;
     }
 
