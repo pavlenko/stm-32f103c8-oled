@@ -15,6 +15,8 @@
 #include "PE_SSD1306.h"
 #include "PE_Ticker.h"
 
+#include "ssd1306.h"
+
 void SystemClock_Config();
 static void MX_GPIO_Init();
 
@@ -43,14 +45,6 @@ void __writeData(uint8_t type, uint8_t *data, uint16_t length) {
             1000
     );
 }
-
-void PE_SSD1306_reset() {};
-
-void PE_SSD1306_write(uint8_t reg, const uint8_t *data, uint16_t size) {
-    __writeData(reg, (uint8_t *) data, size);
-}
-
-PE_SSD1306 ssd1306 = PE_SSD1306(PE_SSD1306_VCC_INTERNAL, 128, 64, PE_SSD1306_reset, PE_SSD1306_write);
 
 void update_display() {
     for (uint8_t i = 0; i < 8; i++) {
@@ -117,26 +111,9 @@ int main()
 
     mGFX_clear(&ssd1306_gfx);
     mGFX_bitmap(&ssd1306_gfx, 0, 0, &bitmap0, mGFX_WHITE);
-    /*mGFX_bitmap(&ssd1306_gfx, 0, 0, &VUMeter_b, mGFX_WHITE);
-    mGFX_string(&ssd1306_gfx, 0, 56, "Hel", &mGFX_Font_05x07, mGFX_WHITE);
-    mGFX_string(&ssd1306_gfx, 21, 55, "Hel", &mGFX_Font_07x10, mGFX_WHITE);
-    mGFX_string(&ssd1306_gfx, 45, 48, "Hel", &mGFX_Font_11x18, mGFX_WHITE);
-    mGFX_string(&ssd1306_gfx, 70, 40, "He", &mGFX_Font_16x26, mGFX_WHITE);*/
 
     update_display();
 
-    //SSD1306_GotoXY(0, 0);
-    //SSD1306__puts("HELLO", SSD1306_COLOR_WHITE);
-
-    //ssd1306_gfx.update();
-
-    //SSD1306_Init();
-    //SSD1306_GotoXY(0, 10);
-    //SSD1306_Puts("OLED initialized", &Font_7x10, SSD1306_COLOR_WHITE);
-    //SSD1306_UpdateScreen();
-
-    //int counter = 0;
-    //char buf[20];
     /*int16_t _w = 0;
     int16_t _h = 0;
     int16_t dw = 4;
@@ -156,27 +133,9 @@ int main()
     char str[20];
 
     while (true) {
-        //Timeout_dispatch(&timeout, HAL_GetTick());
         ticker.dispatch(HAL_GetTick());
         sprintf(str, "tick: %lu", HAL_GetTick());
         mGFX_string(&ssd1306_gfx, 0, 0, str, &mGFX_Font_05x07, mGFX_WHITE);
-
-        //char str2[20];
-        //sprintf(str2, "tick: %d", sizeof(timeout.items));
-        //mGFX_string(&ssd1306_gfx, 0, 8, str2, &mGFX_Font_05x07, mGFX_WHITE);
-        //timerLED.callable();
-        //Timeout_dispatch(&timeout, HAL_GetTick());
-        /*SSD1306_GotoXY(0, 20);
-        sprintf(buf, "counter: %d", counter++);
-        SSD1306_Puts(buf, &Font_7x10, SSD1306_COLOR_WHITE);
-        SSD1306_UpdateScreen();*/
-        /*mGFX_clear(&ssd1306_gfx);
-
-        mGFX_line(&ssd1306_gfx, 0, 0, 127, 63, mGFX_WHITE);
-        mGFX_line(&ssd1306_gfx, 0, 63, 127, 0, mGFX_WHITE);
-        mGFX_circle(&ssd1306_gfx, 63, 31, 31, mGFX_WHITE);
-
-        mGFX_rectangle(&ssd1306_gfx, 0, 0, _w - 1, _h - 1, mGFX_WHITE);*/
 
         update_display();
 
@@ -191,7 +150,6 @@ int main()
         _w += dw;
         _h += dh;*/
 
-        //HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
         HAL_Delay(25);
 
         if (_i == 1500) {
@@ -211,7 +169,7 @@ int main()
   * @brief System Clock Configuration
   * @retval None
   */
-void SystemClock_Config(void)
+void SystemClock_Config()
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
@@ -249,7 +207,7 @@ void SystemClock_Config(void)
   * @param None
   * @retval None
   */
-static void MX_GPIO_Init(void)
+static void MX_GPIO_Init()
 {
 
   /* GPIO Ports Clock Enable */
