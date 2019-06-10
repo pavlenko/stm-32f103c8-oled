@@ -8,14 +8,12 @@
 #include "i2c.h"
 #include "tim.h"
 
-#include "fonts.h"
-#include "ssd1306.h"
-
 #include "font_5x7.h"
 #include "SSD1306_2.h"
 
 #include "bitmap0.h"
 #include "Timeout.h"
+#include "PE_SSD1306.h"
 #include "PE_Ticker.h"
 
 void SystemClock_Config();
@@ -27,7 +25,7 @@ mGFX_Handle_t ssd1306_gfx;
 void __writeByte(uint8_t type, uint8_t byte) {
     HAL_I2C_Mem_Write(
             &i2c2,
-            SSD1306_I2C_ADDR,
+            PE_SSD1306_I2C_ADDRESS_A,
             type,
             I2C_MEMADD_SIZE_8BIT,
             (uint8_t *) &byte,
@@ -39,7 +37,7 @@ void __writeByte(uint8_t type, uint8_t byte) {
 void __writeData(uint8_t type, uint8_t *data, uint16_t length) {
     HAL_I2C_Mem_Write(
             &i2c2,
-            SSD1306_I2C_ADDR,
+            PE_SSD1306_I2C_ADDRESS_A,
             type,
             I2C_MEMADD_SIZE_8BIT,
             (uint8_t *) data,
@@ -75,15 +73,15 @@ int main()
         uint8_t dt[2];
         dt[0] = reg;
         dt[1] = byte;
-        HAL_I2C_Master_Transmit(&i2c2, SSD1306_I2C_ADDR, dt, 2, 10);
+        HAL_I2C_Master_Transmit(&i2c2, PE_SSD1306_I2C_ADDRESS_A, dt, 2, 10);
     };
 
     oled.writeData = [](uint8_t reg, uint8_t *data, uint16_t length){
         uint8_t dt[1];
         dt[0] = reg;
         //dt[1] = *data;
-        HAL_I2C_Master_Transmit(&i2c2, SSD1306_I2C_ADDR, dt, 1, 10);
-        HAL_I2C_Master_Transmit(&i2c2, SSD1306_I2C_ADDR, data, length, 10);
+        HAL_I2C_Master_Transmit(&i2c2, PE_SSD1306_I2C_ADDRESS_A, dt, 1, 10);
+        HAL_I2C_Master_Transmit(&i2c2, PE_SSD1306_I2C_ADDRESS_A, data, length, 10);
     };
 
     SSD1306_initialize(&oled);

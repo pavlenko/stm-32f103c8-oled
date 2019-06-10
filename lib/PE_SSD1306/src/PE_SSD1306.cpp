@@ -27,7 +27,7 @@ void PE_SSD1306::initialize() {
         PE_SSD1306_COM_SCAN_DECREMENT,          // 0xC8
     };
 
-    _write(SSD1306_WRITE_COMMAND, init1, sizeof(init1));
+    _write(PE_SSD1306_WRITE_COMMAND, init1, sizeof(init1));
 
     if (96 == _width && 16 == _height) {
         uint8_t contrast = (_vcc == PE_SSD1306_VCC_EXTERNAL) ? 0x10 : 0xAF;
@@ -37,7 +37,7 @@ void PE_SSD1306::initialize() {
             PE_SSD1306_CONTRAST_CONTROL, contrast, // 0x81
         };
 
-        _write(SSD1306_WRITE_COMMAND, init2, sizeof(init2));
+        _write(PE_SSD1306_WRITE_COMMAND, init2, sizeof(init2));
     } if (128 == _width && 32 == _height) {
         uint8_t contrast = 0x8F;
 
@@ -46,7 +46,7 @@ void PE_SSD1306::initialize() {
             PE_SSD1306_CONTRAST_CONTROL, contrast, // 0x81
         };
 
-        _write(SSD1306_WRITE_COMMAND, init2, sizeof(init2));
+        _write(PE_SSD1306_WRITE_COMMAND, init2, sizeof(init2));
     } if (128 == _width && 64 == _height) {
         uint8_t contrast = (_vcc == PE_SSD1306_VCC_EXTERNAL) ? 0x9F : 0xCF;
 
@@ -55,7 +55,7 @@ void PE_SSD1306::initialize() {
             PE_SSD1306_CONTRAST_CONTROL, contrast, // 0x81
         };
 
-        _write(SSD1306_WRITE_COMMAND, init2, sizeof(init2));
+        _write(PE_SSD1306_WRITE_COMMAND, init2, sizeof(init2));
     }
 
     static const uint8_t init3[] = {
@@ -67,7 +67,7 @@ void PE_SSD1306::initialize() {
         PE_SSD1306_DISPLAY_ON,
     };
 
-    _write(SSD1306_WRITE_COMMAND, init3, sizeof(init3));
+    _write(PE_SSD1306_WRITE_COMMAND, init3, sizeof(init3));
 }
 
 void PE_SSD1306::setEnabled(bool value) {
@@ -75,7 +75,7 @@ void PE_SSD1306::setEnabled(bool value) {
         (uint8_t) (value ? PE_SSD1306_DISPLAY_ON : PE_SSD1306_DISPLAY_OFF),
     };
 
-    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+    _write(PE_SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
 void PE_SSD1306::setInverse(bool value) {
@@ -83,7 +83,7 @@ void PE_SSD1306::setInverse(bool value) {
             (uint8_t) (value ? PE_SSD1306_INVERSE_ENABLE : PE_SSD1306_INVERSE_DISABLE),
     };
 
-    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+    _write(PE_SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
 void PE_SSD1306::setContrast(uint8_t contrast) {
@@ -92,7 +92,7 @@ void PE_SSD1306::setContrast(uint8_t contrast) {
         contrast,
     };
 
-    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+    _write(PE_SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
 void PE_SSD1306::setFlipX(bool value) {
@@ -100,7 +100,7 @@ void PE_SSD1306::setFlipX(bool value) {
         (uint8_t) (value ? PE_SSD1306_SEGMENT_REMAP_OFF : PE_SSD1306_SEGMENT_REMAP_ON),
     };
 
-    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+    _write(PE_SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
 void PE_SSD1306::setFlipY(bool value) {
@@ -108,7 +108,7 @@ void PE_SSD1306::setFlipY(bool value) {
         (uint8_t) (value ? PE_SSD1306_COM_SCAN_INCREMENT : PE_SSD1306_COM_SCAN_DECREMENT),
     };
 
-    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+    _write(PE_SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
 void PE_SSD1306::setAllEnabled(bool value) {
@@ -116,7 +116,7 @@ void PE_SSD1306::setAllEnabled(bool value) {
         (uint8_t) (value ? PE_SSD1306_ALL_ON_ENABLE : PE_SSD1306_ALL_ON_DISABLE),
     };
 
-    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+    _write(PE_SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
 void PE_SSD1306::setScrollEnabled(bool value) {
@@ -124,7 +124,7 @@ void PE_SSD1306::setScrollEnabled(bool value) {
         (uint8_t) (value ? PE_SSD1306_SCROLL_ENABLE : PE_SSD1306_SCROLL_DISABLE),
     };
 
-    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
+    _write(PE_SSD1306_WRITE_COMMAND, data, sizeof(data));
 }
 
 void PE_SSD1306::update(uint8_t *buffer, uint16_t size) {
@@ -134,6 +134,6 @@ void PE_SSD1306::update(uint8_t *buffer, uint16_t size) {
         PE_SSD1306_COLUMN_H_ADDRESS,
     };
 
-    _write(SSD1306_WRITE_COMMAND, data, sizeof(data));
-    _write(SSD1306_WRITE_DATA, buffer, size);
+    _write(PE_SSD1306_WRITE_COMMAND, data, sizeof(data));
+    _write(PE_SSD1306_WRITE_DATA, buffer, size);
 }
