@@ -58,14 +58,6 @@ void update_display() {
     }
 }
 
-//Timeout_List_t timeout;
-
-void __toggle_led() {
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-}
-
-//Timeout_Timer_t timerLED;
-
 int main()
 {
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -170,19 +162,7 @@ int main()
 
     PE_Ticker ticker = PE_Ticker();
     ticker.initialize(HAL_GetTick(), 16);
-
-    if (ticker.createHandlerRepeated(500, __toggle_led) > 0) {
-        HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-    }
-
-    //timerLED.interval = 500;
-    //timerLED.callable = __toggle_led;
-
-    //Timeout_initialize(&timeout, HAL_GetTick(), 16);
-
-    //if (!Timeout_createHandlerRepeated(&timeout, 500, __toggle_led)) {
-    //    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-    //}
+    ticker.createHandlerRepeated(500, [](){ HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); });
 
     char str[20];
 

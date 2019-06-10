@@ -10,6 +10,10 @@ bool PE_Ticker::initialize(uint32_t time, uint8_t size) {
 
     _list = (PE_Ticker_Handler_t **) malloc(_size * sizeof(PE_Ticker_Handler_t *));
 
+    for (uint8_t i = 0; i < _size; ++i) {
+        (*(_list + i)) = nullptr;
+    }
+
     return false;
 }
 
