@@ -89,6 +89,7 @@ void PE_Ticker::dispatch(uint32_t time) {
             if ((*(_list + i))->interval > 0) {
                 (*(_list + i))->schedule += (*(_list + i))->interval;
             } else {
+                free((*(_list + i)));
                 (*(_list + i)) = nullptr;
             }
         }
