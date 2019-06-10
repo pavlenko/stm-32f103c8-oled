@@ -8,8 +8,6 @@
 #include "i2c.h"
 #include "tim.h"
 
-#include "font_5x7.h"
-
 #include "bitmap0.h"
 #include "Timeout.h"
 #include "PE_SSD1306.h"
