@@ -176,3 +176,7 @@ void PE_mGFX::string(uint16_t x, uint16_t y, const char *string, PE_mGFX_Font_t 
         string++;
     }
 }
+
+uint8_t *PE_mGFX::getBuffer() {
+    return _buffer;
+}

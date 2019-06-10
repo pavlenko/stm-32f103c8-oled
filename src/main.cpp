@@ -1,5 +1,5 @@
 #include <mGFX.h>
-#include <mGFX_Font_05x07.h>
+#include <PE_mGFX_Font_05x07.h>
 #include <mGFX_Font_07x10.h>
 #include <mGFX_Font_11x18.h>
 #include <mGFX_Font_16x26.h>
@@ -10,6 +10,7 @@
 
 #include "bitmap0.h"
 #include "Timeout.h"
+#include "PE_mGFX.h"
 #include "PE_SSD1306.h"
 #include "PE_Ticker.h"
 
@@ -18,7 +19,7 @@
 void SystemClock_Config();
 static void MX_GPIO_Init();
 
-mGFX_Handle_t ssd1306_gfx;
+/*mGFX_Handle_t ssd1306_gfx;
 
 void __writeByte(uint8_t type, uint8_t byte) {
     HAL_I2C_Mem_Write(
@@ -42,16 +43,17 @@ void __writeData(uint8_t type, uint8_t *data, uint16_t length) {
             sizeof(uint8_t) * length,
             1000
     );
-}
+}*/
 
 void update_display() {
-    for (uint8_t i = 0; i < 8; i++) {
+    /*for (uint8_t i = 0; i < 8; i++) {
         __writeByte(PE_SSD1306_WRITE_COMMAND, 0xB0 + i);
         __writeByte(PE_SSD1306_WRITE_COMMAND, 0x00);
         __writeByte(PE_SSD1306_WRITE_COMMAND, 0x10);
 
         __writeData(PE_SSD1306_WRITE_DATA, &ssd1306_gfx.buffer[ssd1306_gfx.width * i], ssd1306_gfx.width);
-    }
+    }*/
+    ssd1306_api.update(ssd1306_gfx.getBuffer(), (128 * 64) / 8);
 }
 
 int main()
@@ -67,48 +69,47 @@ int main()
     MX_I2C2_Init();
     MX_TIM2_Init();
 
-    ssd1306.initialize();
+    ssd1306_api.initialize();
+    ssd1306_gfx.initialize();
 
-    mGFX_initialize(&ssd1306_gfx, 128, 64);
-
-    mGFX_string(&ssd1306_gfx, 0, 0, "Core...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    ssd1306_gfx.string(0, 0, "Core...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    mGFX_string(&ssd1306_gfx, 0, 8, "Channel1...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    ssd1306_gfx.string(0, 8, "Channel1...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    mGFX_string(&ssd1306_gfx, 0, 16, "Channel2...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    ssd1306_gfx.string(0, 16, "Channel2...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    mGFX_string(&ssd1306_gfx, 0, 24, "Channel3...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    ssd1306_gfx.string(0, 24, "Channel3...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    mGFX_string(&ssd1306_gfx, 0, 32, "Channel4...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    ssd1306_gfx.string(0, 32, "Channel4...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    mGFX_string(&ssd1306_gfx, 0, 40, "Channel5...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    ssd1306_gfx.string(0, 40, "Channel5...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    mGFX_string(&ssd1306_gfx, 0, 48, "Channel6...OK", &mGFX_Font_05x07, mGFX_WHITE);
+    ssd1306_gfx.string(0, 48, "Channel6...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    mGFX_string(&ssd1306_gfx, 0, 56, "Run main program", &mGFX_Font_05x07, mGFX_WHITE);
+    ssd1306_gfx.string(0, 56, "Run main program", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
 
     HAL_Delay(2000);
-    mGFX_clear(&ssd1306_gfx);
+    ssd1306_gfx.clear();
 
-    mGFX_line(&ssd1306_gfx, 0, 0, 127, 63, mGFX_WHITE);
-    mGFX_line(&ssd1306_gfx, 0, 63, 127, 0, mGFX_WHITE);
-    mGFX_rectangle(&ssd1306_gfx, 0, 0, 127, 63, mGFX_WHITE);
-    mGFX_circle(&ssd1306_gfx, 63, 31, 31, mGFX_WHITE);
+    ssd1306_gfx.line(0, 0, 127, 63, PE_mGFX_WHITE);
+    ssd1306_gfx.line(0, 63, 127, 0, PE_mGFX_WHITE);
+    ssd1306_gfx.rectangle(0, 0, 127, 63, PE_mGFX_WHITE);
+    ssd1306_gfx.circle(63, 31, 31, PE_mGFX_WHITE);
 
     update_display();
 
     HAL_Delay(1500);
 
-    mGFX_clear(&ssd1306_gfx);
-    mGFX_bitmap(&ssd1306_gfx, 0, 0, &bitmap0, mGFX_WHITE);
+    ssd1306_gfx.clear();
+    ssd1306_gfx.bitmap(0, 0, &bitmap0, PE_mGFX_WHITE);
 
     update_display();
 
@@ -133,7 +134,7 @@ int main()
     while (true) {
         ticker.dispatch(HAL_GetTick());
         sprintf(str, "tick: %lu", HAL_GetTick());
-        mGFX_string(&ssd1306_gfx, 0, 0, str, &mGFX_Font_05x07, mGFX_WHITE);
+        ssd1306_gfx.string(0, 0, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
 
         update_display();
 

@@ -120,6 +120,13 @@ public:
      * @param color
      */
     void string(uint16_t x, uint16_t y, const char *string, PE_mGFX_Font_t *font, PE_mGFX_Color_t color);
+
+    /**
+     * Get pointer to internal buffer
+     *
+     * @return
+     */
+    uint8_t * getBuffer();
 };
 
 #endif //PE_MGFX_H

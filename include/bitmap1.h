@@ -91,7 +91,7 @@ static unsigned char battery_bitmap[] = {
         0x00, 0x00, 0x00, 0x00
 };
 
-mGFX_Bitmap_t battery = {
+PE_mGFX_Bitmap_t battery = {
         .data = battery_bitmap,
         .width = 128,
         .height = 64,

@@ -11,4 +11,5 @@ void PE_SSD1306_write(uint8_t reg, const uint8_t *data, uint16_t size) {
     }
 }
 
-PE_SSD1306 ssd1306 = PE_SSD1306(PE_SSD1306_VCC_INTERNAL, 128, 64, PE_SSD1306_reset, PE_SSD1306_write);
+PE_SSD1306 ssd1306_api = PE_SSD1306(PE_SSD1306_VCC_INTERNAL, 128, 64, PE_SSD1306_reset, PE_SSD1306_write);
+PE_mGFX ssd1306_gfx    = PE_mGFX(128, 64);

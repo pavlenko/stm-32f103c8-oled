@@ -8,6 +8,7 @@ include_directories("$ENV{HOME}/.platformio/packages/framework-stm32cube/f1/Driv
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/gGFX/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/mGFX/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/MonoLCD/src")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_mGFX/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_SSD1306/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_Ticker/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/SSD1306/src")
