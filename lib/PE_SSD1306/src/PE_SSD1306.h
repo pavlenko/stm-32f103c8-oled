@@ -45,7 +45,7 @@ typedef enum {
 
 typedef void (*PE_SSD1306_reset_t) ();
 
-typedef void (*PE_SSD1306_write_t) (uint8_t reg, const uint8_t *data, uint8_t size);
+typedef void (*PE_SSD1306_write_t) (uint8_t reg, const uint8_t *data, uint16_t size);
 
 class PE_SSD1306 {
     PE_SSD1306_VCC_t _vcc;

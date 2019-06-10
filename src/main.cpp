@@ -9,7 +9,6 @@
 #include "tim.h"
 
 #include "font_5x7.h"
-#include "SSD1306_2.h"
 
 #include "bitmap0.h"
 #include "Timeout.h"
@@ -19,7 +18,6 @@
 void SystemClock_Config();
 static void MX_GPIO_Init();
 
-SSD1306_t oled;
 mGFX_Handle_t ssd1306_gfx;
 
 void __writeByte(uint8_t type, uint8_t byte) {
@@ -46,13 +44,21 @@ void __writeData(uint8_t type, uint8_t *data, uint16_t length) {
     );
 }
 
+void PE_SSD1306_reset() {};
+
+void PE_SSD1306_write(uint8_t reg, const uint8_t *data, uint16_t size) {
+    __writeData(reg, (uint8_t *) data, size);
+}
+
+PE_SSD1306 ssd1306 = PE_SSD1306(PE_SSD1306_VCC_INTERNAL, 128, 64, PE_SSD1306_reset, PE_SSD1306_write);
+
 void update_display() {
     for (uint8_t i = 0; i < 8; i++) {
-        __writeByte(SSD1306_REG_COMMAND, 0xB0 + i);
-        __writeByte(SSD1306_REG_COMMAND, 0x00);
-        __writeByte(SSD1306_REG_COMMAND, 0x10);
+        __writeByte(PE_SSD1306_WRITE_COMMAND, 0xB0 + i);
+        __writeByte(PE_SSD1306_WRITE_COMMAND, 0x00);
+        __writeByte(PE_SSD1306_WRITE_COMMAND, 0x10);
 
-        __writeData(SSD1306_REG_DATA, &ssd1306_gfx.buffer[ssd1306_gfx.width * i], ssd1306_gfx.width);
+        __writeData(PE_SSD1306_WRITE_DATA, &ssd1306_gfx.buffer[ssd1306_gfx.width * i], ssd1306_gfx.width);
     }
 }
 
@@ -69,22 +75,7 @@ int main()
     MX_I2C2_Init();
     MX_TIM2_Init();
 
-    oled.writeByte = [](uint8_t reg, uint8_t byte){
-        uint8_t dt[2];
-        dt[0] = reg;
-        dt[1] = byte;
-        HAL_I2C_Master_Transmit(&i2c2, PE_SSD1306_I2C_ADDRESS_A, dt, 2, 10);
-    };
-
-    oled.writeData = [](uint8_t reg, uint8_t *data, uint16_t length){
-        uint8_t dt[1];
-        dt[0] = reg;
-        //dt[1] = *data;
-        HAL_I2C_Master_Transmit(&i2c2, PE_SSD1306_I2C_ADDRESS_A, dt, 1, 10);
-        HAL_I2C_Master_Transmit(&i2c2, PE_SSD1306_I2C_ADDRESS_A, data, length, 10);
-    };
-
-    SSD1306_initialize(&oled);
+    ssd1306.initialize();
 
     mGFX_initialize(&ssd1306_gfx, 128, 64);
 
