@@ -178,7 +178,8 @@ int main()
         }
 
         _i += di;
-        tim4.Instance->CCR1 = _i;
+        servo0.setMicros(_i);
+        //tim4.Instance->CCR1 = _i;
     }
 }
 

@@ -3,12 +3,18 @@
 
 #include <stdint.h>
 
-#define PE_SERVOMOTOR_PULSE_MIN 500u
-#define PE_SERVOMOTOR_PULSE_MID 1500u
-#define PE_SERVOMOTOR_PULSE_MAX 2500u
+#define PE_SERVOMOTOR_DEGREE_MIN 0u
+#define PE_SERVOMOTOR_DEGREE_MID 90u
+#define PE_SERVOMOTOR_DEGREE_MAX 180u
 
-#define PE_SERVOMOTOR_SET_MICROS 0x01u
-#define PE_SERVOMOTOR_GET_MICROS 0x02u
+#define PE_SERVOMOTOR_MICROS_MIN 500u
+#define PE_SERVOMOTOR_MICROS_MID 1500u
+#define PE_SERVOMOTOR_MICROS_MAX 2500u
+
+#define PE_SERVOMOTOR_SET_DEGREE  0xF0
+#define PE_SERVOMOTOR_SET_MICROS  0xF1
+#define PE_SERVOMOTOR_SET_MINIMUM 0xF2
+#define PE_SERVOMOTOR_SET_MAXIMUM 0xF3
 
 //TODO api must support control local and remote
 //TODO check connection
@@ -21,22 +27,42 @@ typedef void (*PE_Servomotor_write_t) (uint8_t reg, uint16_t data);
 
 class PE_Servomotor {
 private:
-    PE_Servomotor_write_t _write;
-    uint16_t _min;
-    uint16_t _max;
+    PE_Servomotor_write_t _send;
 public:
-    PE_Servomotor(PE_Servomotor_write_t write);
+    /**
+     * Default constructor
+     *
+     * @param send
+     */
+    explicit PE_Servomotor(PE_Servomotor_write_t send);
 
-    PE_Servomotor(uint16_t min, uint16_t max);
+    /**
+     * Set current angle degree
+     *
+     * @param value
+     */
+    void setDegree(uint16_t value);
 
-    uint16_t getMin() const;
+    /**
+     * Set current angle pulse
+     *
+     * @param value
+     */
+    void setMicros(uint16_t value);
 
-    void setMin(uint16_t min);
+    /**
+     * Set pulse range minimum, default is PE_SERVOMOTOR_MICROS_MIN
+     *
+     * @param value
+     */
+    void setMinimum(uint16_t value);
 
-    uint16_t getMax() const;
-
-    void setMax(uint16_t max);
+    /**
+     * Set pulse range maximum, default is PE_SERVOMOTOR_MICROS_MAX
+     *
+     * @param value
+     */
+    void setMaximum(uint16_t value);
 };
-
 
 #endif //PE_SERVOMOTOR_H
