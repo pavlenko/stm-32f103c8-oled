@@ -26,12 +26,13 @@ __STATIC_INLINE long map(long x, long in_min, long in_max, long out_min, long ou
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
+static uint16_t servo0_micros     = PE_SERVOMOTOR_MICROS_MID;
 static uint16_t servo0_micros_min = PE_SERVOMOTOR_MICROS_MIN;
 static uint16_t servo0_micros_max = PE_SERVOMOTOR_MICROS_MAX;
 
 void servo0_send(uint8_t reg, uint16_t data) {
     if (PE_SERVOMOTOR_SET_DEGREE == reg) {
-        tim4.Instance->CCR1 = map(
+        tim4.Instance->CCR1 = servo0_micros = map(
             constrain(data, PE_SERVOMOTOR_DEGREE_MIN, PE_SERVOMOTOR_DEGREE_MAX),
             PE_SERVOMOTOR_DEGREE_MIN,
             PE_SERVOMOTOR_DEGREE_MAX,
@@ -41,7 +42,7 @@ void servo0_send(uint8_t reg, uint16_t data) {
     }
 
     if (PE_SERVOMOTOR_SET_MICROS == reg) {
-        tim4.Instance->CCR1 = constrain(data, servo0_micros_min, servo0_micros_max);
+        tim4.Instance->CCR1 = servo0_micros = constrain(data, servo0_micros_min, servo0_micros_max);
     }
 
     if (PE_SERVOMOTOR_SET_MINIMUM == reg) {
@@ -53,7 +54,21 @@ void servo0_send(uint8_t reg, uint16_t data) {
     }
 }
 
-PE_Servomotor servo0 = PE_Servomotor(servo0_send);
+uint16_t servo0_read(uint8_t reg) {
+    if (PE_SERVOMOTOR_GET_DEGREE == reg) {
+        return map(
+            servo0_micros,
+            servo0_micros_min,
+            servo0_micros_max,
+            PE_SERVOMOTOR_DEGREE_MIN,
+            PE_SERVOMOTOR_DEGREE_MAX
+        );
+    }
+
+    return 0;
+}
+
+PE_Servomotor servo0 = PE_Servomotor(servo0_send, servo0_read);
 
 /*mGFX_Handle_t ssd1306_gfx;
 
@@ -105,7 +120,9 @@ int main()
     MX_I2C2_Init();
     MX_TIM4_Init();
 
-    servo0.setDegree(90);
+    servo0.setMinimum(640);
+    servo0.setMaximum(2250);
+    servo0.setDegree(0);
 
     ssd1306_api.initialize();
     ssd1306_gfx.initialize();
@@ -167,6 +184,14 @@ int main()
     ticker.initialize(HAL_GetTick(), 16);
     ticker.createHandlerRepeated(500, [](){ HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); });
 
+    ticker.createHandlerRepeated(2000, [](){
+        if (0 == servo0.getDegree()) {
+            servo0.setDegree(180);
+        } else {
+            servo0.setDegree(0);
+        }
+    });
+
     char str[20];
 
     while (true) {
@@ -189,7 +214,7 @@ int main()
 
         HAL_Delay(25);
 
-        if (_i == 1500) {
+        if (_i == 2300) {
             di = -10;
             //tim4.Instance->CCR1 = 1500;
         } else if (_i == 600) {
@@ -198,7 +223,7 @@ int main()
         }
 
         _i += di;
-        servo0.setMicros(_i);
+        //servo0.setMicros(_i);
         //tim4.Instance->CCR1 = _i;
     }
 }

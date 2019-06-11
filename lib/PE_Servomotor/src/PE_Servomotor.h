@@ -11,10 +11,14 @@
 #define PE_SERVOMOTOR_MICROS_MID 1500u
 #define PE_SERVOMOTOR_MICROS_MAX 2500u
 
-#define PE_SERVOMOTOR_SET_DEGREE  0xF0
-#define PE_SERVOMOTOR_SET_MICROS  0xF1
-#define PE_SERVOMOTOR_SET_MINIMUM 0xF2
-#define PE_SERVOMOTOR_SET_MAXIMUM 0xF3
+#define PE_SERVOMOTOR_GET_DEGREE  0xF0
+#define PE_SERVOMOTOR_SET_DEGREE  0xF1
+#define PE_SERVOMOTOR_GET_MICROS  0xF2
+#define PE_SERVOMOTOR_SET_MICROS  0xF3
+#define PE_SERVOMOTOR_GET_MINIMUM 0xF4
+#define PE_SERVOMOTOR_SET_MINIMUM 0xF5
+#define PE_SERVOMOTOR_GET_MAXIMUM 0xF6
+#define PE_SERVOMOTOR_SET_MAXIMUM 0xF7
 
 //TODO api must support control local and remote
 //TODO check connection
@@ -23,18 +27,28 @@
 //TODO calibration mode???
 //TODO read data from remote servo???
 
-typedef void (*PE_Servomotor_write_t) (uint8_t reg, uint16_t data);
+typedef void (*PE_Servomotor_send_t) (uint8_t reg, uint16_t data);
+typedef uint16_t (*PE_Servomotor_read_t) (uint8_t reg);
 
 class PE_Servomotor {
 private:
-    PE_Servomotor_write_t _send;
+    PE_Servomotor_send_t _send;
+    PE_Servomotor_read_t _read;
 public:
     /**
      * Default constructor
      *
      * @param send
+     * @param read
      */
-    explicit PE_Servomotor(PE_Servomotor_write_t send);
+    explicit PE_Servomotor(PE_Servomotor_send_t send, PE_Servomotor_read_t read);
+
+    /**
+     * Get current angle degree
+     *
+     * @return
+     */
+    uint16_t getDegree();
 
     /**
      * Set current angle degree

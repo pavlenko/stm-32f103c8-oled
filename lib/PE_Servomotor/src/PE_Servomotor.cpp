@@ -1,7 +1,12 @@
 #include "PE_Servomotor.h"
 
-PE_Servomotor::PE_Servomotor(PE_Servomotor_write_t send) {
+PE_Servomotor::PE_Servomotor(PE_Servomotor_send_t send, PE_Servomotor_read_t read) {
     _send = send;
+    _read = read;
+}
+
+uint16_t PE_Servomotor::getDegree() {
+    return _read(PE_SERVOMOTOR_GET_DEGREE);
 }
 
 void PE_Servomotor::setDegree(uint16_t value) {
