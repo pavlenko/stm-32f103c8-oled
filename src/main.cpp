@@ -3,6 +3,7 @@
 #include "tim.h"
 
 #include "bitmap0.h"
+#include "bitmap2.h"
 
 #include "PE_mGFX.h"
 #include "PE_mGFX_Font_05x07.h"
@@ -79,7 +80,7 @@ int main()
     HAL_Delay(1500);
 
     ssd1306_gfx.clear();
-    ssd1306_gfx.bitmap(0, 0, &bitmap0, PE_mGFX_WHITE);
+    ssd1306_gfx.bitmap(0, 8, &VUMeter_b, PE_mGFX_WHITE);
 
     update_display();
 
@@ -207,11 +208,15 @@ static void MX_GPIO_Init()
 }
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
-void Error_Handler(void)
-{}
+ * @brief This function is executed in case of error occurrence.
+ * @param file
+ * @param line
+ */
+void _Error_Handler(const char * file, int line)
+{
+    /* User can add his own implementation to report the HAL error return state */
+    while(true) {}
+}
 
 #ifdef  USE_FULL_ASSERT
 /**
