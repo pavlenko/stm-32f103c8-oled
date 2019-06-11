@@ -6,104 +6,16 @@
 #include "PE_mGFX.h"
 
 #include "PE_mGFX_Font_05x07.h"
-#include "PE_Servomotor.h"
 #include "PE_SSD1306.h"
 #include "PE_Ticker.h"
 
 #include "ssd1306.h"
+#include "servomotor.h"
 
 void SystemClock_Config();
 static void MX_GPIO_Init();
 
-#define __constrain(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
-
-__STATIC_INLINE long constrain(long amt, long low, long high) {
-    return amt < low ? low : (amt > high ? high : amt);
-}
-
-__STATIC_INLINE long map(long x, long in_min, long in_max, long out_min, long out_max)
-{
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
-static uint16_t servo0_micros     = PE_SERVOMOTOR_MICROS_MID;
-static uint16_t servo0_micros_min = PE_SERVOMOTOR_MICROS_MIN;
-static uint16_t servo0_micros_max = PE_SERVOMOTOR_MICROS_MAX;
-
-void servo0_send(uint8_t reg, uint16_t data) {
-    if (PE_SERVOMOTOR_SET_DEGREE == reg) {
-        tim4.Instance->CCR1 = servo0_micros = map(
-            constrain(data, PE_SERVOMOTOR_DEGREE_MIN, PE_SERVOMOTOR_DEGREE_MAX),
-            PE_SERVOMOTOR_DEGREE_MIN,
-            PE_SERVOMOTOR_DEGREE_MAX,
-            servo0_micros_min,
-            servo0_micros_max
-        );
-    }
-
-    if (PE_SERVOMOTOR_SET_MICROS == reg) {
-        tim4.Instance->CCR1 = servo0_micros = constrain(data, servo0_micros_min, servo0_micros_max);
-    }
-
-    if (PE_SERVOMOTOR_SET_MINIMUM == reg) {
-        servo0_micros_min = data;
-    }
-
-    if (PE_SERVOMOTOR_SET_MAXIMUM == reg) {
-        servo0_micros_max = data;
-    }
-}
-
-uint16_t servo0_read(uint8_t reg) {
-    if (PE_SERVOMOTOR_GET_DEGREE == reg) {
-        return map(
-            servo0_micros,
-            servo0_micros_min,
-            servo0_micros_max,
-            PE_SERVOMOTOR_DEGREE_MIN,
-            PE_SERVOMOTOR_DEGREE_MAX
-        );
-    }
-
-    return 0;
-}
-
-PE_Servomotor servo0 = PE_Servomotor(servo0_send, servo0_read);
-
-/*mGFX_Handle_t ssd1306_gfx;
-
-void __writeByte(uint8_t type, uint8_t byte) {
-    HAL_I2C_Mem_Write(
-            &i2c2,
-            PE_SSD1306_I2C_ADDRESS_A,
-            type,
-            I2C_MEMADD_SIZE_8BIT,
-            (uint8_t *) &byte,
-            1,
-            1000
-    );
-}
-
-void __writeData(uint8_t type, uint8_t *data, uint16_t length) {
-    HAL_I2C_Mem_Write(
-            &i2c2,
-            PE_SSD1306_I2C_ADDRESS_A,
-            type,
-            I2C_MEMADD_SIZE_8BIT,
-            (uint8_t *) data,
-            sizeof(uint8_t) * length,
-            1000
-    );
-}*/
-
 void update_display() {
-    /*for (uint8_t i = 0; i < 8; i++) {
-        __writeByte(PE_SSD1306_WRITE_COMMAND, 0xB0 + i);
-        __writeByte(PE_SSD1306_WRITE_COMMAND, 0x00);
-        __writeByte(PE_SSD1306_WRITE_COMMAND, 0x10);
-
-        __writeData(PE_SSD1306_WRITE_DATA, &ssd1306_gfx.buffer[ssd1306_gfx.width * i], ssd1306_gfx.width);
-    }*/
     ssd1306_api.update(ssd1306_gfx.getBuffer(), (128 * 64) / 8);
 }
 
