@@ -15,27 +15,45 @@
 void SystemClock_Config();
 static void MX_GPIO_Init();
 
-void servo0_write(uint8_t reg, uint16_t data) {
+#define __constrain(amt, low, high) ((amt) < (low) ? (low) : ((amt) > (high) ? (high) : (amt)))
+
+__STATIC_INLINE long constrain(long amt, long low, long high) {
+    return amt < low ? low : (amt > high ? high : amt);
+}
+
+__STATIC_INLINE long map(long x, long in_min, long in_max, long out_min, long out_max)
+{
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+static uint16_t servo0_micros_min = PE_SERVOMOTOR_MICROS_MIN;
+static uint16_t servo0_micros_max = PE_SERVOMOTOR_MICROS_MAX;
+
+void servo0_send(uint8_t reg, uint16_t data) {
+    if (PE_SERVOMOTOR_SET_DEGREE == reg) {
+        tim4.Instance->CCR1 = map(
+            constrain(data, PE_SERVOMOTOR_DEGREE_MIN, PE_SERVOMOTOR_DEGREE_MAX),
+            PE_SERVOMOTOR_DEGREE_MIN,
+            PE_SERVOMOTOR_DEGREE_MAX,
+            servo0_micros_min,
+            servo0_micros_max
+        );
+    }
+
     if (PE_SERVOMOTOR_SET_MICROS == reg) {
-        tim4.Instance->CCR1 = data;
+        tim4.Instance->CCR1 = constrain(data, servo0_micros_min, servo0_micros_max);
+    }
+
+    if (PE_SERVOMOTOR_SET_MINIMUM == reg) {
+        servo0_micros_min = data;
+    }
+
+    if (PE_SERVOMOTOR_SET_MAXIMUM == reg) {
+        servo0_micros_max = data;
     }
 }
 
-void servo1_write(uint8_t reg, uint16_t data) {
-    if (PE_SERVOMOTOR_SET_MICROS == reg) {
-        tim4.Instance->CCR2 = data;
-    }
-}
-
-void servo2_write(uint8_t reg, uint16_t data) {
-    if (PE_SERVOMOTOR_SET_MICROS == reg) {
-        tim4.Instance->CCR3 = data;
-    }
-}
-
-PE_Servomotor servo0 = PE_Servomotor(servo0_write);
-PE_Servomotor servo1 = PE_Servomotor(servo1_write);
-PE_Servomotor servo2 = PE_Servomotor(servo2_write);
+PE_Servomotor servo0 = PE_Servomotor(servo0_send);
 
 /*mGFX_Handle_t ssd1306_gfx;
 
@@ -86,6 +104,8 @@ int main()
     MX_GPIO_Init();
     MX_I2C2_Init();
     MX_TIM4_Init();
+
+    servo0.setDegree(90);
 
     ssd1306_api.initialize();
     ssd1306_gfx.initialize();
