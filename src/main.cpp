@@ -3,12 +3,13 @@
 #include "tim.h"
 
 #include "bitmap0.h"
-#include "PE_mGFX.h"
 
+#include "PE_mGFX.h"
 #include "PE_mGFX_Font_05x07.h"
 #include "PE_SSD1306.h"
 #include "PE_Ticker.h"
 
+#include "fsm.h"
 #include "ssd1306.h"
 #include "servomotor.h"
 
@@ -34,7 +35,9 @@ int main()
 
     servo0.setMinimum(640);
     servo0.setMaximum(2250);
-    servo0.setDegree(0);
+    //servo0.setDegree(0);
+
+    fsm.initialize(&SERVO_MID);
 
     ssd1306_api.initialize();
     ssd1306_gfx.initialize();
@@ -98,9 +101,11 @@ int main()
 
     ticker.createHandlerRepeated(2000, [](){
         if (0 == servo0.getDegree()) {
-            servo0.setDegree(180);
+            //servo0.setDegree(180);
+            fsm.initialize(&SERVO_MAX);
         } else {
-            servo0.setDegree(0);
+            //servo0.setDegree(0);
+            fsm.initialize(&SERVO_MIN);
         }
     });
 
@@ -108,6 +113,7 @@ int main()
 
     while (true) {
         ticker.dispatch(HAL_GetTick());
+        fsm.dispatch();
         sprintf(str, "tick: %lu", HAL_GetTick());
         ssd1306_gfx.string(0, 0, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
 
