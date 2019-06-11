@@ -4,7 +4,7 @@ TIM_HandleTypeDef tim4;
 
 TIM_OC_InitTypeDef sConfigOC;
 
-void MX_TIM2_Init() {
+void MX_TIM4_Init() {
     TIM_MasterConfigTypeDef sMasterConfig;
 
     tim4.Instance           = TIM4;

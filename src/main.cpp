@@ -1,11 +1,12 @@
 #include "main.h"
 #include "i2c.h"
-
 #include "tim.h"
-#include "bitmap0.h"
 
+#include "bitmap0.h"
 #include "PE_mGFX.h"
+
 #include "PE_mGFX_Font_05x07.h"
+#include "PE_Servomotor.h"
 #include "PE_SSD1306.h"
 #include "PE_Ticker.h"
 
@@ -13,6 +14,28 @@
 
 void SystemClock_Config();
 static void MX_GPIO_Init();
+
+void servo0_write(uint8_t reg, uint16_t data) {
+    if (PE_SERVOMOTOR_SET_MICROS == reg) {
+        tim4.Instance->CCR1 = data;
+    }
+}
+
+void servo1_write(uint8_t reg, uint16_t data) {
+    if (PE_SERVOMOTOR_SET_MICROS == reg) {
+        tim4.Instance->CCR2 = data;
+    }
+}
+
+void servo2_write(uint8_t reg, uint16_t data) {
+    if (PE_SERVOMOTOR_SET_MICROS == reg) {
+        tim4.Instance->CCR3 = data;
+    }
+}
+
+PE_Servomotor servo0 = PE_Servomotor(servo0_write);
+PE_Servomotor servo1 = PE_Servomotor(servo1_write);
+PE_Servomotor servo2 = PE_Servomotor(servo2_write);
 
 /*mGFX_Handle_t ssd1306_gfx;
 
@@ -62,7 +85,7 @@ int main()
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_I2C2_Init();
-    MX_TIM2_Init();
+    MX_TIM4_Init();
 
     ssd1306_api.initialize();
     ssd1306_gfx.initialize();

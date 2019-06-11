@@ -1,5 +1,9 @@
 #include "PE_Servomotor.h"
 
+PE_Servomotor::PE_Servomotor(PE_Servomotor_write_t write) {
+    _write = write;
+}
+
 PE_Servomotor::PE_Servomotor(uint16_t min, uint16_t max) {
     _min = min;
     _max = max;

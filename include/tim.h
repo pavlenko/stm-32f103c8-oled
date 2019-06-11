@@ -9,7 +9,7 @@ extern "C" {
 
 extern TIM_HandleTypeDef tim4;
 
-void MX_TIM2_Init(void);
+void MX_TIM4_Init(void);
 
 #ifdef __cplusplus
 }
