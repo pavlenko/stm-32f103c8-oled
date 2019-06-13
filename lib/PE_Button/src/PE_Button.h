@@ -15,6 +15,11 @@
 #define PE_BUTTON_THRESHOLD_HOLD 1000U
 #endif
 
+// Timeout for execute repeated hold callback, must match condition: <val> > (<holdMS> - <debriefMS>) * 2
+#ifndef PE_BUTTON_TIMEOUT_REPEATED
+#define PE_BUTTON_TIMEOUT_REPEATED 250U
+#endif
+
 typedef enum {
     PE_BUTTON_STATE_RELEASED = -1,
     PE_BUTTON_STATE_UNKNOWN  =  0,
