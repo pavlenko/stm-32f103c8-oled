@@ -7,6 +7,14 @@
 //TODO long press handle
 //TODO periodic update on hold
 
+#ifndef PE_BUTTON_THRESHOLD_DEBRIEF
+#define PE_BUTTON_THRESHOLD_DEBRIEF 10U
+#endif
+
+#ifndef PE_BUTTON_THRESHOLD_HOLD
+#define PE_BUTTON_THRESHOLD_HOLD 1000U
+#endif
+
 typedef enum {
     PE_BUTTON_STATE_RELEASED = -1,
     PE_BUTTON_STATE_UNKNOWN  =  0,

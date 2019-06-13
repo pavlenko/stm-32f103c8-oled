@@ -1,7 +1,10 @@
 #include "PE_Button.h"
 
-#define PE_BUTTON_STATE_CURRENT  0
-#define PE_BUTTON_STATE_PREVIOUS 1
+#define PE_BUTTON_STATUS_CURRENT           0
+#define PE_BUTTON_STATUS_PREVIOUS          1
+#define PE_BUTTON_STATUS_TRIGGERED_PRESS   2
+#define PE_BUTTON_STATUS_TRIGGERED_RELEASE 3
+#define PE_BUTTON_STATUS_TRIGGERED_HOLD    4
 
 #define PE_BUTTON_BIT_GET(_byte_, _bit_) (((_byte_) >> (_bit_)) & 0x01)
 #define PE_BUTTON_BIT_SET(_byte_, _bit_) ((_byte_) |= (1UL << (_bit_)))
@@ -21,35 +24,35 @@ void PE_Button::dispatch(uint32_t time) {
     PE_ButtonState_t state;
 
     // Save the previous value
-    if (PE_BUTTON_BIT_GET(_status, PE_BUTTON_STATE_CURRENT)) {
-        PE_BUTTON_BIT_SET(_status, PE_BUTTON_STATE_PREVIOUS);
+    if (PE_BUTTON_BIT_GET(_status, PE_BUTTON_STATUS_CURRENT)) {
+        PE_BUTTON_BIT_SET(_status, PE_BUTTON_STATUS_PREVIOUS);
     } else {
-        PE_BUTTON_BIT_CLR(_status, PE_BUTTON_STATE_PREVIOUS);
+        PE_BUTTON_BIT_CLR(_status, PE_BUTTON_STATUS_PREVIOUS);
     }
 
     // Save the current state (0 == released, 1 == pressed)
     if (_reader()) {
-        PE_BUTTON_BIT_SET(_status, PE_BUTTON_STATE_CURRENT);
+        PE_BUTTON_BIT_SET(_status, PE_BUTTON_STATUS_CURRENT);
     } else {
-        PE_BUTTON_BIT_CLR(_status, PE_BUTTON_STATE_CURRENT);
+        PE_BUTTON_BIT_CLR(_status, PE_BUTTON_STATUS_CURRENT);
     }
 
-    if (PE_BUTTON_BIT_GET(_status, PE_BUTTON_STATE_CURRENT) != PE_BUTTON_BIT_GET(_status, PE_BUTTON_STATE_PREVIOUS)) {
+    if (PE_BUTTON_BIT_GET(_status, PE_BUTTON_STATUS_CURRENT) != PE_BUTTON_BIT_GET(_status, PE_BUTTON_STATUS_PREVIOUS)) {
         // If state changed - reset counter and return unknown state
         _counter = 0;
 
         // Clear callback triggered flags
-        PE_BUTTON_BIT_CLR(_status, BUTTON_BIT_ON_PRESS);
-        PE_BUTTON_BIT_CLR(_status, BUTTON_BIT_ON_RELEASE);
-        PE_BUTTON_BIT_CLR(_status, BUTTON_BIT_ON_HOLD);
+        PE_BUTTON_BIT_CLR(_status, PE_BUTTON_STATUS_TRIGGERED_PRESS);
+        PE_BUTTON_BIT_CLR(_status, PE_BUTTON_STATUS_TRIGGERED_RELEASE);
+        PE_BUTTON_BIT_CLR(_status, PE_BUTTON_STATUS_TRIGGERED_HOLD);
 
-        state = PE_BUTTON_STATE_UNKNOWN;
+        return;
     } else {
         if (_counter < sizeof(uint32_t)) {
             _counter++;
         }
 
-        if (PE_BUTTON_BIT_GET(_status, PE_BUTTON_STATE_CURRENT)) {
+        if (PE_BUTTON_BIT_GET(_status, PE_BUTTON_STATUS_CURRENT)) {
             if (_counter < BUTTON_DEBRIEF_THRESHOLD) {
                 // If counter less than debrief threshold - return unknown state
                 state = PE_BUTTON_STATE_UNKNOWN;
