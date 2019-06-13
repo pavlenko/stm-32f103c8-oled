@@ -1,10 +1,10 @@
 #include "main.h"
 #include "i2c.h"
 #include "tim.h"
-
 #include "bitmap0.h"
 #include "bitmap2.h"
 
+#include "PE_Button.h"
 #include "PE_mGFX.h"
 #include "PE_mGFX_Font_05x07.h"
 #include "PE_SSD1306.h"
@@ -20,6 +20,10 @@ static void MX_GPIO_Init();
 void update_display() {
     ssd1306_api.update(ssd1306_gfx.getBuffer(), (128 * 64) / 8);
 }
+
+bool readBTN(){ return true; }
+
+PE_Button btn = PE_Button(readBTN);
 
 int main()
 {

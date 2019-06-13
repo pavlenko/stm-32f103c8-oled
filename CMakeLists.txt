@@ -5,7 +5,7 @@ include(CMakeListsPrivate.txt)
 include_directories("$ENV{HOMEDRIVE}$ENV{HOMEPATH}/.platformio/packages/framework-stm32cube/f1/Drivers/STM32F1xx_HAL_Driver/Src")
 include_directories("$ENV{HOME}/.platformio/packages/framework-stm32cube/f1/Drivers/STM32F1xx_HAL_Driver/Src")
 
-include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/mGFX/src")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_Button/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_FSM/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_mGFX/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_Servomotor/src")
