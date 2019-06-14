@@ -4,8 +4,6 @@
 #include <stdint.h>
 
 //TODO click handle
-//TODO long press handle
-//TODO periodic update on hold
 
 #ifndef PE_BUTTON_THRESHOLD_DEBRIEF
 #define PE_BUTTON_THRESHOLD_DEBRIEF 10U
@@ -33,6 +31,10 @@ private:
     PE_ButtonReader_t _reader;
     uint8_t _status = 0;
     uint32_t _time = 0;
+    void (*_onPress) ();
+    void (*_onRelease) ();
+    void (*_onHoldSingular) ();
+    void (*_onHoldRepeated) ();
 public:
     explicit PE_Button(PE_ButtonReader_t reader);
 
