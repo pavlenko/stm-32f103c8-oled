@@ -193,6 +193,32 @@ static const uint8_t nRF24_ADDR_REGS[7] = {
 //#define GPIO_CRL_MODE0_0                     (0x1U << GPIO_CRL_MODE0_Pos)      /*!< 0x00000001 */
 //#define GPIO_CRL_MODE0_1                     (0x2U << GPIO_CRL_MODE0_Pos)      /*!< 0x00000002 */
 
+// Auto Retransmit Count
+#define nRF24_ARC_Pos (0U)
+#define nRF24_ARC_Msk (0xFU << nRF24_ARC_Pos)
+#define nRF24_ARC     nRF24_ARC_Msk
+#define nRF24_ARC_0   (1U << nRF24_ARC_Pos)
+#define nRF24_ARC_1   (2U << nRF24_ARC_Pos)
+#define nRF24_ARC_2   (4U << nRF24_ARC_Pos)
+#define nRF24_ARC_3   (8U << nRF24_ARC_Pos)
+
+// Auto Re-transmit Delay
+#define nRF24_ARD_Pos (4U)
+#define nRF24_ARD_Msk (0xFU << nRF24_ARD_Pos)
+#define nRF24_ARD     nRF24_ARD_Msk
+#define nRF24_ARD_0   (1U << nRF24_ARD_Pos)
+#define nRF24_ARD_1   (2U << nRF24_ARD_Pos)
+#define nRF24_ARD_2   (4U << nRF24_ARD_Pos)
+#define nRF24_ARD_3   (8U << nRF24_ARD_Pos)
+
+/** RF_SETUP bits *************************************************************/
+
+// ONLY FOR nRF24L01
+// Setup LNA gain
+#define nRF24_LNA_HCURR_Pos (0U)
+#define nRF24_LNA_HCURR_Msk (1U << nRF24_LNA_HCURR_Pos)
+#define nRF24_LNA_HCURR     nRF24_LNA_HCURR_Msk
+
 // Set RF output power in TX mode
 #define nRF24_RF_PWR_Pos (1U)
 #define nRF24_RF_PWR_Msk (0x3U << nRF24_RF_PWR_Pos)
@@ -216,6 +242,11 @@ static const uint8_t nRF24_ADDR_REGS[7] = {
 #define nRF24_RF_DR_LOW_Msk (1U << nRF24_RF_DR_LOW_Pos)
 #define nRF24_RF_DR_LOW     nRF24_RF_DR_LOW_Msk
 
+// ONLY FOR nRF24L01+
+// Enables continuous carrier transmit when high
+#define nRF24_CONT_WAVE_Pos (7U)
+#define nRF24_CONT_WAVE_Msk (1U << nRF24_CONT_WAVE_Pos)
+#define nRF24_CONT_WAVE     nRF24_CONT_WAVE_Msk
 
 class PE_nRF24 {
 public:
