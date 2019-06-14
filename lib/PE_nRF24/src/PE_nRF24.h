@@ -193,23 +193,147 @@ static const uint8_t nRF24_ADDR_REGS[7] = {
 //#define GPIO_CRL_MODE0_0                     (0x1U << GPIO_CRL_MODE0_Pos)      /*!< 0x00000001 */
 //#define GPIO_CRL_MODE0_1                     (0x2U << GPIO_CRL_MODE0_Pos)      /*!< 0x00000002 */
 
-// Auto Retransmit Count
+/** CONFIG bits ***************************************************************/
+
+// 1 == PRX, 0 == PTX
+#define nRF24_PRIM_RX_Pos (0U)
+#define nRF24_PRIM_RX_Msk (1U << nRF24_PRIM_RX_Pos)
+#define nRF24_PRIM_RX     nRF24_PRIM_RX_Msk
+
+// 1 == POWER UP, 0 == POWER DOWN
+#define nRF24_PWR_UP_Pos (1U)
+#define nRF24_PWR_UP_Msk (1U << nRF24_PWR_UP_Pos)
+#define nRF24_PWR_UP     nRF24_PWR_UP_Msk
+
+// CRC encoding scheme
+#define nRF24_CRCO_Pos (2U)
+#define nRF24_CRCO_Msk (1U << nRF24_CRCO_Pos)
+#define nRF24_CRCO     nRF24_CRCO_Msk
+
+// Enable CRC
+#define nRF24_EN_CRC_Pos (3U)
+#define nRF24_EN_CRC_Msk (1U << nRF24_EN_CRC_Pos)
+#define nRF24_EN_CRC     nRF24_EN_CRC_Msk
+
+// Mask interrupt caused by MAX_RT
+#define nRF24_MASK_MAX_RT_Pos (4U)
+#define nRF24_MASK_MAX_RT_Msk (1U << nRF24_MASK_MAX_RT_Pos)
+#define nRF24_MASK_MAX_RT     nRF24_MASK_MAX_RT_Msk
+
+// Mask interrupt caused by TX_DS
+#define nRF24_MASK_TX_DS_Pos (5U)
+#define nRF24_MASK_TX_DS_Msk (1U << nRF24_MASK_TX_DS_Pos)
+#define nRF24_MASK_TX_DS     nRF24_MASK_TX_DS_Msk
+
+// Mask interrupt caused by RX_DR
+#define nRF24_MASK_RX_DR_Pos (6U)
+#define nRF24_MASK_RX_DR_Msk (1U << nRF24_MASK_RX_DR_Pos)
+#define nRF24_MASK_RX_DR     nRF24_MASK_RX_DR_Msk
+
+/** EN_AA bits ****************************************************************/
+
+// Enable ‘Auto Acknowledgment’ Function
+#define nRF24_ENAA_P0_Pos (0U)
+#define nRF24_ENAA_P0_Msk (1U << nRF24_ENAA_P0_Pos)
+#define nRF24_ENAA_P0     nRF24_ENAA_P0_Msk
+
+#define nRF24_ENAA_P1_Pos (0U)
+#define nRF24_ENAA_P1_Msk (1U << nRF24_ENAA_P1_Pos)
+#define nRF24_ENAA_P1     nRF24_ENAA_P1_Msk
+
+#define nRF24_ENAA_P2_Pos (0U)
+#define nRF24_ENAA_P2_Msk (1U << nRF24_ENAA_P2_Pos)
+#define nRF24_ENAA_P2     nRF24_ENAA_P2_Msk
+
+#define nRF24_ENAA_P3_Pos (0U)
+#define nRF24_ENAA_P3_Msk (1U << nRF24_ENAA_P3_Pos)
+#define nRF24_ENAA_P3     nRF24_ENAA_P3_Msk
+
+#define nRF24_ENAA_P4_Pos (0U)
+#define nRF24_ENAA_P4_Msk (1U << nRF24_ENAA_P4_Pos)
+#define nRF24_ENAA_P4     nRF24_ENAA_P4_Msk
+
+#define nRF24_ENAA_P5_Pos (0U)
+#define nRF24_ENAA_P5_Msk (1U << nRF24_ENAA_P5_Pos)
+#define nRF24_ENAA_P5     nRF24_ENAA_P5_Msk
+
+/** EN_RXADDR bits ************************************************************/
+
+// Enable data pipe 0, default 1
+#define nRF24_ERX_P0_Pos (0U)
+#define nRF24_ERX_P0_Msk (1U << nRF24_ERX_P0_Pos)
+#define nRF24_ERX_P0     nRF24_ERX_P0_Msk
+
+// Enable data pipe 1, default 1
+#define nRF24_ERX_P1_Pos (1U)
+#define nRF24_ERX_P1_Msk (1U << nRF24_ERX_P1_Pos)
+#define nRF24_ERX_P1     nRF24_ERX_P1_Msk
+
+// Enable data pipe 2, default 0
+#define nRF24_ERX_P2_Pos (2U)
+#define nRF24_ERX_P2_Msk (1U << nRF24_ERX_P2_Pos)
+#define nRF24_ERX_P2     nRF24_ERX_P2_Msk
+
+// Enable data pipe 3, default 0
+#define nRF24_ERX_P3_Pos (3U)
+#define nRF24_ERX_P3_Msk (1U << nRF24_ERX_P3_Pos)
+#define nRF24_ERX_P3     nRF24_ERX_P3_Msk
+
+// Enable data pipe 4, default 0
+#define nRF24_ERX_P4_Pos (4U)
+#define nRF24_ERX_P4_Msk (1U << nRF24_ERX_P4_Pos)
+#define nRF24_ERX_P4     nRF24_ERX_P4_Msk
+
+// Enable data pipe 5, default 0
+#define nRF24_ERX_P5_Pos (5U)
+#define nRF24_ERX_P5_Msk (1U << nRF24_ERX_P5_Pos)
+#define nRF24_ERX_P5     nRF24_ERX_P5_Msk
+
+/** SETUP_AW bits *************************************************************/
+
+// RX/TX Address field width
+// 0x00 == Illegal
+// 0x01 == 3 bytes
+// 0x10 == 4 bytes
+// 0x11 == 5 bytes (default)
+#define nRF24_AW_Pos (0U)
+#define nRF24_AW_Msk (0x3U << nRF24_AW_Pos)
+#define nRF24_AW     nRF24_AW_Msk
+#define nRF24_AW_0   (0x1U << nRF24_AW_Pos)
+#define nRF24_AW_1   (0x2U << nRF24_AW_Pos)
+
+/** SETUP_RETR bits ***********************************************************/
+
+// Auto Retransmit Count, default 0b0000
 #define nRF24_ARC_Pos (0U)
 #define nRF24_ARC_Msk (0xFU << nRF24_ARC_Pos)
 #define nRF24_ARC     nRF24_ARC_Msk
-#define nRF24_ARC_0   (1U << nRF24_ARC_Pos)
-#define nRF24_ARC_1   (2U << nRF24_ARC_Pos)
-#define nRF24_ARC_2   (4U << nRF24_ARC_Pos)
-#define nRF24_ARC_3   (8U << nRF24_ARC_Pos)
+#define nRF24_ARC_0   (0x1U << nRF24_ARC_Pos)
+#define nRF24_ARC_1   (0x2U << nRF24_ARC_Pos)
+#define nRF24_ARC_2   (0x4U << nRF24_ARC_Pos)
+#define nRF24_ARC_3   (0x8U << nRF24_ARC_Pos)
 
-// Auto Re-transmit Delay
+// Auto Re-transmit Delay, default 0b0011
 #define nRF24_ARD_Pos (4U)
 #define nRF24_ARD_Msk (0xFU << nRF24_ARD_Pos)
 #define nRF24_ARD     nRF24_ARD_Msk
-#define nRF24_ARD_0   (1U << nRF24_ARD_Pos)
-#define nRF24_ARD_1   (2U << nRF24_ARD_Pos)
-#define nRF24_ARD_2   (4U << nRF24_ARD_Pos)
-#define nRF24_ARD_3   (8U << nRF24_ARD_Pos)
+#define nRF24_ARD_0   (0x1U << nRF24_ARD_Pos)
+#define nRF24_ARD_1   (0x2U << nRF24_ARD_Pos)
+#define nRF24_ARD_2   (0x4U << nRF24_ARD_Pos)
+#define nRF24_ARD_3   (0x8U << nRF24_ARD_Pos)
+
+/** RF_CH bits ****************************************************************/
+
+// Sets the frequency channel
+#define nRF24_RF_CH_Pos (0U)
+#define nRF24_RF_CH_Msk (0x3FU << nRF24_RF_CH_Pos)
+#define nRF24_RF_CH     nRF24_RF_CH_Msk
+#define nRF24_RF_CH_0   (0x01U << nRF24_RF_CH_Pos)
+#define nRF24_RF_CH_1   (0x02U << nRF24_RF_CH_Pos)
+#define nRF24_RF_CH_2   (0x04U << nRF24_RF_CH_Pos)
+#define nRF24_RF_CH_3   (0x08U << nRF24_RF_CH_Pos)
+#define nRF24_RF_CH_4   (0x10U << nRF24_RF_CH_Pos)
+#define nRF24_RF_CH_5   (0x20U << nRF24_RF_CH_Pos)
 
 /** RF_SETUP bits *************************************************************/
 
@@ -247,6 +371,59 @@ static const uint8_t nRF24_ADDR_REGS[7] = {
 #define nRF24_CONT_WAVE_Pos (7U)
 #define nRF24_CONT_WAVE_Msk (1U << nRF24_CONT_WAVE_Pos)
 #define nRF24_CONT_WAVE     nRF24_CONT_WAVE_Msk
+
+/** STATUS bits ***************************************************************/
+
+// TX FIFO full flag
+#define nRF24_TX_FULL_Pos (0U)
+#define nRF24_TX_FULL_Msk (1U << nRF24_TX_FULL_Pos)
+#define nRF24_TX_FULL     nRF24_TX_FULL_Msk
+
+// Data pipe number for the payload
+#define nRF24_RX_P_NO_Pos (1U)
+#define nRF24_RX_P_NO_Msk (0x7U << nRF24_RX_P_NO_Pos)
+#define nRF24_RX_P_NO     nRF24_RX_P_NO_Msk
+#define nRF24_RX_P_NO_0   (0x01U << nRF24_RX_P_NO_Pos)
+#define nRF24_RX_P_NO_1   (0x02U << nRF24_RX_P_NO_Pos)
+#define nRF24_RX_P_NO_2   (0x04U << nRF24_RX_P_NO_Pos)
+#define nRF24_RX_P_NO_3   (0x08U << nRF24_RX_P_NO_Pos)
+#define nRF24_RX_P_NO_4   (0x10U << nRF24_RX_P_NO_Pos)
+#define nRF24_RX_P_NO_5   (0x20U << nRF24_RX_P_NO_Pos)
+
+// Maximum number of TX retries interrupt
+#define nRF24_MAX_RT_Pos (4U)
+#define nRF24_MAX_RT_Msk (1U << nRF24_MAX_RT_Pos)
+#define nRF24_MAX_RT     nRF24_MAX_RT_Msk
+
+// Data Sent TX FIFO interrupt
+#define nRF24_TX_DS_Pos (5U)
+#define nRF24_TX_DS_Msk (1U << nRF24_TX_DS_Pos)
+#define nRF24_TX_DS     nRF24_TX_DS_Msk
+
+// Data Ready RX FIFO interrupt
+#define nRF24_RX_DR_Pos (6U)
+#define nRF24_RX_DR_Msk (1U << nRF24_RX_DR_Pos)
+#define nRF24_RX_DR     nRF24_RX_DR_Msk
+
+/** OBSERVE_TX bits ***********************************************************/
+
+// Count resent packets
+#define nRF24_ARC_CNT_Pos (0U)
+#define nRF24_ARC_CNT_Msk (0xFU << nRF24_ARC_CNT_Pos)
+#define nRF24_ARC_CNT     nRF24_ARC_CNT_Msk
+#define nRF24_ARC_CNT_0   (0x1U << nRF24_ARC_CNT_Pos)
+#define nRF24_ARC_CNT_1   (0x2U << nRF24_ARC_CNT_Pos)
+#define nRF24_ARC_CNT_2   (0x4U << nRF24_ARC_CNT_Pos)
+#define nRF24_ARC_CNT_3   (0x8U << nRF24_ARC_CNT_Pos)
+
+// Count lost packets
+#define nRF24_PLOS_CNT_Pos (4U)
+#define nRF24_PLOS_CNT_Msk (0xFU << nRF24_PLOS_CNT_Pos)
+#define nRF24_PLOS_CNT     nRF24_PLOS_CNT_Msk
+#define nRF24_PLOS_CNT_0   (0x1U << nRF24_PLOS_CNT_Pos)
+#define nRF24_PLOS_CNT_1   (0x2U << nRF24_PLOS_CNT_Pos)
+#define nRF24_PLOS_CNT_2   (0x4U << nRF24_PLOS_CNT_Pos)
+#define nRF24_PLOS_CNT_3   (0x8U << nRF24_PLOS_CNT_Pos)
 
 class PE_nRF24 {
 public:
