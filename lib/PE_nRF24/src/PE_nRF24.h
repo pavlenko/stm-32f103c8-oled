@@ -231,6 +231,35 @@ static const uint8_t nRF24_ADDR_REGS[7] = {
 // No operation (used for reading status register)
 #define nRF24_CMD_NOP 0xFFU
 
+/** Registers *****************************************************************/
+
+#define nRF24_CONFIG      0x00U
+#define nRF24_EN_AA       0x01U
+#define nRF24_EN_RXADDR   0x02U
+#define nRF24_SETUP_AW    0x03U
+#define nRF24_SETUP_RETR  0x04U
+#define nRF24_RF_CH       0x05U
+#define nRF24_RF_SETUP    0x06U
+#define nRF24_STATUS      0x07U
+#define nRF24_OBSERVE_TX  0x08U
+#define nRF24_RPD         0x09U
+#define nRF24_RX_ADDR_P0  0x0AU
+#define nRF24_RX_ADDR_P1  0x0BU
+#define nRF24_RX_ADDR_P2  0x0CU
+#define nRF24_RX_ADDR_P3  0x0DU
+#define nRF24_RX_ADDR_P4  0x0EU
+#define nRF24_RX_ADDR_P5  0x0FU
+#define nRF24_TX_ADDR     0x10U
+#define nRF24_RX_PW_P0    0x11U
+#define nRF24_RX_PW_P1    0x12U
+#define nRF24_RX_PW_P2    0x13U
+#define nRF24_RX_PW_P3    0x14U
+#define nRF24_RX_PW_P4    0x15U
+#define nRF24_RX_PW_P5    0x16U
+#define nRF24_FIFO_STATUS 0x17U
+#define nRF24_DYNPD       0x1CU
+#define nRF24_FEATURE     0x1DU // Feature Register
+
 /** CONFIG bits ***************************************************************/
 
 // 1 == PRX, 0 == PTX
@@ -462,6 +491,82 @@ static const uint8_t nRF24_ADDR_REGS[7] = {
 #define nRF24_PLOS_CNT_1   (0x2U << nRF24_PLOS_CNT_Pos)
 #define nRF24_PLOS_CNT_2   (0x4U << nRF24_PLOS_CNT_Pos)
 #define nRF24_PLOS_CNT_3   (0x8U << nRF24_PLOS_CNT_Pos)
+
+/** FIFO_STATUS bits **********************************************************/
+
+// RX FIFO empty flag, default 1
+#define nRF24_FIFO_STATUS_RX_EMPTY_Pos (0U)
+#define nRF24_FIFO_STATUS_RX_EMPTY_Msk (1U << nRF24_FIFO_STATUS_RX_EMPTY_Pos)
+#define nRF24_FIFO_STATUS_RX_EMPTY     nRF24_FIFO_STATUS_RX_EMPTY_Msk
+
+// RX FIFO full flag, default 0
+#define nRF24_FIFO_STATUS_RX_FULL_Pos (1U)
+#define nRF24_FIFO_STATUS_RX_FULL_Msk (1U << nRF24_FIFO_STATUS_RX_FULL_Pos)
+#define nRF24_FIFO_STATUS_RX_FULL     nRF24_FIFO_STATUS_RX_FULL_Msk
+
+// TX FIFO empty flag, default 1
+#define nRF24_FIFO_STATUS_TX_EMPTY_Pos (4U)
+#define nRF24_FIFO_STATUS_TX_EMPTY_Msk (1U << nRF24_FIFO_STATUS_TX_EMPTY_Pos)
+#define nRF24_FIFO_STATUS_TX_EMPTY     nRF24_FIFO_STATUS_TX_EMPTY_Msk
+
+// TX FIFO full flag, default 0
+#define nRF24_FIFO_STATUS_TX_FULL_Pos (5U)
+#define nRF24_FIFO_STATUS_TX_FULL_Msk (1U << nRF24_FIFO_STATUS_TX_FULL_Pos)
+#define nRF24_FIFO_STATUS_TX_FULL     nRF24_FIFO_STATUS_TX_FULL_Msk
+
+// Pulse the rfce high for at least 10μs to Reuse last transmitted payload, default 0
+#define nRF24_FIFO_STATUS_TX_REUSE_Pos (6U)
+#define nRF24_FIFO_STATUS_TX_REUSE_Msk (1U << nRF24_FIFO_STATUS_TX_REUSE_Pos)
+#define nRF24_FIFO_STATUS_TX_REUSE     nRF24_FIFO_STATUS_TX_REUSE_Msk
+
+/** DYNPD bits ****************************************************************/
+
+// Enable dynamic payload length data pipe 0, default 0
+#define nRF24_DYNPD_DPL_P0_Pos (0U)
+#define nRF24_DYNPD_DPL_P0_Msk (1U << nRF24_DYNPD_DPL_P0_Pos)
+#define nRF24_DYNPD_DPL_P0     nRF24_DYNPD_DPL_P0_Msk
+
+// Enable dynamic payload length data pipe 1, default 0
+#define nRF24_DYNPD_DPL_P1_Pos (1U)
+#define nRF24_DYNPD_DPL_P1_Msk (1U << nRF24_DYNPD_DPL_P1_Pos)
+#define nRF24_DYNPD_DPL_P1     nRF24_DYNPD_DPL_P1_Msk
+
+// Enable dynamic payload length data pipe 2, default 0
+#define nRF24_DYNPD_DPL_P2_Pos (2U)
+#define nRF24_DYNPD_DPL_P2_Msk (1U << nRF24_DYNPD_DPL_P2_Pos)
+#define nRF24_DYNPD_DPL_P2     nRF24_DYNPD_DPL_P2_Msk
+
+// Enable dynamic payload length data pipe 3, default 0
+#define nRF24_DYNPD_DPL_P3_Pos (3U)
+#define nRF24_DYNPD_DPL_P3_Msk (1U << nRF24_DYNPD_DPL_P3_Pos)
+#define nRF24_DYNPD_DPL_P3     nRF24_DYNPD_DPL_P3_Msk
+
+// Enable dynamic payload length data pipe 4, default 0
+#define nRF24_DYNPD_DPL_P4_Pos (4U)
+#define nRF24_DYNPD_DPL_P4_Msk (1U << nRF24_DYNPD_DPL_P4_Pos)
+#define nRF24_DYNPD_DPL_P4     nRF24_DYNPD_DPL_P4_Msk
+
+// Enable dynamic payload length data pipe 5, default 0
+#define nRF24_DYNPD_DPL_P5_Pos (5U)
+#define nRF24_DYNPD_DPL_P5_Msk (1U << nRF24_DYNPD_DPL_P5_Pos)
+#define nRF24_DYNPD_DPL_P5     nRF24_DYNPD_DPL_P5_Msk
+
+/** FEATURE bits **************************************************************/
+
+// Enables the W_TX_PAYLOAD_NOACK command, default 0
+#define nRF24_FEATURE_EN_DYN_ACK_Pos (0U)
+#define nRF24_FEATURE_EN_DYN_ACK_Msk (1U << nRF24_FEATURE_EN_DYN_ACK_Pos)
+#define nRF24_FEATURE_EN_DYN_ACK     nRF24_FEATURE_EN_DYN_ACK_Msk
+
+// Enables Payload with ACK, default 0
+#define nRF24_FEATURE_EN_ACK_PAY_Pos (1U)
+#define nRF24_FEATURE_EN_ACK_PAY_Msk (1U << nRF24_FEATURE_EN_ACK_PAY_Pos)
+#define nRF24_FEATURE_EN_ACK_PAY     nRF24_FEATURE_EN_ACK_PAY_Msk
+
+// Enables Dynamic Payload Length, default 0
+#define nRF24_FEATURE_EN_DPL_Pos (2U)
+#define nRF24_FEATURE_EN_DPL_Msk (1U << nRF24_FEATURE_EN_DPL_Pos)
+#define nRF24_FEATURE_EN_DPL     nRF24_FEATURE_EN_DPL_Msk
 
 class PE_nRF24 {
 public:
