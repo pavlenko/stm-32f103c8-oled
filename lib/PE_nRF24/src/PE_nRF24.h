@@ -193,6 +193,44 @@ static const uint8_t nRF24_ADDR_REGS[7] = {
 //#define GPIO_CRL_MODE0_0                     (0x1U << GPIO_CRL_MODE0_Pos)      /*!< 0x00000001 */
 //#define GPIO_CRL_MODE0_1                     (0x2U << GPIO_CRL_MODE0_Pos)      /*!< 0x00000002 */
 
+/** Instructions **************************************************************/
+
+// Register read
+#define nRF24_CMD_R_REGISTER(_reg_) ((0x00U) | ((0x1FU) & (_reg_)))
+
+// Register write
+#define nRF24_CMD_W_REGISTER(_reg_) ((0x20U) | ((0x1FU) & (_reg_)))
+
+// Read RX payload
+#define nRF24_CMD_R_RX_PAYLOAD 0x61U
+
+// Write TX payload
+#define nRF24_CMD_W_TX_PAYLOAD 0xA0U
+
+// Flush TX FIFO
+#define nRF24_CMD_FLUSH_TX 0xE1U
+
+// Flush RX FIFO
+#define nRF24_CMD_FLUSH_RX 0xE2U
+
+// Reuse TX payload
+#define nRF24_CMD_REUSE_TX_PL 0xE3U
+
+// ONLY FOR nRF24L01+
+// Read RX payload width for the top R_RX_PAYLOAD in the RX FIFO
+#define nRF24_R_RX_PL_WID 0x60U
+
+// ONLY FOR nRF24L01+
+// Write Payload to be transmitted together with ACK packet on PIPE
+#define nRF24_W_ACK_PAYLOAD(_pipe_) ((0xA8U) | ((0x7U) & (_pipe_)))
+
+// ONLY FOR nRF24L01+
+// Disables AUTO ACK on this specific packet.
+#define nRF24_W_TX_PAYLOAD_NO_ACK 0xB0U
+
+// No operation (used for reading status register)
+#define nRF24_CMD_NOP 0xFFU
+
 /** CONFIG bits ***************************************************************/
 
 // 1 == PRX, 0 == PTX
