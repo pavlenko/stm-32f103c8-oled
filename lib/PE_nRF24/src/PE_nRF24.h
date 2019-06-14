@@ -186,6 +186,13 @@ static const uint8_t nRF24_ADDR_REGS[7] = {
     nRF24_REG_TX_ADDR
 };
 
+//TODO example bits definition
+//#define GPIO_CRL_MODE0_Pos                   (0U)
+//#define GPIO_CRL_MODE0_Msk                   (0x3U << GPIO_CRL_MODE0_Pos)      /*!< 0x00000003 */
+//#define GPIO_CRL_MODE0                       GPIO_CRL_MODE0_Msk                /*!< MODE0[1:0] bits (Port x mode bits, pin 0) */
+//#define GPIO_CRL_MODE0_0                     (0x1U << GPIO_CRL_MODE0_Pos)      /*!< 0x00000001 */
+//#define GPIO_CRL_MODE0_1                     (0x2U << GPIO_CRL_MODE0_Pos)      /*!< 0x00000002 */
+
 class PE_nRF24 {
 public:
     void initialize();
