@@ -193,6 +193,30 @@ static const uint8_t nRF24_ADDR_REGS[7] = {
 //#define GPIO_CRL_MODE0_0                     (0x1U << GPIO_CRL_MODE0_Pos)      /*!< 0x00000001 */
 //#define GPIO_CRL_MODE0_1                     (0x2U << GPIO_CRL_MODE0_Pos)      /*!< 0x00000002 */
 
+// Set RF output power in TX mode
+#define nRF24_RF_PWR_Pos (1U)
+#define nRF24_RF_PWR_Msk (0x3U << nRF24_RF_PWR_Pos)
+#define nRF24_RF_PWR     nRF24_RF_PWR_Msk
+#define nRF24_RF_PWR_0   (0x1U << nRF24_RF_PWR_Pos)
+#define nRF24_RF_PWR_1   (0x2U << nRF24_RF_PWR_Pos)
+
+// Select between the high speed data rates: 0x1 == 2 Mbps, 0x0 == 1 Mbps
+#define nRF24_RF_DR_HIGH_Pos (3U)
+#define nRF24_RF_DR_HIGH_Msk (1U << nRF24_RF_DR_HIGH_Pos)
+#define nRF24_RF_DR_HIGH     nRF24_RF_DR_HIGH_Msk
+
+// Force PLL lock signal. Only used in test
+#define nRF24_PLL_LOCK_Pos (4U)
+#define nRF24_PLL_LOCK_Msk (1U << nRF24_PLL_LOCK_Pos)
+#define nRF24_PLL_LOCK     nRF24_PLL_LOCK_Msk
+
+// ONLY FOR nRF24L01+
+// Set RF Data Rate to 250kbps
+#define nRF24_RF_DR_LOW_Pos (5U)
+#define nRF24_RF_DR_LOW_Msk (1U << nRF24_RF_DR_LOW_Pos)
+#define nRF24_RF_DR_LOW     nRF24_RF_DR_LOW_Msk
+
+
 class PE_nRF24 {
 public:
     void initialize();
