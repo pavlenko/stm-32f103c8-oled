@@ -4,6 +4,8 @@
 #include <stdint.h>
 
 //TODO click handle
+//TODO execute checks only if handler configured
+//TODO allow configure timeouts globally for all buttons
 
 #ifndef PE_BUTTON_THRESHOLD_DEBRIEF
 #define PE_BUTTON_THRESHOLD_DEBRIEF 10U
@@ -31,7 +33,7 @@ private:
     PE_ButtonReader_t _reader;
     uint8_t _status = 0;
     uint32_t _time = 0;
-    void (*_onPress) ();
+    void (*_onPress) () = nullptr;
     void (*_onRelease) ();
     void (*_onHoldSingular) ();
     void (*_onHoldRepeated) ();
