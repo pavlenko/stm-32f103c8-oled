@@ -10,13 +10,13 @@
  *     v    [F] [E]   [C]
  *
  * Y - move front/rear
- * X - rotate ?
- * A - ?
- * B - ?
- * C - ?
- * D - ?
- * E - ?
- * F - ?
+ * X - move left/right
+ * A - increase height
+ * B - rotate right
+ * C - decrease height
+ * D - rotate left
+ * E - TODO
+ * F - TODO
  */
 
 #endif //__CONTROLLER_H
