@@ -21,7 +21,12 @@ void update_display() {
     ssd1306_api.update(ssd1306_gfx.getBuffer(), (128 * 64) / 8);
 }
 
-bool readBTN(){ return true; }
+bool pin14press = false;
+uint32_t pin14hold = 0;
+
+bool readBTN(){
+    return HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_14) == GPIO_PIN_RESET;
+}
 
 PE_Button btn = PE_Button(readBTN);
 
@@ -114,6 +119,11 @@ int main()
         }
     });
 
+    btn.setOnPress([](){ pin14press = true; pin14hold = 0; });
+    btn.setOnRelease([](){ pin14press = true; pin14hold = 0; });
+    btn.setOnHoldSingular([](){ pin14hold++; });
+    btn.setOnHoldRepeated([](){ pin14hold++; });
+
     char str[20];
 
     while (true) {
@@ -121,6 +131,8 @@ int main()
         fsm.dispatch();
         sprintf(str, "tick: %lu", HAL_GetTick());
         ssd1306_gfx.string(0, 0, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+
+        //TODO display button status
 
         update_display();
 
@@ -195,20 +207,18 @@ void SystemClock_Config()
   */
 static void MX_GPIO_Init()
 {
-
-  /* GPIO Ports Clock Enable */
+    /* GPIO Ports Clock Enable */
     __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOD_CLK_ENABLE();
+    __HAL_RCC_GPIOC_CLK_ENABLE();
+    __HAL_RCC_GPIOD_CLK_ENABLE();
 
     GPIO_InitTypeDef gpio;
 
-    gpio.Pin   = GPIO_PIN_13;
+    gpio.Pin   = GPIO_PIN_13|GPIO_PIN_14;
     gpio.Mode  = GPIO_MODE_OUTPUT_PP;
     gpio.Speed = GPIO_SPEED_FREQ_HIGH;
 
     HAL_GPIO_Init(GPIOC, &gpio);
-
 }
 
 /**

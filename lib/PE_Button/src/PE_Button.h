@@ -28,7 +28,7 @@
 #endif
 
 typedef bool (*PE_ButtonReader_t) ();
-typedef bool (*PE_ButtonHandler_t) ();
+typedef void (*PE_ButtonHandler_t) ();
 
 class PE_Button {
 private:
