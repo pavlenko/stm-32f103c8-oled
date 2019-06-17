@@ -53,14 +53,14 @@ void PE_Button::dispatch(uint32_t millis) {
     // Process pressed/released handler, must be first because must called always
     if (millis - _millis > PE_BUTTON_TIMEOUT_DEBRIEF) {
         if ((_status & STATUS_CURRENT) == 1U) {
-            if ((_status & (1U << STATUS_TRIG_PRESS)) == 0U) {
-                _status |= (1U << STATUS_TRIG_PRESS);
+            if ((_status & STATUS_TRIG_PRESS) == 0U) {
+                _status |= STATUS_TRIG_PRESS;
                 if (_onPress) _onPress();
             }
         } else {
-            if ((_status & (1U << STATUS_TRIG_RELEASE)) == 0U) {
-                _status |= (1U << STATUS_TRIG_RELEASE);
-                if (_onRelease) _onRelease();
+            if ((_status & STATUS_TRIG_RELEASE) == 0U) {
+                _status |= STATUS_TRIG_RELEASE;
+                if (_onRelease) _onRelease();//TODO check not triggered before press
             }
         }
     }
