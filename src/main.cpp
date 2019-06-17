@@ -93,16 +93,6 @@ int main()
 
     update_display();
 
-    /*int16_t _w = 0;
-    int16_t _h = 0;
-    int16_t dw = 4;
-    int16_t dh = 2;*/
-
-    //tim4.Instance->CCR1 = 2000;
-
-    int16_t _i = 600;
-    int16_t di = 0;
-
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
 
     PE_Ticker ticker = PE_Ticker();
@@ -119,17 +109,8 @@ int main()
         }
     });
 
-    btn.setOnPress([](){ pin14press = true; pin14hold = 0; });
-    btn.setOnRelease([](){ pin14press = true; pin14hold = 0; });
-    btn.setOnHoldSingular([](){ pin14hold++; });
-    btn.setOnHoldRepeated([](){ pin14hold++; });
-
-    char str[20];
-
-    while (true) {
-        ticker.dispatch(HAL_GetTick());
-        fsm.dispatch();
-        btn.dispatch(HAL_GetTick());
+    ticker.createHandlerRepeated(100, [](){
+        char str[20];
 
         sprintf(str, "tick: %lu", HAL_GetTick());
         ssd1306_gfx.string(0, 0, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
@@ -138,31 +119,17 @@ int main()
         ssd1306_gfx.string(0, 8, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
 
         update_display();
+    });
 
-        /*if (_w == 0 && _h == 0) {
-            dw = 4;
-            dh = 2;
-        } else if (_w == 128 && _h == 64) {
-            dw = -4;
-            dh = -2;
-        }
+    btn.setOnPress([](){ pin14press = true; pin14hold = 0; });
+    btn.setOnRelease([](){ pin14press = true; pin14hold = 0; });
+    btn.setOnHoldSingular([](){ pin14hold++; });
+    btn.setOnHoldRepeated([](){ pin14hold++; });
 
-        _w += dw;
-        _h += dh;*/
-
-        HAL_Delay(25);
-
-        if (_i == 2300) {
-            di = -10;
-            //tim4.Instance->CCR1 = 1500;
-        } else if (_i == 600) {
-            di = 10;
-            //tim4.Instance->CCR1 = 600;
-        }
-
-        _i += di;
-        //servo0.setMicros(_i);
-        //tim4.Instance->CCR1 = _i;
+    while (true) {
+        ticker.dispatch(HAL_GetTick());
+        fsm.dispatch();
+        btn.dispatch(HAL_GetTick());
     }
 }
 
@@ -170,37 +137,37 @@ int main()
   * @brief System Clock Configuration
   * @retval None
   */
-void SystemClock_Config()
-{
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+void SystemClock_Config() {
+    RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+    RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /** Initializes the CPU, AHB and APB busses clocks 
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Initializes the CPU, AHB and APB busses clocks 
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+    /** Initializes the CPU, AHB and APB busses clocks */
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+    RCC_OscInitStruct.HSEState       = RCC_HSE_ON;
+    RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
+    RCC_OscInitStruct.HSIState       = RCC_HSI_ON;
+    RCC_OscInitStruct.PLL.PLLState   = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource  = RCC_PLLSOURCE_HSE;
+    RCC_OscInitStruct.PLL.PLLMUL     = RCC_PLL_MUL9;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
-  {
-    Error_Handler();
-  }
+    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
+        Error_Handler();
+    }
+
+    /** Initializes the CPU, AHB and APB busses clocks */
+    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK
+                                | RCC_CLOCKTYPE_SYSCLK
+                                | RCC_CLOCKTYPE_PCLK1
+                                | RCC_CLOCKTYPE_PCLK2;
+
+    RCC_ClkInitStruct.SYSCLKSource   = RCC_SYSCLKSOURCE_PLLCLK;
+    RCC_ClkInitStruct.AHBCLKDivider  = RCC_SYSCLK_DIV1;
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
+        Error_Handler();
+    }
 }
 
 /**
