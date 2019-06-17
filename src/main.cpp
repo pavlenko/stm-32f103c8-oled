@@ -89,7 +89,7 @@ int main()
     HAL_Delay(1500);
 
     ssd1306_gfx.clear();
-    ssd1306_gfx.bitmap(0, 8, &VUMeter_b, PE_mGFX_WHITE);
+    ssd1306_gfx.bitmap(0, 16, &VUMeter_b, PE_mGFX_WHITE);
 
     update_display();
 
@@ -129,10 +129,13 @@ int main()
     while (true) {
         ticker.dispatch(HAL_GetTick());
         fsm.dispatch();
+        btn.dispatch(HAL_GetTick());
+
         sprintf(str, "tick: %lu", HAL_GetTick());
         ssd1306_gfx.string(0, 0, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
 
-        //TODO display button status
+        sprintf(str, "B: %u H: %lu", (uint8_t) pin14press, pin14hold);
+        ssd1306_gfx.string(0, 8, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
 
         update_display();
 
@@ -214,11 +217,20 @@ static void MX_GPIO_Init()
 
     GPIO_InitTypeDef gpio;
 
-    gpio.Pin   = GPIO_PIN_13|GPIO_PIN_14;
+    gpio.Pin   = GPIO_PIN_13;
     gpio.Mode  = GPIO_MODE_OUTPUT_PP;
     gpio.Speed = GPIO_SPEED_FREQ_HIGH;
 
     HAL_GPIO_Init(GPIOC, &gpio);
+
+    GPIO_InitTypeDef gpioC14;
+
+    gpioC14.Pin   = GPIO_PIN_14;
+    gpioC14.Mode  = GPIO_MODE_INPUT;
+    //gpioC14.Pull  = GPIO_PULLUP;
+    gpioC14.Speed = GPIO_SPEED_FREQ_HIGH;
+
+    HAL_GPIO_Init(GPIOC, &gpioC14);
 }
 
 /**
