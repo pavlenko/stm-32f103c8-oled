@@ -25,6 +25,15 @@ typedef struct {
 } HP_ConfigLeg_t;
 
 typedef struct {
+    HP_ConfigLeg_t *legFL;
+    HP_ConfigLeg_t *legFR;
+    HP_ConfigLeg_t *legML;
+    HP_ConfigLeg_t *legMR;
+    HP_ConfigLeg_t *legRL;
+    HP_ConfigLeg_t *legRR;
+} HP_Config_t;
+
+typedef struct {
     float x;
     float y;
     float z;
