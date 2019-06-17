@@ -4,6 +4,26 @@
 #include <stdint.h>
 #include <PE_Servomotor.h>
 
+/**         _______
+ *  /\    /         \    /\
+ * /  \===|         |===/  \
+ *        |    ^y   |
+ *  /\    |    |  x |    /\
+ * /  \===| <--*--> |===/  \
+ *        |         |
+ *  /\    |         |    /\
+ * /  \===|         |===/  \
+ *        \ _______ /
+ */
+
+typedef struct {
+    int16_t mountX;  // Mount X distance
+    int16_t mountY;  // Mount Y distance
+    int16_t cLength; // Coxa length
+    int16_t fLength; // Femur length
+    int16_t tLength; // Tiba length
+} HP_ConfigLeg_t;
+
 typedef struct {
     float x;
     float y;
@@ -29,6 +49,6 @@ typedef struct {
     HP_Leg_t *legRR; // rear right
 } HP_Frame_t;
 
-extern void MX_Hexapod_Init();//TODO full init servo system with initial state
+void MX_Hexapod_Init();//TODO full init servo system with initial state
 
 #endif //__HEXAPOD_H
