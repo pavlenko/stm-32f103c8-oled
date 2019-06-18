@@ -25,6 +25,7 @@ typedef struct {
 } HP_ConfigLeg_t;
 
 typedef struct {
+    float height;
     HP_ConfigLeg_t *legFL;
     HP_ConfigLeg_t *legFR;
     HP_ConfigLeg_t *legML;

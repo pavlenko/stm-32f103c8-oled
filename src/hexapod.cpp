@@ -57,3 +57,96 @@ void MX_Hexapod_Init() {
     hpConfig.legRL = &configRL;
     hpConfig.legRR = &configRR;
 }
+
+volatile uint8_t iteration = 0;
+
+// frame center is: x=0, y=0, z=height
+void calculate() {
+    HP_Point_t targetFL, targetFR, targetML, targetMR, targetRL, targetRR;
+
+    switch (iteration) {
+        case 0:
+            targetFL = {.z = 0};
+            targetFR = {.z = 0};
+            targetML = {.z = 0};
+            targetMR = {.z = 0};
+            targetRL = {.z = 0};
+            targetRR = {.z = 0};
+            break;
+
+            //TODO change below
+        case 1:
+            targetFL = {.z = 0};
+            targetFR = {.z = -hpConfig.height};
+            targetML = {.z = 0};
+            targetMR = {.z = -hpConfig.height};
+            targetRL = {.z = 0};
+            targetRR = {.z = -hpConfig.height};
+            break;
+
+        case 2:
+            targetFL = {.z = 0};
+            targetFR = {.z = -hpConfig.height};
+            targetML = {.z = 0};
+            targetMR = {.z = -hpConfig.height};
+            targetRL = {.z = 0};
+            targetRR = {.z = -hpConfig.height};
+            break;
+
+        case 3:
+            targetFL = {.z = 0};
+            targetFR = {.z = -hpConfig.height};
+            targetML = {.z = 0};
+            targetMR = {.z = -hpConfig.height};
+            targetRL = {.z = 0};
+            targetRR = {.z = -hpConfig.height};
+            break;
+
+        case 4:
+            targetFL = {.z = -hpConfig.height};
+            targetFR = {.z = -hpConfig.height};
+            targetML = {.z = -hpConfig.height};
+            targetMR = {.z = -hpConfig.height};
+            targetRL = {.z = -hpConfig.height};
+            targetRR = {.z = -hpConfig.height};
+            break;
+
+        case 5:
+            targetFL = {.z = -hpConfig.height};
+            targetFR = {.z = 0};
+            targetML = {.z = -hpConfig.height};
+            targetMR = {.z = 0};
+            targetRL = {.z = -hpConfig.height};
+            targetRR = {.z = 0};
+            break;
+
+        case 6:
+            targetFL = {.z = -hpConfig.height};
+            targetFR = {.z = 0};
+            targetML = {.z = -hpConfig.height};
+            targetMR = {.z = 0};
+            targetRL = {.z = -hpConfig.height};
+            targetRR = {.z = 0};
+            break;
+
+        case 7:
+            targetFL = {.z = -hpConfig.height};
+            targetFR = {.z = 0};
+            targetML = {.z = -hpConfig.height};
+            targetMR = {.z = 0};
+            targetRL = {.z = -hpConfig.height};
+            targetRR = {.z = 0};
+            break;
+
+        default:
+            return;
+    }
+
+    //TODO make used:
+    (void) &targetFL;
+    (void) &targetFR;
+    (void) &targetML;
+    (void) &targetMR;
+    (void) &targetRL;
+    (void) &targetRR;
+}
