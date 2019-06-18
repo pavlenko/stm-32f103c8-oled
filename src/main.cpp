@@ -1,4 +1,5 @@
 #include "main.h"
+#include "led.h"
 #include "i2c.h"
 #include "tim.h"
 #include "bitmap0.h"
@@ -39,6 +40,7 @@ int main()
     SystemClock_Config();
 
     /* Initialize all configured peripherals */
+    MX_LED_Init();
     MX_GPIO_Init();
     MX_I2C2_Init();
     MX_TIM4_Init();
@@ -93,23 +95,19 @@ int main()
 
     update_display();
 
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-
     PE_Ticker ticker = PE_Ticker();
     ticker.initialize(HAL_GetTick(), 16);
-    ticker.createHandlerRepeated(500, [](){ HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); });
 
     ticker.createHandlerRepeated(2000, [](){
         if (0 == servo0.getDegree()) {
-            //servo0.setDegree(180);
-            fsm.initialize(&SERVO_MAX);
+            fsm.transitionTo(&SERVO_MAX);
         } else {
-            //servo0.setDegree(0);
-            fsm.initialize(&SERVO_MIN);
+            fsm.transitionTo(&SERVO_MIN);
         }
     });
 
     ticker.createHandlerRepeated(100, [](){
+        LED(LED_ON);
         char str[20];
 
         sprintf(str, "tick: %lu", HAL_GetTick());
@@ -132,6 +130,7 @@ int main()
         ticker.dispatch(HAL_GetTick());
         fsm.dispatch();
         btn.dispatch(HAL_GetTick());
+        LED(LED_OFF);
     }
 }
 
@@ -183,14 +182,6 @@ static void MX_GPIO_Init()
     __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOD_CLK_ENABLE();
-
-    GPIO_InitTypeDef gpio;
-
-    gpio.Pin   = GPIO_PIN_13;
-    gpio.Mode  = GPIO_MODE_OUTPUT_PP;
-    gpio.Speed = GPIO_SPEED_FREQ_HIGH;
-
-    HAL_GPIO_Init(GPIOC, &gpio);
 
     GPIO_InitTypeDef gpioC14;
 
