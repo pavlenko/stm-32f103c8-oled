@@ -1,5 +1,6 @@
 #include "PE_Button.h"
 
+//TODO change to booleans instead of flags, or maybe use cast
 #define STATUS_CURRENT_Pos (0U)
 #define STATUS_CURRENT_Msk (1U << STATUS_CURRENT_Pos)
 #define STATUS_CURRENT     STATUS_CURRENT_Msk
@@ -44,7 +45,7 @@ void PE_Button::dispatch(uint32_t millis) {
     }
 
     // Reset execution flags if state changed
-    if ((_status & STATUS_CURRENT) != (_status & STATUS_PREVIOUS)) {
+    if ((bool) (_status & STATUS_CURRENT) != (bool) (_status & STATUS_PREVIOUS)) {
         _millis = millis;
         _status &= ~(STATUS_TRIG_PRESS | STATUS_TRIG_RELEASE | STATUS_TRIG_HOLD);
         return;
@@ -52,22 +53,22 @@ void PE_Button::dispatch(uint32_t millis) {
 
     // Process pressed/released handler, must be first because must called always
     if (millis - _millis > PE_BUTTON_TIMEOUT_DEBRIEF) {
-        if ((_status & STATUS_CURRENT) == 1U) {
-            if ((_status & STATUS_TRIG_PRESS) == 0U) {
+        if ((_status & STATUS_CURRENT)) {
+            if (!(_status & STATUS_TRIG_PRESS)) {
                 _status |= STATUS_TRIG_PRESS;
                 if (_onPress) _onPress();
             }
         } else {
-            if ((_status & STATUS_TRIG_RELEASE) == 0U) {
+            if (!(_status & STATUS_TRIG_RELEASE)) {
                 _status |= STATUS_TRIG_RELEASE;
-                if (_onRelease) _onRelease();//TODO check not triggered before press
+                if (_onRelease) _onRelease();
             }
         }
     }
 
 #if PE_BUTTON_USE_HOLD_SINGULAR == 1
     // Process singular handler
-    if (millis - _millis > PE_BUTTON_TIMEOUT_HOLD_SINGULAR) {
+    if ((_status & STATUS_TRIG_PRESS) && millis - _millis > PE_BUTTON_TIMEOUT_HOLD_SINGULAR) {
         if ((_status & STATUS_TRIG_HOLD) == 0U) {
             _status |= STATUS_TRIG_HOLD;
             if (_onHoldSingular) _onHoldSingular();
@@ -77,8 +78,8 @@ void PE_Button::dispatch(uint32_t millis) {
 
 #if PE_BUTTON_USE_HOLD_REPEATED == 1
     // Process repeated handler
-    if (millis - _millis > PE_BUTTON_TIMEOUT_HOLD_REPEATED) {
-        _millis = millis - PE_BUTTON_TIMEOUT_REPEAT;
+    if ((_status & STATUS_TRIG_PRESS) && millis - _millis > PE_BUTTON_TIMEOUT_HOLD_REPEATED) {
+        _millis = millis - (PE_BUTTON_TIMEOUT_HOLD_REPEATED - PE_BUTTON_TIMEOUT_REPEAT);
         if (_onHoldRepeated) _onHoldRepeated();
     }
 #endif

@@ -21,8 +21,8 @@ void update_display() {
     ssd1306_api.update(ssd1306_gfx.getBuffer(), (128 * 64) / 8);
 }
 
-bool pin14press = false;
-uint32_t pin14hold = 0;
+static volatile bool pin14press = false;
+static volatile uint32_t pin14hold = 0;
 
 bool readBTN(){
     return HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_14) == GPIO_PIN_RESET;
@@ -115,6 +115,8 @@ int main()
         sprintf(str, "tick: %lu", HAL_GetTick());
         ssd1306_gfx.string(0, 0, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
 
+        ssd1306_gfx.string(0, 8, "              ", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+
         sprintf(str, "B: %u H: %lu", (uint8_t) pin14press, pin14hold);
         ssd1306_gfx.string(0, 8, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
 
@@ -122,7 +124,7 @@ int main()
     });
 
     btn.setOnPress([](){ pin14press = true; pin14hold = 0; });
-    btn.setOnRelease([](){ pin14press = true; pin14hold = 0; });
+    btn.setOnRelease([](){ pin14press = false; pin14hold = 0; });
     btn.setOnHoldSingular([](){ pin14hold++; });
     btn.setOnHoldRepeated([](){ pin14hold++; });
 
@@ -194,7 +196,7 @@ static void MX_GPIO_Init()
 
     gpioC14.Pin   = GPIO_PIN_14;
     gpioC14.Mode  = GPIO_MODE_INPUT;
-    //gpioC14.Pull  = GPIO_PULLUP;
+    gpioC14.Pull  = GPIO_PULLUP;
     gpioC14.Speed = GPIO_SPEED_FREQ_HIGH;
 
     HAL_GPIO_Init(GPIOC, &gpioC14);
