@@ -66,12 +66,12 @@ void calculate() {
 
     switch (iteration) {
         case 0:
-            targetFL = {.z = 0};
-            targetFR = {.z = 0};
-            targetML = {.z = 0};
-            targetMR = {.z = 0};
-            targetRL = {.z = 0};
-            targetRR = {.z = 0};
+            targetFL = {.x = -100, .y = 100, .z = 0};
+            targetFR = {.x = 100, .y = 100, .z = 0};
+            targetML = {.x = -100, .y = 0, .z = 0};
+            targetMR = {.x = 100, .y = 0, .z = 0};
+            targetRL = {.x = -100, .y = -100, .z = 0};
+            targetRR = {.x = 100, .y = -100, .z = 0};
             break;
 
             //TODO change below
