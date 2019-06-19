@@ -15,8 +15,14 @@
 #include "ssd1306.h"
 #include "servomotor.h"
 
+ADC_HandleTypeDef hadc1;
+DMA_HandleTypeDef hdma_adc1;
+uint16_t ADCReadings[2]; //ADC Readings
+
 void SystemClock_Config();
 static void MX_GPIO_Init();
+static void MX_ADC1_Init();
+static void MX_DMA_Init();
 
 void update_display() {
     ssd1306_api.update(ssd1306_gfx.getBuffer(), (128 * 64) / 8);
@@ -44,6 +50,8 @@ int main()
     MX_GPIO_Init();
     MX_I2C2_Init();
     MX_TIM4_Init();
+    MX_ADC1_Init();
+    MX_DMA_Init();
 
     servo0.setMinimum(640);
     servo0.setMaximum(2250);
@@ -126,6 +134,9 @@ int main()
     btn.setOnHoldSingular([](){ pin14hold++; });
     btn.setOnHoldRepeated([](){ pin14hold++; });
 
+    __enable_irq();
+    HAL_ADC_Start_DMA(&hadc1, (uint32_t*) ADCReadings, 2);//start the DMA collecting the data
+
     while (true) {
         ticker.dispatch(HAL_GetTick());
         fsm.dispatch();
@@ -179,6 +190,7 @@ void SystemClock_Config() {
 static void MX_GPIO_Init()
 {
     /* GPIO Ports Clock Enable */
+    __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOD_CLK_ENABLE();
@@ -191,6 +203,54 @@ static void MX_GPIO_Init()
     gpioC14.Speed = GPIO_SPEED_FREQ_HIGH;
 
     HAL_GPIO_Init(GPIOC, &gpioC14);
+}
+
+/* ADC1 init function */
+void MX_ADC1_Init() {
+    ADC_ChannelConfTypeDef sConfig;
+
+    /** Common config */
+    hadc1.Instance                   = ADC1;
+    hadc1.Init.ScanConvMode          = ADC_SCAN_ENABLE;
+    hadc1.Init.ContinuousConvMode    = ENABLE;
+    hadc1.Init.DiscontinuousConvMode = DISABLE;
+    hadc1.Init.ExternalTrigConv      = ADC_SOFTWARE_START;
+    hadc1.Init.NbrOfDiscConversion   = 0;
+    hadc1.Init.DataAlign             = ADC_DATAALIGN_RIGHT;
+    hadc1.Init.NbrOfConversion       = 2;
+
+    if (HAL_ADC_Init(&hadc1) != HAL_OK) {
+        Error_Handler();
+    }
+
+    /** Configure Regular Channel */
+    sConfig.Channel      = ADC_CHANNEL_0;
+    sConfig.Rank         = ADC_REGULAR_RANK_1;
+    sConfig.SamplingTime = ADC_SAMPLETIME_71CYCLES_5;
+
+    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
+        Error_Handler();
+    }
+
+    /** Configure Regular Channel */
+    sConfig.Channel      = ADC_CHANNEL_1;
+    sConfig.Rank         = ADC_REGULAR_RANK_2;
+    sConfig.SamplingTime = ADC_SAMPLETIME_71CYCLES_5;
+
+    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
+        Error_Handler();
+    }
+
+}
+
+void MX_DMA_Init() {
+    /* DMA controller clock enable */
+    __HAL_RCC_DMA1_CLK_ENABLE();
+
+    /* DMA interrupt init */
+    /* DMA1_Channel1_IRQn interrupt configuration */
+    HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 }
 
 /**

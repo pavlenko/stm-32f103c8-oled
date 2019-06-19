@@ -76,66 +76,66 @@ void calculate() {
 
             //TODO change below
         case 1:
-            targetFL = {.z = 0};
-            targetFR = {.z = -hpConfig.height};
-            targetML = {.z = 0};
-            targetMR = {.z = -hpConfig.height};
-            targetRL = {.z = 0};
-            targetRR = {.z = -hpConfig.height};
+            targetFL = {.x = 0, .y = 0, .z = 0};
+            targetFR = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetML = {.x = 0, .y = 0, .z = 0};
+            targetMR = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetRL = {.x = 0, .y = 0, .z = 0};
+            targetRR = {.x = 0, .y = 0, .z = -hpConfig.height};
             break;
 
         case 2:
-            targetFL = {.z = 0};
-            targetFR = {.z = -hpConfig.height};
-            targetML = {.z = 0};
-            targetMR = {.z = -hpConfig.height};
-            targetRL = {.z = 0};
-            targetRR = {.z = -hpConfig.height};
+            targetFL = {.x = 0, .y = 0, .z = 0};
+            targetFR = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetML = {.x = 0, .y = 0, .z = 0};
+            targetMR = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetRL = {.x = 0, .y = 0, .z = 0};
+            targetRR = {.x = 0, .y = 0, .z = -hpConfig.height};
             break;
 
         case 3:
-            targetFL = {.z = 0};
-            targetFR = {.z = -hpConfig.height};
-            targetML = {.z = 0};
-            targetMR = {.z = -hpConfig.height};
-            targetRL = {.z = 0};
-            targetRR = {.z = -hpConfig.height};
+            targetFL = {.x = 0, .y = 0, .z = 0};
+            targetFR = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetML = {.x = 0, .y = 0, .z = 0};
+            targetMR = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetRL = {.x = 0, .y = 0, .z = 0};
+            targetRR = {.x = 0, .y = 0, .z = -hpConfig.height};
             break;
 
         case 4:
-            targetFL = {.z = -hpConfig.height};
-            targetFR = {.z = -hpConfig.height};
-            targetML = {.z = -hpConfig.height};
-            targetMR = {.z = -hpConfig.height};
-            targetRL = {.z = -hpConfig.height};
-            targetRR = {.z = -hpConfig.height};
+            targetFL = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetFR = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetML = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetMR = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetRL = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetRR = {.x = 0, .y = 0, .z = -hpConfig.height};
             break;
 
         case 5:
-            targetFL = {.z = -hpConfig.height};
-            targetFR = {.z = 0};
-            targetML = {.z = -hpConfig.height};
-            targetMR = {.z = 0};
-            targetRL = {.z = -hpConfig.height};
-            targetRR = {.z = 0};
+            targetFL = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetFR = {.x = 0, .y = 0, .z = 0};
+            targetML = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetMR = {.x = 0, .y = 0, .z = 0};
+            targetRL = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetRR = {.x = 0, .y = 0, .z = 0};
             break;
 
         case 6:
-            targetFL = {.z = -hpConfig.height};
-            targetFR = {.z = 0};
-            targetML = {.z = -hpConfig.height};
-            targetMR = {.z = 0};
-            targetRL = {.z = -hpConfig.height};
-            targetRR = {.z = 0};
+            targetFL = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetFR = {.x = 0, .y = 0, .z = 0};
+            targetML = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetMR = {.x = 0, .y = 0, .z = 0};
+            targetRL = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetRR = {.x = 0, .y = 0, .z = 0};
             break;
 
         case 7:
-            targetFL = {.z = -hpConfig.height};
-            targetFR = {.z = 0};
-            targetML = {.z = -hpConfig.height};
-            targetMR = {.z = 0};
-            targetRL = {.z = -hpConfig.height};
-            targetRR = {.z = 0};
+            targetFL = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetFR = {.x = 0, .y = 0, .z = 0};
+            targetML = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetMR = {.x = 0, .y = 0, .z = 0};
+            targetRL = {.x = 0, .y = 0, .z = -hpConfig.height};
+            targetRR = {.x = 0, .y = 0, .z = 0};
             break;
 
         default:
