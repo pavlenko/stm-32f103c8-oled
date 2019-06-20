@@ -33,10 +33,21 @@ typedef struct {
 } HP_Point2D_t;
 
 typedef struct {
-    int16_t x;
-    int16_t y;
-    int16_t z;
+    float x;
+    float y;
+    float z;
 } HP_Point3D_t;
+
+float clearance = 50;
+
+typedef struct {
+    HP_Point3D_t FL;
+    HP_Point3D_t FR;
+    HP_Point3D_t ML;
+    HP_Point3D_t MR;
+    HP_Point3D_t RL;
+    HP_Point3D_t RR;
+} HP_Targets_t;
 
 void test() {
     HP_Point3D_t center = {0, 0, 0};
@@ -54,6 +65,39 @@ void test() {
     HP_Point3D_t targetMR = {100, 0, -50};
     HP_Point3D_t targetRL = {-100, -100, -50};
     HP_Point3D_t targetRR = {100, -100, -50};
+}
+
+//TODO initial points, default
+void calculate0(HP_Targets_t *targets)
+{
+    float mul = sin(45 * PI_DIV_BY_180);
+
+    targets->FL = {-100 * mul, 100 * mul, -clearance};
+
+    targets->FR = {100 * mul, 100 * mul, -clearance};
+
+    targets->ML = {-100, 0, -clearance};
+
+    targets->MR = {100, 0, -clearance};
+
+    targets->RL = {-100 * mul, -100 * mul, -clearance};
+
+    targets->RR = {100 * mul, -100 * mul, -clearance};
+}
+
+void calculate1(HP_Targets_t *targets)
+{
+    float mul = sin(45 * PI_DIV_BY_180);
+
+    float diffX = 0;
+    float diffY = 10;
+
+    targets->FL = {-100 * mul, 100 * mul- diffY, -clearance};
+    targets->FR = {100 * mul, 100 * mul + diffY, -clearance};
+    targets->ML = {-100, 0 + diffY, -clearance};
+    targets->MR = {100, 0 - diffY, -clearance};
+    targets->RL = {-100 * mul, -100 * mul- diffY, -clearance};
+    targets->RR = {100 * mul, -100 * mul + diffY, -clearance};
 }
 
 #endif //__HP_H
