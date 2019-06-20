@@ -72,11 +72,13 @@ void SysTick_Handler(void)
   HAL_IncTick();
 }
 
-// DMA used to move the ADC readings into system ram
-void DMA1_Channel1_IRQHandler(void) {
+void DMA1_Channel1_IRQHandler(void)
+{
+    /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+
+    /* USER CODE END DMA1_Channel1_IRQn 0 */
     HAL_DMA_IRQHandler(&hdma_adc1);
-}
-//ADC interrupt used for DMA
-void ADC1_2_IRQHandler(void) {
-    HAL_ADC_IRQHandler(&hadc1);
+    /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
+
+    /* USER CODE END DMA1_Channel1_IRQn 1 */
 }
