@@ -72,17 +72,29 @@ void calculate0(HP_Targets_t *targets)
 {
     float mul = sin(45 * PI_DIV_BY_180);
 
-    targets->FL = {-100 * mul, 100 * mul, -clearance};
+    targets->FL.x = -100 * mul;
+    targets->FL.y = 100 * mul;
+    targets->FL.z = -clearance;
 
-    targets->FR = {100 * mul, 100 * mul, -clearance};
+    targets->FR.x = 100 * mul;
+    targets->FR.y = 100 * mul;
+    targets->FR.z = -clearance;
 
-    targets->ML = {-100, 0, -clearance};
+    targets->ML.x = -100;
+    targets->ML.y = 0;
+    targets->ML.z = -clearance;
 
-    targets->MR = {100, 0, -clearance};
+    targets->MR.x = 100;
+    targets->MR.y = 0;
+    targets->MR.z = -clearance;
 
-    targets->RL = {-100 * mul, -100 * mul, -clearance};
+    targets->RL.x = -100 * mul;
+    targets->RL.y = -100 * mul;
+    targets->RL.z = -clearance;
 
-    targets->RR = {100 * mul, -100 * mul, -clearance};
+    targets->RR.x = 100 * mul;
+    targets->RR.y = -100 * mul;
+    targets->RR.z = -clearance;
 }
 
 void calculate1(HP_Targets_t *targets)
@@ -92,12 +104,29 @@ void calculate1(HP_Targets_t *targets)
     float diffX = 0;
     float diffY = 10;
 
-    targets->FL = {-100 * mul, 100 * mul- diffY, -clearance};
-    targets->FR = {100 * mul, 100 * mul + diffY, -clearance};
-    targets->ML = {-100, 0 + diffY, -clearance};
-    targets->MR = {100, 0 - diffY, -clearance};
-    targets->RL = {-100 * mul, -100 * mul- diffY, -clearance};
-    targets->RR = {100 * mul, -100 * mul + diffY, -clearance};
+    targets->FL.x = -100 * mul + diffX;
+    targets->FL.y = 100 * mul + diffY;
+    targets->FL.z = 0;
+
+    targets->FR.x = 100 * mul + diffX;
+    targets->FR.y = 100 * mul - diffY;
+    targets->FR.z = -clearance;
+
+    targets->ML.x = -100 + diffX;
+    targets->ML.y = 0 - diffY;
+    targets->ML.z = -clearance;
+
+    targets->MR.x = 100 + diffX;
+    targets->MR.y = 0 + diffY;
+    targets->MR.z = 0;
+
+    targets->RL.x = -100 * mul + diffX;
+    targets->RL.y = -100 * mul + diffY;
+    targets->RL.z = 0;
+
+    targets->RR.x = 100 * mul + diffX;
+    targets->RR.y = -100 * mul - diffY;
+    targets->RR.z = -clearance;
 }
 
 #endif //__HP_H
