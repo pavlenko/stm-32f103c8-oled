@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2048
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Balance", "Balance\Balance.vcxproj", "{C9779FD5-9DC7-4621-8C26-E610BDDE200A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|VisualGDB = Debug|VisualGDB
+		Release|VisualGDB = Release|VisualGDB
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C9779FD5-9DC7-4621-8C26-E610BDDE200A}.Debug|VisualGDB.ActiveCfg = Debug|VisualGDB
+		{C9779FD5-9DC7-4621-8C26-E610BDDE200A}.Debug|VisualGDB.Build.0 = Debug|VisualGDB
+		{C9779FD5-9DC7-4621-8C26-E610BDDE200A}.Release|VisualGDB.ActiveCfg = Release|VisualGDB
+		{C9779FD5-9DC7-4621-8C26-E610BDDE200A}.Release|VisualGDB.Build.0 = Release|VisualGDB
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E4A616DE-F1A3-4C1E-838D-65BA2428373A}
+	EndGlobalSection
+EndGlobal
