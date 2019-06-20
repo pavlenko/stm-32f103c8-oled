@@ -1,5 +1,6 @@
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
 #include "led.h"
 #include "i2c.h"
 #include "tim.h"
@@ -20,7 +21,6 @@ DMA_HandleTypeDef hdma_adc1;
 
 void SystemClock_Config();
 static void MX_GPIO_Init();
-static void MX_DMA_Init();
 
 void update_display() {
     ssd1306_api.update(ssd1306_gfx.getBuffer(), (128 * 64) / 8);
@@ -48,8 +48,8 @@ int main()
     MX_GPIO_Init();
     MX_I2C2_Init();
     MX_TIM4_Init();
-    MX_ADC1_Init();
     MX_DMA_Init();
+    MX_ADC1_Init();
 
     servo0.setMinimum(640);
     servo0.setMaximum(2250);
@@ -207,21 +207,6 @@ static void MX_GPIO_Init()
     gpioC14.Speed = GPIO_SPEED_FREQ_HIGH;
 
     HAL_GPIO_Init(GPIOC, &gpioC14);
-}
-
-/**
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void)
-{
-    /* DMA controller clock enable */
-    __HAL_RCC_DMA1_CLK_ENABLE();
-
-    /* DMA interrupt init */
-    /* DMA1_Channel1_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
-
 }
 
 /**
