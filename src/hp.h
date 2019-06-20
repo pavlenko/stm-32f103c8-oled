@@ -1,6 +1,23 @@
 #ifndef __HP_H
 #define __HP_H
 
+/**
+ * Movement steps 0...7 (8 == 0 on next iteration)
+ *
+ *     3---4---5
+ *    / \     / \
+ *   /   \   /   \
+ *  /     \ /     \
+ * 2---1--0,8--7---6
+ *
+ *     7---8---1
+ *    / \     / \
+ *   /   \   /   \
+ *  /     \ /     \
+ * 6---5--0,4--3---2
+ */
+
+
 //TODO geometry
 //TODO initial state (prototype for modification)
 
