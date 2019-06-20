@@ -177,6 +177,10 @@ void PE_mGFX::string(uint16_t x, uint16_t y, const char *string, PE_mGFX_Font_t 
     }
 }
 
-uint8_t *PE_mGFX::getBuffer() {
+uint16_t PE_mGFX::getBufferSize() {
+    return _width * ((_height + 7) / 8);
+}
+
+uint8_t *PE_mGFX::getBufferData() {
     return _buffer;
 }

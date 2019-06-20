@@ -122,11 +122,18 @@ public:
     void string(uint16_t x, uint16_t y, const char *string, PE_mGFX_Font_t *font, PE_mGFX_Color_t color);
 
     /**
+     * Get internal buffer size
+     *
+     * @return
+     */
+    uint16_t getBufferSize();
+
+    /**
      * Get pointer to internal buffer
      *
      * @return
      */
-    uint8_t * getBuffer();
+    uint8_t * getBufferData();
 };
 
 #endif //PE_MGFX_H

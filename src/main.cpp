@@ -23,7 +23,7 @@ void SystemClock_Config();
 static void MX_GPIO_Init();
 
 void update_display() {
-    ssd1306_api.update(ssd1306_gfx.getBuffer(), (128 * 64) / 8);
+    ssd1306_api.update(ssd1306_gfx.getBufferData(), ssd1306_gfx.getBufferSize());
 }
 
 static volatile bool pin14press = false;
