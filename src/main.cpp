@@ -1,4 +1,5 @@
 #include "main.h"
+#include "adc.h"
 #include "led.h"
 #include "i2c.h"
 #include "tim.h"
@@ -15,13 +16,10 @@
 #include "ssd1306.h"
 #include "servomotor.h"
 
-ADC_HandleTypeDef hadc1;
 DMA_HandleTypeDef hdma_adc1;
-uint16_t ADCReadings[2]; //ADC Readings
 
 void SystemClock_Config();
 static void MX_GPIO_Init();
-static void MX_ADC1_Init();
 static void MX_DMA_Init();
 
 void update_display() {
@@ -115,6 +113,10 @@ int main()
     });
 
     ticker.createHandlerRepeated(100, [](){
+        uint16_t channel0, channel1;
+
+        ADC_Fetch(&channel0, &channel1);
+
         LED(LED_ON);
         char str[20];
 
@@ -124,10 +126,14 @@ int main()
         ssd1306_gfx.string(0, 8, "              ", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
 
         //sprintf(str, "B: %u H: %lu", (uint8_t) pin14press, pin14hold);
-        sprintf(str, "adc: %d", ADCReadings[0]);
+        sprintf(str, "adc: %d %d", channel0, channel1);
         ssd1306_gfx.string(0, 8, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
 
         update_display();
+    });
+
+    ticker.createHandlerRepeated(50, [](){
+        ADC_Start();
     });
 
     btn.setOnPress([](){ pin14press = true; pin14hold = 0; });
@@ -135,23 +141,11 @@ int main()
     btn.setOnHoldSingular([](){ pin14hold++; });
     btn.setOnHoldRepeated([](){ pin14hold++; });
 
-    HAL_ADC_Start(&hadc1);
-    __enable_irq();
-    HAL_ADC_Start_DMA(&hadc1, (uint32_t*) ADCReadings, 2);//start the DMA collecting the data
-
     while (true) {
         ticker.dispatch(HAL_GetTick());
         fsm.dispatch();
         btn.dispatch(HAL_GetTick());
-        //HAL_ADC_Start_DMA(&hadc1, (uint32_t*) ADCReadings, 2);//start the DMA collecting the data
         LED(LED_OFF);
-    }
-}
-
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
-{
-    if (hadc->Instance == ADC1) {
-        HAL_ADC_Start_DMA(&hadc1, (uint32_t*) ADCReadings, 2);//start the DMA collecting the data
     }
 }
 
@@ -213,54 +207,6 @@ static void MX_GPIO_Init()
     gpioC14.Speed = GPIO_SPEED_FREQ_HIGH;
 
     HAL_GPIO_Init(GPIOC, &gpioC14);
-}
-
-static void MX_ADC1_Init(void)
-{
-
-    /* USER CODE BEGIN ADC1_Init 0 */
-
-    /* USER CODE END ADC1_Init 0 */
-
-    ADC_ChannelConfTypeDef sConfig = {0};
-
-    /* USER CODE BEGIN ADC1_Init 1 */
-
-    /* USER CODE END ADC1_Init 1 */
-    /** Common config
-    */
-    hadc1.Instance = ADC1;
-    hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
-    hadc1.Init.ContinuousConvMode = ENABLE;
-    hadc1.Init.DiscontinuousConvMode = DISABLE;
-    hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-    hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-    hadc1.Init.NbrOfConversion = 2;
-    if (HAL_ADC_Init(&hadc1) != HAL_OK)
-    {
-        Error_Handler();
-    }
-    /** Configure Regular Channel
-    */
-    sConfig.Channel = ADC_CHANNEL_0;
-    sConfig.Rank = ADC_REGULAR_RANK_1;
-    sConfig.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
-    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-    {
-        Error_Handler();
-    }
-    /** Configure Regular Channel
-    */
-    sConfig.Channel = ADC_CHANNEL_1;
-    sConfig.Rank = ADC_REGULAR_RANK_2;
-    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-    {
-        Error_Handler();
-    }
-    /* USER CODE BEGIN ADC1_Init 2 */
-
-    /* USER CODE END ADC1_Init 2 */
-
 }
 
 /**
