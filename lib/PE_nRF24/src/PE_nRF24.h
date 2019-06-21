@@ -409,14 +409,24 @@ typedef void (*PE_nRF24_writeByte) (uint8_t reg, uint8_t byte);
 
 typedef void (*PE_nRF24_writeData) (uint8_t reg, uint8_t *data, uint8_t size);
 
+typedef void (*PE_nRF24_readData) (uint8_t reg, uint8_t *data, uint8_t size);
+
+typedef void (*PE_nRF24_sendData) (uint8_t reg, uint8_t *data, uint8_t size);
+
 class PE_nRF24 {
     PE_nRF24_writeByte _writeByte;
     PE_nRF24_writeData _writeData;
+
+    PE_nRF24_readData _read;
+    PE_nRF24_sendData _send;
 public:
-    PE_nRF24(PE_nRF24_writeByte, PE_nRF24_writeData);
     void initialize();
     void flushRX();
     void flushTX();
+
+    bool readPayload(uint8_t *data, uint8_t size);
+
+    bool sendPayload(uint8_t *data, uint8_t size);
 };
 
 #endif //PE_NRF24_H
