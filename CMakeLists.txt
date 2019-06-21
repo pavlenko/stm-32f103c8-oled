@@ -7,6 +7,7 @@ include_directories("$ENV{HOME}/.platformio/packages/framework-stm32cube/f1/Driv
 
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_Button/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_FSM/src")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_nRF24/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_mGFX/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_Servomotor/src")
 include_directories("${CMAKE_CURRENT_LIST_DIR}/lib/PE_SSD1306/src")
