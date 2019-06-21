@@ -405,6 +405,15 @@ typedef enum {
     nRF24_SETUP_RETR_ARD_4000us = 0xFU,
 } nRF24_SETUP_RETR_ARD_t;
 
+typedef enum {
+    nRF24_PIPE0 = (uint8_t)0x00, // pipe0
+    nRF24_PIPE1 = (uint8_t)0x01, // pipe1
+    nRF24_PIPE2 = (uint8_t)0x02, // pipe2
+    nRF24_PIPE3 = (uint8_t)0x03, // pipe3
+    nRF24_PIPE4 = (uint8_t)0x04, // pipe4
+    nRF24_PIPE5 = (uint8_t)0x05, // pipe5
+} nRF24_PIPE_t;
+
 typedef void (*PE_nRF24_writeByte) (uint8_t reg, uint8_t byte);
 
 typedef void (*PE_nRF24_writeData) (uint8_t reg, uint8_t *data, uint8_t size);
@@ -424,9 +433,27 @@ public:
     void flushRX();
     void flushTX();
 
+    void setRFChannel(uint8_t channel);
+
+    /**
+     * Set TX power
+     *
+     * @param power
+     */
     void setTXPower(nRF24_RF_SETUP_RF_PWR_t power);
 
+    /**
+     * Set data rate
+     *
+     * @param dataRate
+     */
     void setDataRate(nRF24_RF_SETUP_RF_DR_t dataRate);
+
+    void setCRCScheme(nRF24_CONFIG_CRC_t scheme);
+
+    void setAddressLength(uint8_t length);
+
+    void setAddressPipe(nRF24_PIPE_t pipe, const uint8_t *address);
 
     /**
      * Read payload
