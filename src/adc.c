@@ -44,7 +44,7 @@ void MX_ADC1_Init(void)
     }
 
     /** Configure Regular Channel */
-    chConfig.Channel      = ADC_CHANNEL_7;
+    chConfig.Channel      = ADC_CHANNEL_1;
     chConfig.Rank         = ADC_REGULAR_RANK_2;
     chConfig.SamplingTime = ADC_SAMPLETIME_13CYCLES_5;
 
@@ -117,12 +117,12 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* adc)
     if (adc->Instance == ADC1) {
         // Handle multiple measurements for get avg result
         if (adcMeasurementIndex < NUMBER_OF_MEASUREMENTS) {
-            adcMeasurementArray0[adcMeasurementIndex] = adcConversionArray[0];
-            adcMeasurementArray1[adcMeasurementIndex] = adcConversionArray[1];
+            adcMeasurementArray0[adcMeasurementIndex] = adcConversionArray[0] >> 2u;
+            adcMeasurementArray1[adcMeasurementIndex] = adcConversionArray[1] >> 2u;
 
             adcMeasurementIndex++;
 
-            HAL_ADC_Start_DMA(&hadc1, (uint32_t*) &adcConversionArray, sizeof(adcConversionArray) / sizeof(*(adcConversionArray)));
+            HAL_ADC_Start_DMA(&adc1, (uint32_t*) &adcConversionArray, sizeof(adcConversionArray) / sizeof(*(adcConversionArray)));
         } else {
             tmpMeasurementValue0 = 0;
             tmpMeasurementValue1 = 0;
@@ -143,6 +143,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* adc)
 
 void ADC_Start()
 {
+    HAL_ADCEx_Calibration_Start(&adc1);
     adcConversionReady = 0;
     HAL_ADC_Start_DMA(&adc1, (uint32_t*) &adcConversionArray, sizeof(adcConversionArray) / sizeof(*(adcConversionArray)));
 }
