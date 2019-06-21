@@ -61,31 +61,31 @@ void PE_nRF24::flushTX() {
     _writeByte(nRF24_CMD_FLUSH_TX, nRF24_CMD_NOP);
 }
 
-bool PE_nRF24::readPayload(uint8_t *data, uint8_t size) {
+void PE_nRF24::readPayload(uint8_t *data, uint8_t *size) {
     uint8_t pipe;
-    uint8_t length;
+    uint8_t status;
+
+    // Read the STATUS register
+    _read(nRF24_CMD_R_REGISTER(nRF24_STATUS), &status, 1);
 
     // Extract a payload pipe number from the STATUS register
-    pipe = (nRF24_ReadReg(nRF24_REG_STATUS) & nRF24_MASK_RX_P_NO) >> 1;//TODO
+    pipe = (status & nRF24_STATUS_RX_P_NO_Msk) >> nRF24_STATUS_RX_P_NO_Pos;
 
     // RX FIFO empty?
     if (pipe < 6) {
         // Get payload length
-        _read(nRF24_RX_PW_P0 + pipe, &length, 1);
+        _read(nRF24_RX_PW_P0 + pipe, size, 1);
 
         // Read a payload from the RX FIFO
-        if (length) {
-            //TODO resolve proper data size depends on length & size
-            _read(nRF24_CMD_R_RX_PAYLOAD, data, size);
+        if (*size) {
+            _read(nRF24_CMD_R_RX_PAYLOAD, data, *size);
         }
-
-        return true;
+    } else {
+        // The RX FIFO is empty
+        *size = 0;
     }
-
-    return false;
 }
 
-bool PE_nRF24::sendPayload(uint8_t *data, uint8_t size) {
+void PE_nRF24::sendPayload(uint8_t *data, uint8_t size) {
     _send(nRF24_CMD_W_TX_PAYLOAD, data, size);
-    return true;
 }

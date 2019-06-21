@@ -424,9 +424,15 @@ public:
     void flushRX();
     void flushTX();
 
-    bool readPayload(uint8_t *data, uint8_t size);
+    /**
+     * Read payload data to buffer
+     *
+     * @param data
+     * @param size
+     */
+    void readPayload(uint8_t *data, uint8_t *size);
 
-    bool sendPayload(uint8_t *data, uint8_t size);
+    void sendPayload(uint8_t *data, uint8_t size);
 };
 
 #endif //PE_NRF24_H
