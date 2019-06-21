@@ -409,8 +409,8 @@ typedef void (*PE_nRF24_writeByte) (uint8_t reg, uint8_t byte);
 
 typedef void (*PE_nRF24_writeData) (uint8_t reg, uint8_t *data, uint8_t size);
 
+// TODO need both callbacks: readData, readByte, sendData, sendByte
 typedef void (*PE_nRF24_readData) (uint8_t reg, uint8_t *data, uint8_t size);
-
 typedef void (*PE_nRF24_sendData) (uint8_t reg, uint8_t *data, uint8_t size);
 
 class PE_nRF24 {
@@ -424,14 +424,24 @@ public:
     void flushRX();
     void flushTX();
 
+    void setTXPower(nRF24_RF_SETUP_RF_PWR_t power);
+
+    void setDataRate(nRF24_RF_SETUP_RF_DR_t dataRate);
+
     /**
-     * Read payload data to buffer
+     * Read payload
      *
      * @param data
      * @param size
      */
     void readPayload(uint8_t *data, uint8_t *size);
 
+    /**
+     * Send payload
+     *
+     * @param data
+     * @param size
+     */
     void sendPayload(uint8_t *data, uint8_t size);
 };
 

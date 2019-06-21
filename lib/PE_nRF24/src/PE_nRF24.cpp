@@ -53,15 +53,48 @@ void PE_nRF24::initialize() {
     nRF24_CSN_H();
 }
 
-void PE_nRF24::flushRX() {
+void PE_nRF24::flushRX()
+{
     _writeByte(nRF24_CMD_FLUSH_RX, nRF24_CMD_NOP);
 }
 
-void PE_nRF24::flushTX() {
+void PE_nRF24::flushTX()
+{
     _writeByte(nRF24_CMD_FLUSH_TX, nRF24_CMD_NOP);
 }
 
-void PE_nRF24::readPayload(uint8_t *data, uint8_t *size) {
+void PE_nRF24::setTXPower(nRF24_RF_SETUP_RF_PWR_t power)
+{
+    uint8_t rfSetup;
+
+    // Get RF_SETUP
+    _read(nRF24_CMD_R_REGISTER(nRF24_RF_SETUP), &rfSetup, 1);
+
+    // Modify RF_PWR bits
+    rfSetup &= nRF24_RF_SETUP_RF_PWR;
+    rfSetup |= power;
+
+    // Set RF_SETUP
+    _send(nRF24_CMD_W_REGISTER(nRF24_RF_SETUP), &rfSetup, 1);
+}
+
+void PE_nRF24::setDataRate(nRF24_RF_SETUP_RF_DR_t dataRate)
+{
+    uint8_t rfSetup;
+
+    // Get RF_SETUP
+    _read(nRF24_CMD_R_REGISTER(nRF24_RF_SETUP), &rfSetup, 1);
+
+    // Modify RF_DR bits
+    rfSetup &= nRF24_RF_SETUP_RF_DR_HIGH|nRF24_RF_SETUP_RF_DR_LOW;
+    rfSetup |= dataRate;
+
+    // Set RF_SETUP
+    _send(nRF24_CMD_W_REGISTER(nRF24_RF_SETUP), &rfSetup, 1);
+}
+
+void PE_nRF24::readPayload(uint8_t *data, uint8_t *size)
+{
     uint8_t pipe;
     uint8_t status;
 
@@ -86,6 +119,7 @@ void PE_nRF24::readPayload(uint8_t *data, uint8_t *size) {
     }
 }
 
-void PE_nRF24::sendPayload(uint8_t *data, uint8_t size) {
+void PE_nRF24::sendPayload(uint8_t *data, uint8_t size)
+{
     _send(nRF24_CMD_W_TX_PAYLOAD, data, size);
 }
