@@ -465,8 +465,19 @@ public:
      */
     void setCRCScheme(nRF24_CONFIG_CRC_t scheme);
 
-    void setAddressLength(uint8_t length);
+    /**
+     * Set address length for all pipes
+     *
+     * @param length
+     */
+    void setAddressLength(nRF24_SETUP_AW_AW_t length);
 
+    /**
+     * Set address for specific pipe
+     *
+     * @param pipe
+     * @param address
+     */
     void setAddressPipe(nRF24_PIPE_t pipe, const uint8_t *address);
 
     /**

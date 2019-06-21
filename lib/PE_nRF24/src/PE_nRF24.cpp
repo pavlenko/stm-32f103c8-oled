@@ -86,6 +86,19 @@ void PE_nRF24::setCRCScheme(nRF24_CONFIG_CRC_t scheme)
     _sendByte(nRF24_CMD_R_REGISTER(nRF24_CONFIG), config);
 }
 
+void PE_nRF24::setAddressLength(nRF24_SETUP_AW_AW_t length)
+{
+    _sendByte(nRF24_CMD_R_REGISTER(nRF24_SETUP_AW), length);
+}
+
+void PE_nRF24::setAddressPipe(nRF24_PIPE_t pipe, const uint8_t *address)
+{
+    // Get SETUP_AW register
+    uint8_t length = _readByte(nRF24_CMD_R_REGISTER(nRF24_SETUP_AW));
+
+    //TODO
+}
+
 void PE_nRF24::readPayload(uint8_t *data, uint8_t *size)
 {
     // Read the STATUS register
