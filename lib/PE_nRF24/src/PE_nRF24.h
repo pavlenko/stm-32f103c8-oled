@@ -419,20 +419,29 @@ typedef void (*PE_nRF24_writeByte) (uint8_t reg, uint8_t byte);
 typedef void (*PE_nRF24_writeData) (uint8_t reg, uint8_t *data, uint8_t size);
 
 // TODO need both callbacks: readData, readByte, sendData, sendByte
+typedef uint8_t (*PE_nRF24_readByte) (uint8_t reg);
 typedef void (*PE_nRF24_readData) (uint8_t reg, uint8_t *data, uint8_t size);
+typedef void (*PE_nRF24_sendByte) (uint8_t reg, uint8_t data);
 typedef void (*PE_nRF24_sendData) (uint8_t reg, uint8_t *data, uint8_t size);
 
 class PE_nRF24 {
     PE_nRF24_writeByte _writeByte;
     PE_nRF24_writeData _writeData;
 
-    PE_nRF24_readData _read;
-    PE_nRF24_sendData _send;
+    PE_nRF24_readByte _readByte;
+    PE_nRF24_readData _readData;
+    PE_nRF24_sendByte _sendByte;
+    PE_nRF24_sendData _sendData;
 public:
     void initialize();
     void flushRX();
     void flushTX();
 
+    /**
+     * Select RF channel
+     *
+     * @param channel
+     */
     void setRFChannel(uint8_t channel);
 
     /**
@@ -449,6 +458,11 @@ public:
      */
     void setDataRate(nRF24_RF_SETUP_RF_DR_t dataRate);
 
+    /**
+     * Set CRC enabled/disabled and select CRC size
+     *
+     * @param scheme
+     */
     void setCRCScheme(nRF24_CONFIG_CRC_t scheme);
 
     void setAddressLength(uint8_t length);
