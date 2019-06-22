@@ -117,8 +117,8 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* adc)
     if (adc->Instance == ADC1) {
         // Handle multiple measurements for get avg result
         if (adcMeasurementIndex < NUMBER_OF_MEASUREMENTS) {
-            adcMeasurementArray0[adcMeasurementIndex] = adcConversionArray[0] >> 2u;
-            adcMeasurementArray1[adcMeasurementIndex] = adcConversionArray[1] >> 2u;
+            adcMeasurementArray0[adcMeasurementIndex] = adcConversionArray[0] >> 1u;
+            adcMeasurementArray1[adcMeasurementIndex] = adcConversionArray[1] >> 1u;
 
             adcMeasurementIndex++;
 

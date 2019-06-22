@@ -1,5 +1,6 @@
 #include "main.h"
 #include "adc.h"
+#include "calc.h"
 #include "dma.h"
 #include "led.h"
 #include "i2c.h"
@@ -104,18 +105,20 @@ int main()
     PE_Ticker ticker = PE_Ticker();
     ticker.initialize(HAL_GetTick(), 16);
 
-    ticker.createHandlerRepeated(2000, [](){
+    /*ticker.createHandlerRepeated(2000, [](){
         if (0 == servo0.getDegree()) {
             fsm.transitionTo(&SERVO_MAX);
         } else {
             fsm.transitionTo(&SERVO_MIN);
         }
-    });
+    });*/
 
     ticker.createHandlerRepeated(100, [](){
         uint16_t channel0, channel1;
 
         ADC_Fetch(&channel0, &channel1);
+
+        servo0.setMicros(map(channel0, 0, 2000, 600, 2300));
 
         LED(LED_ON);
         char str[20];
