@@ -22,10 +22,7 @@
 
 //TODO api must support control local and remote
 //TODO check connection
-//TODO write microseconds??? or maybe write angle is preferred
-//TODO get/set min/max via remote api
 //TODO calibration mode???
-//TODO read data from remote servo???
 
 typedef void (*PE_Servomotor_send_t) (uint8_t reg, uint16_t data);
 typedef uint16_t (*PE_Servomotor_read_t) (uint8_t reg);
@@ -65,11 +62,25 @@ public:
     void setMicros(uint16_t value);
 
     /**
+     * Get pulse range minimum
+     *
+     * @return
+     */
+    uint16_t getMinimum();
+
+    /**
      * Set pulse range minimum, default is PE_SERVOMOTOR_MICROS_MIN
      *
      * @param value
      */
     void setMinimum(uint16_t value);
+
+    /**
+     * Get pulse range maximum
+     *
+     * @return
+     */
+    uint16_t getMaximum();
 
     /**
      * Set pulse range maximum, default is PE_SERVOMOTOR_MICROS_MAX
