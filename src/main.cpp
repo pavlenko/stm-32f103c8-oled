@@ -61,6 +61,25 @@ int main()
     ssd1306_api.initialize();
     ssd1306_gfx.initialize();
 
+    //scan i2c bus
+    /*uint8_t i, j = 0, y = 0;
+    char scan[20];
+
+    for (i = 1; i < 128; i ++) {
+        if (HAL_I2C_IsDeviceReady(&i2c2, (uint16_t)(i << 1u), 2, 2) != HAL_OK) { // HAL_ERROR or HAL_BUSY or HAL_TIMEOUT
+            sprintf(scan, "0x%X", i);
+            ssd1306_gfx.string(0, y, scan, &PE_mGFX_Font_05x07, PE_mGFX_WHITE); // No ACK received at that address
+            update_display();
+        } else {
+            sprintf(scan, "0x%X", i);
+            ssd1306_gfx.string(0, y, scan, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+            update_display();
+            y += PE_mGFX_Font_05x07.height;
+        }
+    }
+
+    HAL_Delay(2000);*/
+
     ssd1306_gfx.string(0, 0, "Core...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
