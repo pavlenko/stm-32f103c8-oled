@@ -68,7 +68,7 @@ int main()
     char scan[20];
 
     for (i = 1; i < 128; i ++) {
-        if (HAL_I2C_IsDeviceReady(&i2c2, (uint16_t) (i << 1u), 2, 2) != HAL_OK) { // HAL_ERROR or HAL_BUSY or HAL_TIMEOUT
+        if (HAL_I2C_IsDeviceReady(&i2c2, (uint16_t) (i << 1u), 2, 100) != HAL_OK) { // HAL_ERROR or HAL_BUSY or HAL_TIMEOUT
             sprintf(scan, "_x%X", (i << 1u));
             ssd1306_gfx.string(0, y, scan, &PE_mGFX_Font_05x07, PE_mGFX_WHITE); // No ACK received at that address
             update_display();
@@ -80,7 +80,39 @@ int main()
         }
     }
 
-    HAL_Delay(2000);
+    uint8_t test[3];
+
+    if (HAL_I2C_Master_Receive(&i2c2, 0x3E, (uint8_t *) test, 3, 100) != HAL_OK) {
+        switch (i2c2.ErrorCode) {
+            case HAL_I2C_ERROR_BERR:
+                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_BERR", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+                break;
+            case HAL_I2C_ERROR_ARLO:
+                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_ARLO", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+                break;
+            case HAL_I2C_ERROR_AF:
+                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_AF", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+                break;
+            case HAL_I2C_ERROR_OVR:
+                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_OVR", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+                break;
+            case HAL_I2C_ERROR_DMA:
+                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_DMA", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+                break;
+            case HAL_I2C_ERROR_TIMEOUT:
+                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_TIMEOUT", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+                break;
+            default:
+                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_ERROR", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+                break;
+        }
+    } else {
+        ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, (char *) test, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+    }
+
+    update_display();
+
+    HAL_Delay(3000);
 
     ssd1306_gfx.string(0, 0, "Core...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
