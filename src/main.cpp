@@ -82,7 +82,7 @@ int main()
 
     uint8_t test[3];
 
-    if (HAL_I2C_Master_Receive(&i2c2, 0x3E, (uint8_t *) test, 3, 100) != HAL_OK) {
+    if (HAL_I2C_Master_Receive(&i2c2, 0x3C, (uint8_t *) test, 3, 100) != HAL_OK) {
         switch (i2c2.ErrorCode) {
             case HAL_I2C_ERROR_BERR:
                 ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_BERR", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
