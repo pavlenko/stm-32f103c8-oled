@@ -65,7 +65,7 @@ int main()
     HAL_Delay(100);
 
     //scan i2c bus
-    uint8_t i, j = 0, y = 0;
+    /*uint8_t i, j = 0, y = 0;
     char scan[20];
 
     for (i = 1; i < 128; i ++) {
@@ -79,65 +79,17 @@ int main()
             update_display();
             y += PE_mGFX_Font_05x07.height;
         }
-    }
-
-    uint8_t buf[2];
-    uint16_t req = 1500, res;
-
-    ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "write", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
-    update_display();
-
-    buf[0] = (uint8_t) (res >> 8);
-    buf[1] = (uint8_t) (res & 0xFF);
-
-    HAL_I2C_Mem_Write(&i2c1, 0x3C, 0x20, I2C_MEMADD_SIZE_8BIT, buf, 2, 10);
+    }*/
 
     ssd1306_gfx.string(0, 4 * PE_mGFX_Font_05x07.height, "read", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
 
-    buf[0] = 0;
-    buf[1] = 0;
-
-    HAL_I2C_Mem_Read(&i2c1, 0x3C, 0x00, I2C_MEMADD_SIZE_8BIT, buf, 2, 10);
-
-    res = buf[0] << 8 | buf[1];
-
     char str[10];
-    sprintf(str, "%d", res);
+
+    HAL_I2C_Mem_Read(&i2c1, 0x3C, 0x01, I2C_MEMADD_SIZE_8BIT, (uint8_t *) str, 5, 10);
+
     ssd1306_gfx.string(0, 5 * PE_mGFX_Font_05x07.height, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
-
-    /*char test[3];
-
-    if (HAL_I2C_Master_Receive(&i2c2, 0x3C, (uint8_t *) test, 3, 100) != HAL_OK) {
-        switch (i2c2.ErrorCode) {
-            case HAL_I2C_ERROR_BERR:
-                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_BERR", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
-                break;
-            case HAL_I2C_ERROR_ARLO:
-                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_ARLO", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
-                break;
-            case HAL_I2C_ERROR_AF:
-                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_AF", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
-                break;
-            case HAL_I2C_ERROR_OVR:
-                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_OVR", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
-                break;
-            case HAL_I2C_ERROR_DMA:
-                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_DMA", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
-                break;
-            case HAL_I2C_ERROR_TIMEOUT:
-                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_I2C_ERROR_TIMEOUT", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
-                break;
-            default:
-                ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, "HAL_ERROR", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
-                break;
-        }
-    } else {
-        ssd1306_gfx.string(0, 3 * PE_mGFX_Font_05x07.height, test, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
-    }
-
-    update_display();*/
 
     HAL_Delay(3000);
 
