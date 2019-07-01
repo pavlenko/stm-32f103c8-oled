@@ -47,6 +47,7 @@ int main()
     /* Initialize all configured peripherals */
     MX_LED_Init();
     MX_GPIO_Init();
+    MX_I2C1_Init();
     MX_I2C2_Init();
     MX_TIM4_Init();
     MX_DMA_Init();
@@ -68,7 +69,7 @@ int main()
     char scan[20];
 
     for (i = 1; i < 128; i ++) {
-        if (HAL_I2C_IsDeviceReady(&i2c2, (uint16_t) (i << 1u), 2, 100) != HAL_OK) { // HAL_ERROR or HAL_BUSY or HAL_TIMEOUT
+        if (HAL_I2C_IsDeviceReady(&i2c1, (uint16_t) (i << 1u), 2, 100) != HAL_OK) { // HAL_ERROR or HAL_BUSY or HAL_TIMEOUT
             sprintf(scan, "_x%X", (i << 1u));
             ssd1306_gfx.string(0, y, scan, &PE_mGFX_Font_05x07, PE_mGFX_WHITE); // No ACK received at that address
             update_display();
@@ -89,7 +90,7 @@ int main()
     buf[0] = (uint8_t) (res >> 8);
     buf[1] = (uint8_t) (res & 0xFF);
 
-    HAL_I2C_Mem_Write(&i2c2, 0x3C, 0x20, I2C_MEMADD_SIZE_8BIT, buf, 2, 10);
+    HAL_I2C_Mem_Write(&i2c1, 0x3C, 0x20, I2C_MEMADD_SIZE_8BIT, buf, 2, 10);
 
     ssd1306_gfx.string(0, 4 * PE_mGFX_Font_05x07.height, "read", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
@@ -97,7 +98,7 @@ int main()
     buf[0] = 0;
     buf[1] = 0;
 
-    HAL_I2C_Mem_Read(&i2c2, 0x3C, 0x00, I2C_MEMADD_SIZE_8BIT, buf, 2, 10);
+    HAL_I2C_Mem_Read(&i2c1, 0x3C, 0x00, I2C_MEMADD_SIZE_8BIT, buf, 2, 10);
 
     res = buf[0] << 8 | buf[1];
 

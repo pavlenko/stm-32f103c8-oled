@@ -19,7 +19,7 @@ static uint16_t servo0_micros_max = PE_SERVOMOTOR_MICROS_MAX;
 
 void servo0_send(uint8_t reg, uint16_t data) {
     if (PE_SERVOMOTOR_SET_DEGREE == reg) {
-        tim4.Instance->CCR1 = servo0_micros = map(
+        tim1.Instance->CCR1 = servo0_micros = map(
             constrain(data, PE_SERVOMOTOR_DEGREE_MIN, PE_SERVOMOTOR_DEGREE_MAX),
             PE_SERVOMOTOR_DEGREE_MIN,
             PE_SERVOMOTOR_DEGREE_MAX,
@@ -29,7 +29,7 @@ void servo0_send(uint8_t reg, uint16_t data) {
     }
 
     if (PE_SERVOMOTOR_SET_MICROS == reg) {
-        tim4.Instance->CCR1 = servo0_micros = constrain(data, servo0_micros_min, servo0_micros_max);
+        tim1.Instance->CCR1 = servo0_micros = constrain(data, servo0_micros_min, servo0_micros_max);
     }
 
     if (PE_SERVOMOTOR_SET_MINIMUM == reg) {

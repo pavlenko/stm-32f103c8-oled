@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stm32f1xx_hal.h>
 
-extern TIM_HandleTypeDef tim4;
+extern TIM_HandleTypeDef tim1;
 
 void MX_TIM4_Init(void);
 
