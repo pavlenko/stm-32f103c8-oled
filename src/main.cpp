@@ -17,6 +17,7 @@
 #include "fsm.h"
 #include "ssd1306.h"
 #include "servomotor.h"
+#include "pwm_driver.h"
 
 DMA_HandleTypeDef hdma_adc1;
 
@@ -65,7 +66,7 @@ int main()
     HAL_Delay(100);
 
     //scan i2c bus
-    /*uint8_t i, j = 0, y = 0;
+    uint8_t i, j = 0, y = 0;
     char scan[20];
 
     for (i = 1; i < 128; i ++) {
@@ -77,18 +78,31 @@ int main()
             sprintf(scan, "0x%X", (i << 1u));
             ssd1306_gfx.string(0, y, scan, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
             update_display();
-            y += PE_mGFX_Font_05x07.height;
+            y += (PE_mGFX_Font_05x07.height + 1);
         }
-    }*/
+    }
 
-    ssd1306_gfx.string(0, 4 * PE_mGFX_Font_05x07.height, "read", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+    HAL_Delay(2000);
+
+    uint8_t  PWM_ADDR   = 0x1E;
+    uint8_t  PWM_W_REG  = PWM_DRIVER_CMD_W_REGISTER(PWM_DRIVER_CH0_PULSE);
+    uint8_t  PWM_R_REG  = PWM_DRIVER_CMD_R_REGISTER(PWM_DRIVER_CH0_PULSE);
+    uint16_t PWM_value0 = 0x4E;
+    uint16_t PWM_value1;
+
+    ssd1306_gfx.string(0, 4 * (PE_mGFX_Font_05x07.height + 1), "write", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
 
-    char str[10];
+    HAL_I2C_Mem_Write(&i2c1, PWM_ADDR, PWM_W_REG, I2C_MEMADD_SIZE_8BIT, (uint8_t *) &PWM_value0, 2, 10);
 
-    HAL_I2C_Mem_Read(&i2c1, 0x3C, 0x01, I2C_MEMADD_SIZE_8BIT, (uint8_t *) str, 5, 10);
+    ssd1306_gfx.string(0, 5 * (PE_mGFX_Font_05x07.height + 1), "read", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+    update_display();
 
-    ssd1306_gfx.string(0, 5 * PE_mGFX_Font_05x07.height, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+    HAL_I2C_Mem_Read(&i2c1, PWM_ADDR, PWM_R_REG, I2C_MEMADD_SIZE_8BIT, (uint8_t *) &PWM_value1, 2, 10);
+
+    char result[18];
+    sprintf(result, "0x%.4X == 0x%.4X", PWM_value0, PWM_value1);
+    ssd1306_gfx.string(0, 6 * (PE_mGFX_Font_05x07.height + 1), result, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
 
     HAL_Delay(3000);
