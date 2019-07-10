@@ -87,7 +87,7 @@ int main()
     uint8_t  PWM_ADDR   = 0x1E;
     uint8_t  PWM_W_REG  = PWM_DRIVER_CMD_W_REGISTER(PWM_DRIVER_CH0_PULSE);
     uint8_t  PWM_R_REG  = PWM_DRIVER_CMD_R_REGISTER(PWM_DRIVER_CH0_PULSE);
-    uint16_t PWM_value0 = 0x4E;
+    uint16_t PWM_value0 = 0x14E;
     uint16_t PWM_value1;
 
     ssd1306_gfx.string(0, 4 * (PE_mGFX_Font_05x07.height + 1), "write", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
