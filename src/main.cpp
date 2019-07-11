@@ -66,7 +66,7 @@ int main()
     HAL_Delay(100);
 
     //scan i2c bus
-    uint8_t i, j = 0, y = 0;
+    /*uint8_t i, j = 0, y = 0;
     char scan[20];
 
     for (i = 1; i < 128; i ++) {
@@ -82,9 +82,9 @@ int main()
         }
     }
 
-    HAL_Delay(2000);
+    HAL_Delay(2000);*/
 
-    uint8_t  PWM_ADDR   = 0x1E;
+    /*uint8_t  PWM_ADDR   = 0x1E;
     uint8_t  PWM_W_REG  = PWM_DRIVER_CMD_W_REGISTER(PWM_DRIVER_CH0_PULSE);
     uint8_t  PWM_R_REG  = PWM_DRIVER_CMD_R_REGISTER(PWM_DRIVER_CH0_PULSE);
     uint16_t PWM_value0 = 0x14E;
@@ -105,7 +105,7 @@ int main()
     ssd1306_gfx.string(0, 6 * (PE_mGFX_Font_05x07.height + 1), result, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
 
-    HAL_Delay(3000);
+    HAL_Delay(3000);*/
 
     ssd1306_gfx.string(0, 0, "Core...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
@@ -164,7 +164,13 @@ int main()
 
         ADC_Fetch(&channel0, &channel1);
 
-        servo0.setMicros(map(channel0, 0, 2000, 600, 2300));
+        //servo0.setMicros(map(channel0, 0, 2000, 600, 2300));
+
+        uint8_t  PWM_ADDR   = 0x1E;
+        uint8_t  PWM_W_REG  = PWM_DRIVER_CMD_W_REGISTER(PWM_DRIVER_CH0_PULSE);
+        uint16_t PWM_value0 = map(channel0, 0, 2000, 600, 2300);
+
+        HAL_I2C_Mem_Write(&i2c1, PWM_ADDR, PWM_W_REG, I2C_MEMADD_SIZE_8BIT, (uint8_t *) &PWM_value0, 2, 10);
 
         LED(LED_ON);
         char str[20];
