@@ -12,6 +12,8 @@
 #define F_LENGTH 105
 #define T_LENGTH 55
 
+//TODO frame is a circle with diameter of 200 mm
+
 typedef struct {
     float x;
     float y;
