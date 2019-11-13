@@ -25,7 +25,10 @@ void SystemClock_Config();
 static void MX_GPIO_Init();
 
 void update_display() {
-    ssd1306_api.update(ssd1306_gfx.getBufferData(), ssd1306_gfx.getBufferSize());
+    ssd1306_api.update(
+        ssd1306_gfx.data,
+        ssd1306_gfx.width * ((ssd1306_gfx.height + 7) / 8)
+    );
 }
 
 static volatile bool pin14press = false;
@@ -61,7 +64,7 @@ int main()
     fsm.initialize(&SERVO_MID);
 
     ssd1306_api.initialize();
-    ssd1306_gfx.initialize();
+    PE_mGFX_initialize(&ssd1306_gfx);
 
     HAL_Delay(100);
 
@@ -107,44 +110,44 @@ int main()
 
     HAL_Delay(3000);*/
 
-    ssd1306_gfx.string(0, 0, "Core...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+    PE_mGFX_string(&ssd1306_gfx, 0, 0, "Core...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    ssd1306_gfx.string(0, 8, "Channel1...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+    PE_mGFX_string(&ssd1306_gfx, 0, 8, "Channel1...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    ssd1306_gfx.string(0, 16, "Channel2...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+    PE_mGFX_string(&ssd1306_gfx, 0, 16, "Channel2...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    ssd1306_gfx.string(0, 24, "Channel3...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+    PE_mGFX_string(&ssd1306_gfx, 0, 24, "Channel3...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    ssd1306_gfx.string(0, 32, "Channel4...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+    PE_mGFX_string(&ssd1306_gfx, 0, 32, "Channel4...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    ssd1306_gfx.string(0, 40, "Channel5...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+    PE_mGFX_string(&ssd1306_gfx, 0, 40, "Channel5...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    ssd1306_gfx.string(0, 48, "Channel6...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+    PE_mGFX_string(&ssd1306_gfx, 0, 48, "Channel6...OK", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
     HAL_Delay(100);
-    ssd1306_gfx.string(0, 56, "Run main program", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+    PE_mGFX_string(&ssd1306_gfx, 0, 56, "Run main program", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
     update_display();
 
     HAL_Delay(2000);
-    ssd1306_gfx.clear();
+    PE_mGFX_clear(&ssd1306_gfx);
 
-    ssd1306_gfx.line(0, 0, 127, 63, PE_mGFX_WHITE);
-    ssd1306_gfx.line(0, 63, 127, 0, PE_mGFX_WHITE);
-    ssd1306_gfx.rectangle(0, 0, 127, 63, PE_mGFX_WHITE);
-    ssd1306_gfx.circle(63, 31, 31, PE_mGFX_WHITE);
+    PE_mGFX_line(&ssd1306_gfx, 0, 0, 127, 63, PE_mGFX_WHITE);
+    PE_mGFX_line(&ssd1306_gfx, 0, 63, 127, 0, PE_mGFX_WHITE);
+    PE_mGFX_rectangle(&ssd1306_gfx, 0, 0, 127, 63, PE_mGFX_WHITE);
+    PE_mGFX_circle(&ssd1306_gfx, 63, 31, 31, PE_mGFX_WHITE);
 
     update_display();
 
     HAL_Delay(1500);
 
-    ssd1306_gfx.clear();
-    ssd1306_gfx.bitmap(0, 16, &VUMeter_b, PE_mGFX_WHITE);
+    PE_mGFX_clear(&ssd1306_gfx);
+    PE_mGFX_bitmap(&ssd1306_gfx, 0, 16, &VUMeter_b, PE_mGFX_WHITE);
 
     update_display();
 
@@ -176,13 +179,13 @@ int main()
         char str[20];
 
         sprintf(str, "tick: %lu", HAL_GetTick());
-        ssd1306_gfx.string(0, 0, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+        PE_mGFX_string(&ssd1306_gfx, 0, 0, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
 
-        ssd1306_gfx.string(0, 8, "              ", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+        PE_mGFX_string(&ssd1306_gfx, 0, 8, "              ", &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
 
         //sprintf(str, "B: %u H: %lu", (uint8_t) pin14press, pin14hold);
         sprintf(str, "adc: %d %d", channel0, channel1);
-        ssd1306_gfx.string(0, 8, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
+        PE_mGFX_string(&ssd1306_gfx, 0, 8, str, &PE_mGFX_Font_05x07, PE_mGFX_WHITE);
 
         update_display();
     });

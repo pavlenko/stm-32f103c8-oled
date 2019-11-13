@@ -7,6 +7,6 @@
 #include "PE_SSD1306.h"
 
 extern PE_SSD1306 ssd1306_api;
-extern PE_mGFX ssd1306_gfx;
+extern PE_mGFX_Canvas_t ssd1306_gfx;
 
 #endif //__SSD1306_H
